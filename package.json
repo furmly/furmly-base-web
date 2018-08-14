@@ -1,0 +1,14 @@
+{
+  "name": "furmly-base-web",
+  "version": "1.0.0",
+  "description": "Base web library for furmly web themes",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "furmly"
+  ],
+  "author": "Chidi Onuekwusi",
+  "license": "ISC"
+}
