@@ -64,4 +64,14 @@ storiesOf("Input", module)
         errors={["Something bad has happened", "Your name is compulsory"]}
       />
     </ThemeProvider>
+  ))
+  .add("one numerical input", () => (
+    <ThemeProvider theme={defaultTheme}>
+      <Input
+        name="age"
+        label="How old are you?"
+        elementType="INPUT"
+        type="number"
+      />
+    </ThemeProvider>
   ));

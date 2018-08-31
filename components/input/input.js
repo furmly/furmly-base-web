@@ -6,13 +6,16 @@ import { FormDiv, FormLabel, ErrorText, Copy } from "../common";
 const StyledInput = styled.input`
   border: none;
   display: block;
+  font-family: Roboto;
+  background-color: transparent;
   min-height: ${props =>
     (props.large && props.theme.factor * 10 + 50) || props.theme.factor * 30}px;
   width: 100%;
 `;
 
+//const NumberBasedInput = styled(StyledInput).attrs({ type: "number" });
 
-const Input = ({ description, errors, label, value, valueChanged }) => {
+const Input = ({ description, errors, label, value, valueChanged, type }) => {
   const onChange = evt => {
     if (evt.preventDefault && typeof evt.preventDefault !== null)
       evt.preventDefault();
@@ -20,8 +23,10 @@ const Input = ({ description, errors, label, value, valueChanged }) => {
   };
   return (
     <FormDiv>
-      <FormLabel>{label}</FormLabel>
-      <StyledInput value={value} onChange={onChange} />
+      <FormLabel className={(errors && errors.length && "error") || ""}>
+        {label}
+      </FormLabel>
+      <StyledInput type={type} value={value} onChange={onChange} />
       <Copy>{description}</Copy>
       {errors && errors.map(x => <ErrorText key={x}>{x}</ErrorText>)}
     </FormDiv>

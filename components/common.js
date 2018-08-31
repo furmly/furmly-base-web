@@ -1,5 +1,6 @@
 import styled, { injectGlobal } from "styled-components";
 import Lato from "../fonts/Lato-Light.ttf";
+import Roboto from "../fonts/Roboto-Thin.ttf";
 import React from "react";
 
 export const smallText = props => props.theme.factor * 14;
@@ -10,6 +11,7 @@ export const labelColor = props => props.theme.labelColor;
 export const errorColor = props => props.theme.errorColor || "red";
 export const FormDiv = styled.div`
   padding: ${props => props.theme.factor * 10}px;
+  background-color: #00000003;
 `;
 
 export const Label = styled.label`
@@ -18,6 +20,10 @@ export const Label = styled.label`
   padding: ${props => props.theme.factor * 5}px;
   font-size: ${smallText}px;
   display: inline-block;
+  transition: background-color 1s;
+  &.error {
+    background-color: ${errorColor};
+  }
 `;
 
 const FormLabelContainer = styled.div`
@@ -27,14 +33,17 @@ const FormLabelContainer = styled.div`
 const FocusIndicator = styled.hr`
   width: 0%;
   position: absolute;
-  bottom:0px;
+  bottom: 0px;
   border: none;
-  margin:0px;
+  margin: 0px;
   height: ${props => props.theme.factor * 2}px;
   background-color: ${labelBackgroundColor};
   transition: width ease-in-out 0.5s;
   ${FormDiv}:hover & {
     width: 100%;
+  }
+  ${Label}.error+& {
+    background-color: ${errorColor};
   }
 `;
 export const FormLabel = props => (
@@ -56,13 +65,15 @@ export const Copy = styled.span`
   display: block;
 `;
 
-//export const FocusIndicator=styled.
-
 injectGlobal`
 textarea, select, input, button { outline: none; }
 @font-face {
   font-family:'Lato';
   src:url(${Lato})
+}
+@font-face {
+  font-family:'Roboto';
+  src:url(${Roboto})
 }
 body{
   font-family:Lato;
