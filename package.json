@@ -4,11 +4,23 @@
   "description": "Base web library for furmly web themes",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "storybook": "start-storybook -p 9001 -c .storybook"
   },
   "keywords": [
     "furmly"
   ],
   "author": "Chidi Onuekwusi",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "furmly-client": "git+https://github.com/chidionuekwusi/furmly-client.git",
+    "prop-types": "^15.6.2",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2",
+    "styled-components": "^3.4.2"
+  },
+  "devDependencies": {
+    "@storybook/react": "^3.4.10",
+    "babel-core": "^6.26.3"
+  }
 }
