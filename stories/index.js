@@ -88,4 +88,21 @@ storiesOf("Input", module)
     <ThemeProvider theme={defaultTheme}>
       <DatePicker {...dateProps} />
     </ThemeProvider>
+  ))
+  .add("several date pickers and inputs", () => (
+    <ThemeProvider theme={defaultTheme}>
+      <div style={{ width: "100%", display: "flex" }}>
+        <div style={{ display: "inline", width: "50%" }}>
+          <Input
+            description="This is text that is supposed to help you."
+            name="firstName"
+            label="First Name"
+            elementType="INPUT"
+          />
+        </div>
+        <div style={{ display: "inline", width: "50%" }}>
+          <DatePicker {...dateProps} />
+        </div>
+      </div>
+    </ThemeProvider>
   ));

@@ -17,10 +17,6 @@ export const minimumInputHeight = props =>
 export const highLightColor = props =>
   props.theme.highLightColor || "#0000001a";
 export const inputPadding = props => `0px ${props.theme.factor * 5}px`;
-export const iconSize = {
-  small: 12,
-  large: 32
-};
 
 export const buttonDefaults = "display: block;  border: none;";
 export const FormDiv = styled.div`
