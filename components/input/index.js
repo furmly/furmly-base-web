@@ -1,7 +1,6 @@
 import React from "react";
 import Input from "./input";
+import DatePicker from "./datepicker";
 
-export default (props) => (
-    <Input {...props} />
-);
-export { Input };
+export default Input;
+export { DatePicker };

@@ -16,6 +16,7 @@
     "furmly-client": "git+https://github.com/chidionuekwusi/furmly-client.git",
     "prop-types": "^15.6.2",
     "react": "^16.4.2",
+    "react-calendar": "^2.17.1",
     "react-dom": "^16.4.2",
     "styled-components": "^3.4.2"
   },

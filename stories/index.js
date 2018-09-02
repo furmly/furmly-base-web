@@ -2,13 +2,22 @@ import React from "react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
 import { ThemeProvider } from "styled-components";
-import Input from "../components/input";
+import Input, { DatePicker } from "../components/input";
 const defaultTheme = {
   labelBackgroundColor: "#282828",
   labelColor: "white",
   factor: 1.2,
   errorColor: "red"
 };
+
+const dateProps = {
+  name: "dateOfBirth",
+  description: "This is the day you were born.",
+  label: "Date of Birth",
+  type: "DATE",
+  value: new Date()
+};
+const userProps = {};
 
 storiesOf("Button", module)
   .add("with text", () => (
@@ -73,5 +82,10 @@ storiesOf("Input", module)
         elementType="INPUT"
         type="number"
       />
+    </ThemeProvider>
+  ))
+  .add("date input", () => (
+    <ThemeProvider theme={defaultTheme}>
+      <DatePicker {...dateProps} />
     </ThemeProvider>
   ));
