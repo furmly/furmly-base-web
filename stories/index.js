@@ -9,14 +9,28 @@ const defaultTheme = {
   factor: 1.2,
   errorColor: "red"
 };
-
+const valueChanged = action("valueChanged");
+const time = new Date();
+const prev = new Date();
+prev.setDate(time.getDate() - 5);
 const dateProps = {
   name: "dateOfBirth",
   description: "This is the day you were born.",
   label: "Date of Birth",
   type: "DATE",
-  value: new Date()
+  value: null,
+  minDate: prev,
+  maxDate: time,
+  fromValue: prev,
+  toValue: time,
+  isRange: true,
+  fromValueChanged: action("fromValueChanged"),
+  toValueChanged: action("toValueChanged"),
+  valueChanged
 };
+
+const singleDateProps = Object.assign({}, dateProps, { isRange: false });
+
 const userProps = {};
 
 storiesOf("Button", module)
@@ -39,6 +53,7 @@ storiesOf("Input", module)
         name="firstName"
         label="First Name"
         elementType="INPUT"
+        valueChanged={valueChanged}
       />
     </ThemeProvider>
   ))
@@ -51,6 +66,7 @@ storiesOf("Input", module)
             name="firstName"
             label="First Name"
             elementType="INPUT"
+            valueChanged={valueChanged}
           />
         </div>
         <div style={{ display: "inline", width: "50%" }}>
@@ -59,6 +75,7 @@ storiesOf("Input", module)
             name="lastName"
             label="Surname"
             elementType="INPUT"
+            valueChanged={valueChanged}
           />
         </div>
       </div>
@@ -71,6 +88,7 @@ storiesOf("Input", module)
         label="Surname"
         elementType="INPUT"
         errors={["Something bad has happened", "Your name is compulsory"]}
+        valueChanged={valueChanged}
       />
     </ThemeProvider>
   ))
@@ -81,6 +99,7 @@ storiesOf("Input", module)
         label="How old are you?"
         elementType="INPUT"
         type="number"
+        valueChanged={valueChanged}
       />
     </ThemeProvider>
   ))
@@ -98,10 +117,11 @@ storiesOf("Input", module)
             name="firstName"
             label="First Name"
             elementType="INPUT"
+            valueChanged={valueChanged}
           />
         </div>
         <div style={{ display: "inline", width: "50%" }}>
-          <DatePicker {...dateProps} />
+          <DatePicker {...singleDateProps} />
         </div>
       </div>
     </ThemeProvider>

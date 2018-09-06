@@ -8,18 +8,30 @@ import {
   elementPadding,
   buttonDefaults,
   minimumInputHeight,
-  highLightColor,
   inputPadding,
-  Icon
+  media,
+  Icon,
+  StyledPortal,
+  highLightColor
 } from "../common";
 
 const StyledCalendar = styled(Calendar).attrs({
-  nextLabel: <Icon icon="arrow-alt-circle-right" />
+  nextLabel: <Icon icon="angle-right" />,
+  next2Label: <Icon icon="angle-double-right" />,
+  prevLabel: <Icon icon="angle-left" />,
+  prev2Label: <Icon icon="angle-double-left" />
 })`
+  background-color: white;
+  height: 450px;
+  width: 350px;
+  ${media.xSmall`height:40vh;width:50vh`};
+  ${media.small`height:40vh;width:50vh`};
+  ${media.xlarge`height:500px;width:400px;`};
   button.react-calendar__tile,
   button.react-calendar__navigation__arrow,
   button.react-calendar__navigation__label {
     border: none;
+    padding: ${elementPadding}px;
   }
   .react-calendar__month-view__weekdays__weekday {
     text-align: center;
@@ -28,6 +40,9 @@ const StyledCalendar = styled(Calendar).attrs({
     padding: ${elementPadding}px;
     transition: color 1s, background-color 0.6s;
     background-color: transparent;
+  }
+  button.react-calendar__tile:enabled {
+    font-weight: bold;
   }
   button.react-calendar__navigation__label,
   button.react-calendar__navigation__arrow {
@@ -48,37 +63,86 @@ const RevealButton = styled.button`
   width: 100%;
   text-align: left;
   background-color: transparent;
-  transition: background-color 0.6s,color 1s;
+  transition: background-color 0.6s, color 1s;
   &:hover {
-    // background-color: ${highLightColor};
-    background-color: ${labelBackgroundColor};
-    color: ${labelColor};
-
+    background-color: ${highLightColor};
+    // color: ${labelColor};
+    cursor: pointer;
   }
   &:hover svg {
-    fill:${labelColor};
+    // fill: ${labelColor};
   }
 `;
-const DatePicker = props => {
-  const value =
-    typeof props.value == "string" ? new Date(props.value) : props.value;
-  const valueString = value.toLocaleString();
-  return [
-    <RevealButton>
-      <Icon icon="calendar" />
-      {valueString}
-    </RevealButton>,
-    <StyledCalendar value={value} onChange={props.valueChanged} />
-  ];
-};
 
-// class DatePicker extends React.Component {
-//     constructor(props){
-//         super(props);
-//         this.state={
+const ActionContainer = styled.div``;
 
-//         }
-//     }
+class DatePicker extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isOpen: false
+    };
+    this.toggle = this.toggle.bind(this);
+    this.submitDate = this.submitDate.bind(this);
+    this.dateValueChanged = this.dateValueChanged.bind(this);
+    this.portalProps = {
+      actionButtons: [
+        { content: "Cancel", onClick: this.toggle, key: "CANCEL" }
+      ]
+    };
+  }
+  toggle() {
+    this.setState({
+      isOpen: !this.state.isOpen
+    });
+  }
+  dateValueChanged(date) {
+    const value = this.props.isRange ? date : [date];
+    this.setState({ value }, this.submitDate);
+  }
+  submitDate() {
+    let [value, rest] = this.state.value;
+    if (this.props.isRange) {
+      this.props.fromValueChanged(value);
+      this.props.toValueChanged(rest);
+    } else this.props.valueChanged(value);
 
-// }
+    this.setState({ isOpen: false });
+  }
+  render() {
+    const { isRange, value, toValue, fromValue, minDate, maxDate } = this.props;
+    const dateValue = isRange
+      ? [fromValue, toValue]
+      : typeof value === "string"
+        ? new Date(value)
+        : value;
+    const valueString =
+      dateValue &&
+      (Array.prototype.isPrototypeOf(dateValue)
+        ? value
+        : dateValue.toLocaleDateString());
+    const elements = [
+      <RevealButton key={`reveal-${this.props.name}`} onClick={this.toggle}>
+        <Icon icon="calendar" />
+        {valueString ||
+          (isRange && "Please select valid dates in the range...") ||
+          "Please select a date"}
+      </RevealButton>,
+      <StyledPortal
+        key={`portal-${this.props.name}`}
+        isOpen={this.state.isOpen}
+        {...this.portalProps}
+      >
+        <StyledCalendar
+          selectRange={this.props.isRange}
+          minDate={minDate}
+          maxDate={maxDate}
+          value={dateValue}
+          onChange={this.dateValueChanged}
+        />
+      </StyledPortal>
+    ];
+    return elements;
+  }
+}
 export default inputFactory(DatePicker);

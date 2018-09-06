@@ -22,7 +22,7 @@ const StyledInput = styled.input`
 
 export const inputFactory = InnerInput => {
   const Input = props => {
-    const { description, errors, label, value, valueChanged, type } = props;
+    const { description, errors, label } = props;
     return (
       <FormDiv>
         <FormLabel className={(errors && errors.length && "error") || ""}>
