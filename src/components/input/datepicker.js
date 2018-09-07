@@ -9,11 +9,11 @@ import {
   buttonDefaults,
   minimumInputHeight,
   inputPadding,
-  media,
-  Icon,
-  StyledPortal,
   highLightColor
-} from "../common";
+} from "../common/variables";
+import { media } from "../common/utils";
+import Icon from "../common/components/Icon";
+import StyledPortal from "../common/components/Portal";
 
 const StyledCalendar = styled(Calendar).attrs({
   nextLabel: <Icon icon="angle-right" />,

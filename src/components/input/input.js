@@ -1,19 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import {
-  FormDiv,
-  FormLabel,
-  ErrorText,
-  Copy,
-  minimumInputHeight,
-  inputPadding
-} from "../common";
+import { minimumInputHeight, inputPadding } from "../common/variables";
+import FormDiv from "../common/components/FormDiv";
+import FormLabel from "../common/components/Label";
+import ErrorText from "../common/components/ErrorText";
+import Copy from "../common/components/Copy";
 
 const StyledInput = styled.input`
   border: none;
   display: block;
-  // font-family: Roboto;
   background-color: transparent;
   min-height: ${minimumInputHeight}px;
   padding: ${inputPadding};

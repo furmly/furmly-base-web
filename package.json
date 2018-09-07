@@ -4,7 +4,7 @@
   "description": "Base web library for furmly web themes",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node ./node_modules/jest/bin/jest",
     "storybook": "start-storybook -p 9001 -c .storybook"
   },
   "keywords": [
@@ -22,6 +22,23 @@
   },
   "devDependencies": {
     "@storybook/react": "^3.4.10",
-    "babel-core": "^6.26.3"
+    "babel-core": "^6.26.3",
+    "babel-jest": "^23.4.2",
+    "enzyme": "^3.6.0",
+    "enzyme-adapter-react-16": "^1.5.0",
+    "enzyme-to-json": "^3.3.4",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^23.5.0"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "identity-obj-proxy"
+    },
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ],
+    "setupFiles": [
+      "./src/setupTests.js"
+    ]
   }
 }

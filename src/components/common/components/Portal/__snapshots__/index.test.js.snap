@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Portal should render correctly 1`] = `
+<WithTheme(Portal)
+  actionButtons={
+    Array [
+      Object {
+        "content": "Click here please",
+        "key": "Click here my guy",
+        "onClick": [MockFunction],
+      },
+    ]
+  }
+  theme={Object {}}
+>
+  <Portal
+    actionButtons={
+      Array [
+        Object {
+          "content": "Click here please",
+          "key": "Click here my guy",
+          "onClick": [MockFunction],
+        },
+      ]
+    }
+    theme={Object {}}
+  />
+</WithTheme(Portal)>
+`;
