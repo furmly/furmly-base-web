@@ -15,15 +15,23 @@ const StyledInput = styled.input`
   padding: ${inputPadding};
   width: 100%;
 `;
+export const onChange = (valueChanged, evt) => {
+  alert("change has occurred");
+  if (evt.preventDefault && typeof evt.preventDefault !== null)
+    evt.preventDefault();
+  valueChanged(evt.target.value);
+};
 
-export const inputFactory = InnerInput => {
+export const inputFactory = (InnerInput, noLabel) => {
   const Input = props => {
     const { description, errors, label } = props;
     return (
       <FormDiv>
-        <FormLabel className={(errors && errors.length && "error") || ""}>
-          {label}
-        </FormLabel>
+        {!noLabel ? (
+          <FormLabel className={(errors && errors.length && "error") || ""}>
+            {label}
+          </FormLabel>
+        ) : null}
         <InnerInput {...props} />
         <Copy>{description}</Copy>
         {errors && errors.map(x => <ErrorText key={x}>{x}</ErrorText>)}
@@ -45,12 +53,13 @@ export const inputFactory = InnerInput => {
 };
 
 const Input = ({ type, value, valueChanged }) => {
-  const onChange = evt => {
-    if (evt.preventDefault && typeof evt.preventDefault !== null)
-      evt.preventDefault();
-    valueChanged(evt.target.value);
-  };
-  return <StyledInput type={type} value={value} onChange={onChange} />;
+  return (
+    <StyledInput
+      type={type}
+      value={value}
+      onChange={onChange.bind(this, valueChanged)}
+    />
+  );
 };
 
 export default inputFactory(Input);

@@ -1,7 +1,7 @@
 import React from "react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
-import Input, { DatePicker } from "../src/components/input";
+import Input, { DatePicker, Checkbox } from "../src/components/input";
 
 const valueChanged = action("valueChanged");
 const time = new Date();
@@ -20,6 +20,13 @@ const dateProps = {
   isRange: true,
   fromValueChanged: action("fromValueChanged"),
   toValueChanged: action("toValueChanged"),
+  valueChanged
+};
+
+const checkboxProps = {
+  name: "sleeping",
+  label: "Are you asleep ?",
+  description: "use this to indicate sleepmode",
   valueChanged
 };
 
@@ -71,4 +78,5 @@ storiesOf("Input", module)
         <DatePicker {...singleDateProps} />
       </div>
     </div>
-  ));
+  ))
+  .add("ordinary checkbox", () => <Checkbox {...checkboxProps} />);
