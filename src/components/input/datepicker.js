@@ -11,6 +11,7 @@ import {
   inputPadding,
   highLightColor
 } from "../common/variables";
+import { hover } from "../common/animations";
 import { media } from "../common/utils";
 import Icon from "../common/components/Icon";
 import StyledPortal from "../common/components/Portal";
@@ -63,7 +64,7 @@ const RevealButton = styled.button`
   width: 100%;
   text-align: left;
   background-color: transparent;
-  transition: background-color 0.6s, color 1s;
+  ${hover};
   &:hover {
     background-color: ${highLightColor};
     // color: ${labelColor};

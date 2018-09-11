@@ -4,8 +4,10 @@ import styled from "styled-components";
 import {
   minimumInputHeight,
   inputPadding,
-  highLightColor
+  highLightColor,
+  labelSize
 } from "../common/variables";
+import { hover } from "../common/animations";
 import FormDiv from "../common/components/FormDiv";
 import FormLabel from "../common/components/Label";
 import ErrorText from "../common/components/ErrorText";
@@ -18,9 +20,13 @@ const StyledInput = styled.input`
   min-height: ${minimumInputHeight}px;
   padding: ${inputPadding};
   width: 100%;
+  ${hover};
   &:hover {
     background-color: ${highLightColor};
   }
+`;
+const FakeLabel = styled.div`
+  height: ${labelSize}px;
 `;
 export const onChange = (valueChanged, evt) => {
   if (evt.preventDefault && typeof evt.preventDefault !== null)
@@ -37,7 +43,9 @@ export const inputFactory = (InnerInput, noLabel) => {
           <FormLabel className={(errors && errors.length && "error") || ""}>
             {label}
           </FormLabel>
-        ) : null}
+        ) : (
+          <FakeLabel />
+        )}
         <InnerInput {...props} />
         <Copy>{description}</Copy>
         {errors && errors.map(x => <ErrorText key={x}>{x}</ErrorText>)}

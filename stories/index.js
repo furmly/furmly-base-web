@@ -17,3 +17,4 @@ const Provider = storyFn => (
 );
 addDecorator(Provider);
 require("./input");
+require("./select");

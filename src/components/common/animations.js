@@ -13,3 +13,7 @@ export const ripple = keyframes`
     opacity: 0;
     transform: scale(40, 40);
   }`;
+
+export const hover = `
+  transition: background-color 0.6s, color 1s
+  `;

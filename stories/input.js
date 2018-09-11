@@ -7,7 +7,7 @@ const valueChanged = action("valueChanged");
 const time = new Date();
 const prev = new Date();
 prev.setDate(time.getDate() - 5);
-const dateProps = {
+export const dateProps = {
   name: "dateOfBirth",
   description: "This is the day you were born.",
   label: "Date of Birth",
@@ -23,7 +23,7 @@ const dateProps = {
   valueChanged
 };
 
-const checkboxProps = {
+export const checkboxProps = {
   name: "sleeping",
   label: "Are you asleep ?",
   description: "use this to indicate sleepmode",
@@ -32,7 +32,7 @@ const checkboxProps = {
 
 const singleDateProps = Object.assign({}, dateProps, { isRange: false });
 
-const userProps = {
+export const userProps = {
   description: "This is text that is supposed to help you.",
   name: "firstName",
   label: "First Name",
