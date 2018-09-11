@@ -5,9 +5,11 @@ import {
   labelColor,
   minimumInputHeight,
   smallText,
-  errorColor
+  errorColor,
+  labelBackgroundColor
 } from "../common/variables";
 
+const size = props => props.theme.factor * 20;
 const Label = styled.label`
   margin-left: ${props => props.theme.factor * 5}px;
   vertical-align: middle;
@@ -23,69 +25,53 @@ const Label = styled.label`
 const Wrapper = styled.div`
   height: ${minimumInputHeight}px;
 `;
-const Container = styled.div`
-  display: inline-block;
-  width: ${props => props.theme.factor * 66}px;
-  height: 26px;
-  background: #333;
-  position: relative;
-//   border-radius: 50px;
-  box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.5),
-    0px 1px 0px rgba(255, 255, 255, 0.2);
-  &:after {
-    content: "NO";
-    color: ${labelColor};
-    position: absolute;
-    right: 10px;
-    z-index: 0;
-    font: 12px/26px Arial, sans-serif;
-    font-weight: bold;
-    text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.15);
-  }
-  &:before {
-    content: "YES";
-    color: ${labelColor};
-    position: absolute;
-    left: 10px;
-    z-index: 0;
-    font: 12px/26px Arial, sans-serif;
-    font-weight: bold;
-  }
-`;
+
 const Nob = styled.label`
-  display: block;
-  width: 34px;
-  height: 20px;
+  display: inline-block;
+  position: relative;
+  width: ${size}px;
+  height: ${size}px;
   cursor: pointer;
-  position: absolute;
-  pointer-events:none;
-  top: 3px;
-  left: 3px;
-  z-index: 1;
-  background: #fcfff4;
-  background: linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
-//   border-radius: 50px;
-  transition: all 0.4s ease;
-  box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
+  background: ${labelBackgroundColor};
+  &:after {
+    content: "";
+    width: ${props => (props.theme.factor * 20) / 2 + 2}px;
+    height: 5px;
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    border: 3px solid ${labelColor};
+    border-top: none;
+    border-right: none;
+    background: transparent;
+    opacity: 0;
+    transform: rotate(-45deg);
+  }
+  &:hover::after {
+    opacity: 0.3;
+  }
 `;
 const Checkbox = styled.input.attrs({ type: "checkbox" })`
-//   visibility: hidden;
-  &:checked + label {
-    left: 43px;
+  &[type="checkbox"] {
+    visibility: hidden;
+    &:checked + label:after {
+      opacity: 1;
+    }
   }
 `;
 
 export default inputFactory(props => {
   return (
     <Wrapper>
-      <Container>
+      <Nob>
         <Checkbox
-          value="None"
+          value={!!props.value}
           checked={!!props.value}
-          onChange={onChange.bind(this, props.valueChanged)}
+          onChange={onChange.bind(this, value =>
+            props.valueChanged(value === "true")
+          )}
         />
-        <Nob />
-      </Container>
+      </Nob>
       <Label>{props.label}</Label>
     </Wrapper>
   );

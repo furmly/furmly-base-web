@@ -1,7 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { minimumInputHeight, inputPadding } from "../common/variables";
+import {
+  minimumInputHeight,
+  inputPadding,
+  highLightColor
+} from "../common/variables";
 import FormDiv from "../common/components/FormDiv";
 import FormLabel from "../common/components/Label";
 import ErrorText from "../common/components/ErrorText";
@@ -14,9 +18,11 @@ const StyledInput = styled.input`
   min-height: ${minimumInputHeight}px;
   padding: ${inputPadding};
   width: 100%;
+  &:hover {
+    background-color: ${highLightColor};
+  }
 `;
 export const onChange = (valueChanged, evt) => {
-  alert("change has occurred");
   if (evt.preventDefault && typeof evt.preventDefault !== null)
     evt.preventDefault();
   valueChanged(evt.target.value);
