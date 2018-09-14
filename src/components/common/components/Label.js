@@ -24,6 +24,7 @@ export const Label = styled.label`
 const FormLabelContainer = styled.div`
   width: 100%;
   position: relative;
+  visibility: ${props => (props.hide && "hidden") || "visible"};
 `;
 const FocusIndicator = styled.hr`
   width: 0%;

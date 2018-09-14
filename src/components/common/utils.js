@@ -1,6 +1,7 @@
 import { css, injectGlobal } from "styled-components";
 import Lato from "../../fonts/Lato-Light.ttf";
 import Roboto from "../../fonts/Roboto-Thin.ttf";
+import { lineHeight } from "./variables";
 
 export const createMedia = (
   xSmall = 600,
@@ -55,5 +56,6 @@ textarea, select, input, button { outline: none; }
 
 body,button{
   font-family:Lato;
+  line-height:${lineHeight};
 }
 `;

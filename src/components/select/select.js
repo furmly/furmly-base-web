@@ -15,6 +15,12 @@ import { hover } from "../common/animations";
 const Container = styled.div`
   position: relative;
   width: 100%;
+  &:after{
+    content:"▼"
+    position:absolute;
+    top:0;
+    right:0;
+  }
 `;
 
 const Menu = styled.div`
@@ -47,12 +53,12 @@ const Menu = styled.div`
 const RevealButton = styled.button`
   display: block;
   border: none;
-  background-color: transparent; 
+  background-color: transparent;
   min-height: ${minimumInputHeight}px;
   width: 100%;
   text-align: left;
   &.show {
-    background-color: ${labelColor}; 
+    background-color: ${labelColor};
   }
   &.show:after {
     content: "";
