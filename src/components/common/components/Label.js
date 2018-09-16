@@ -4,7 +4,8 @@ import {
   labelBackgroundColor,
   smallText,
   errorColor,
-  labelColor
+  labelColor,
+  formLineWidth
 } from "../variables";
 import FormDiv from "../components/FormDiv";
 
@@ -32,7 +33,7 @@ const FocusIndicator = styled.hr`
   bottom: 0px;
   border: none;
   margin: 0px;
-  height: ${props => props.theme.factor * 2}px;
+  height: ${formLineWidth}px;
   background-color: ${labelBackgroundColor};
   transition: width ease-in-out 0.5s;
   transition-delay: 200ms;

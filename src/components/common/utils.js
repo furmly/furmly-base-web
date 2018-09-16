@@ -45,6 +45,12 @@ export const media = createMedia();
 
 export const injectFontsAndCSSBase = () => injectGlobal`
 textarea, select, input, button { outline: none; }
+button {
+  padding:0px;
+}
+* {
+  box-sizing: border-box;
+}
 @font-face {
   font-family:'Lato';
   src:url(${Lato})

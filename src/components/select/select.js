@@ -7,7 +7,9 @@ import {
   boxShadow,
   dropDownMenuColor,
   labelBackgroundColor,
-  labelColor
+  borderColor,
+  labelColor,
+  formLineWidth
 } from "../common/variables";
 import { inputFactory } from "../input/input";
 import { hover } from "../common/animations";
@@ -15,18 +17,23 @@ import { hover } from "../common/animations";
 const Container = styled.div`
   position: relative;
   width: 100%;
-  &:after{
-    content:"▼"
-    position:absolute;
-    top:0;
-    right:0;
+  &:after {
+    content: "▼";
+    position: absolute;
+    top: calc(${props => minimumInputHeight(props) / 2}px - 0.6em);
+    right: 5px;
   }
 `;
 
+const MenuContainer = styled.div`
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 25vh;
+`;
 const Menu = styled.div`
   position: absolute;
-  overflow-x: hidden;
-  overflow-y: auto;
+  border-top-color: ${borderColor};
+  border-top-width: 2px;
   background-color: ${dropDownMenuColor};
   width: 100%;
   visibility: hidden;
@@ -39,7 +46,7 @@ const Menu = styled.div`
     top: 0;
     left: 0;
     height: 100%;
-    width: 2px;
+    width: ${formLineWidth}px;
     background-color: ${labelBackgroundColor};
   }
   &.show {
@@ -57,6 +64,7 @@ const RevealButton = styled.button`
   min-height: ${minimumInputHeight}px;
   width: 100%;
   text-align: left;
+  padding: ${inputPadding};
   &.show {
     background-color: ${labelColor};
   }
@@ -66,7 +74,7 @@ const RevealButton = styled.button`
     top: 0;
     left: 0;
     height: 100%;
-    width: 2px;
+    width: ${formLineWidth}px;
     background-color: ${labelBackgroundColor};
   }
   ${hover};
@@ -138,14 +146,16 @@ class Select extends React.Component {
           {value || `${label}`}
         </RevealButton>
         <Menu className={showMenu}>
-          {items.map(x => (
-            <Item
-              onClick={() => this.toggleMenu(valueChanged(x[keyProperty]))}
-              key={x[keyProperty]}
-            >
-              {x[displayProperty]}
-            </Item>
-          ))}
+          <MenuContainer>
+            {items.map(x => (
+              <Item
+                onClick={() => this.toggleMenu(valueChanged(x[keyProperty]))}
+                key={x[keyProperty]}
+              >
+                {x[displayProperty]}
+              </Item>
+            ))}
+          </MenuContainer>
         </Menu>
       </Container>
     );

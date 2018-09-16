@@ -20,7 +20,51 @@ const selectProps = {
     {
       _id: 2,
       name: "Obi Onuekwusi"
-    }
+    },
+    {
+      _id: 3,
+      name: "Chidi Onuekwusi"
+    },
+    {
+      _id: 4,
+      name: "Obi Onuekwusi"
+    },
+    ,
+    {
+      _id: 5,
+      name: "Chidi Onuekwusi"
+    },
+    {
+      _id: 6,
+      name: "Obi Onuekwusi"
+    },
+    ,
+    {
+      _id: 7,
+      name: "Chidi Onuekwusi"
+    },
+    {
+      _id: 8,
+      name: "Obi Onuekwusi"
+    },
+    ,
+    {
+      _id: 9,
+      name: "Chidi Onuekwusi"
+    },
+    {
+      _id: 10,
+      name: "Obi Onuekwusi"
+    },
+    ,
+    {
+      _id: 11,
+      name: "Chidi Onuekwusi"
+    },
+    {
+      _id: 12,
+      name: "Obi Onuekwusi"
+    },
   ],
   valueChanged
 };
