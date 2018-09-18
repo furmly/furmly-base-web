@@ -1,4 +1,6 @@
+import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { media } from "../../utils";
 import {
   labelBackgroundColor,
@@ -6,6 +8,7 @@ import {
   labelColor
 } from "../../variables";
 import { ripple } from "../../animations";
+import Icon from "../Icon";
 
 export default styled.button`
   ${media.medium`min-width:${props => props.theme.factor * 54}px`};
@@ -35,3 +38,18 @@ export default styled.button`
     transform-origin: 50% 50%;
   }
 `;
+
+const IconButtonWrapper = styled.button`
+  border: none;
+  background: none;
+  cursor: pointer;
+`;
+export const IconButton = props => (
+  <IconButtonWrapper onClick={props.onClick}>
+    <Icon size={props.iconSize} icon={props.icon} />
+  </IconButtonWrapper>
+);
+
+IconButton.propTypes = {
+  icon: PropTypes.string.isRequired
+};

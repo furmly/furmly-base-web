@@ -5,16 +5,19 @@ import { iconSize, elementPadding } from "../variables";
 import icons from "../../../icons";
 
 const IconContainer = styled.svg`
-  width: ${iconSize}px;
-  height: ${iconSize}px;
+  width: ${props => props.iconSize || iconSize}px;
+  height: ${props => props.iconSize || iconSize}px;
   margin-right: ${elementPadding}px;
 `;
 
-const Icon = ({ icon }) => {
+const Icon = ({ icon, size }) => {
   const iconInfo = icons[icon];
-  if (!iconInfo) throw new Error(`Unknown Icon bro ${icon}`);
+  if (!iconInfo) throw new Error(`Unknown Icon ${icon}`);
   return (
-    <IconContainer viewBox={`0 0 ${iconInfo[0]} ${iconInfo[1]}`}>
+    <IconContainer
+      iconSize={size}
+      viewBox={`0 0 ${iconInfo[0]} ${iconInfo[1]}`}
+    >
       <path d={iconInfo[4]} />
     </IconContainer>
   );

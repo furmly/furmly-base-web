@@ -65,3 +65,21 @@ body,button{
   line-height:${lineHeight};
 }
 `;
+
+export const getSlice = (page, count) => {
+  let start = (page - 1) * count;
+  let end = start + count;
+  return {
+    start,
+    end
+  };
+};
+
+export const convertToString = obj => {
+  if (obj && typeof obj == "object")
+    return Object.keys(obj).reduce((sum, x) => {
+      return (sum += " " + x + " " + obj[x] + "\n");
+    }, "");
+
+  return obj;
+};
