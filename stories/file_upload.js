@@ -1,19 +1,29 @@
 import React from "react";
 import { storiesOf } from "@storybook/react";
-import { action } from "@storybook/addon-actions";
-import FileUpload from "../src/components/file_upload";
+import { decorateAction, action } from "@storybook/addon-actions";
+import FileUpload, {
+  XlsxPreview
+} from "../src/components/file_upload/file_upload";
 
-const valueChanged = action("valueChanged");
 const props = {
   displayProperty: "name",
   description: "This is a description",
   disabled: false,
-  upload: action("tried to upload something"),
+
   title: "Upload CV",
   keyProperty: "_id",
-  valueChanged
+  previewType: XlsxPreview,
+  preview: [{ name: "Chidi", _id: 1 }, { name: "Obi", _id: 2 }],
+  allowed: "png|jpeg|jpg"
 };
+const upload = decorateAction([
+  args => {
+    alert("fired");
+    return args;
+  }
+]);
+props.upload = upload("tried to upload something");
 
 storiesOf("FileUpload", module).add("single file upload", () => (
-  <FileUpload {...props} />
+  <FileUpload {...props} valueChanged={action("valueChanged")} />
 ));

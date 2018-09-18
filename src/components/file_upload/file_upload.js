@@ -132,7 +132,9 @@ FileUpload.propTypes = {
 };
 export default inputFactory(FileUpload, true);
 
-const ImagePreview = props => <StyledImagePreview src={props.data.uri} />;
+export const ImagePreview = props => (
+  <StyledImagePreview src={props.data.uri} />
+);
 ImagePreview.propTypes = {
   data: PropTypes.object.isRequired
 };
@@ -140,7 +142,7 @@ ImagePreview.id = imageTypes;
 ImagePreview.query = "?format=base64";
 
 const XlsxPager = getPager(); // generate pager with default components.
-class XlsxPreview extends Component {
+export class XlsxPreview extends Component {
   constructor(props) {
     super(props);
     this.state = { count: 5, page: 1 };
@@ -155,7 +157,8 @@ class XlsxPreview extends Component {
           <TableCell key={"_head" + index}>{x}</TableCell>
         ))
       : [];
-    const items = getSlice(this.state.page, this.state.count);
+    const { start, end } = getSlice(this.state.page, this.state.count);
+    const items = (this.props.data && this.props.data.slice(start, end)) || [];
     return [
       <Table>
         <TableHead>{headers}</TableHead>
