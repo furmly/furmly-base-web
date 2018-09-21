@@ -6,8 +6,8 @@
       {
         "alias": {
           "error_handler": "./src/errorhandler.js",
-          "client_config": "./.storybook/dynamo.client.config",
-          "call_api": "./node_modules/redux-api-middleware/lib/RSAA"
+          "client_config": "./.storybook/dynamo_client_config/config.js",
+          "call_api": "./.storybook/dynamo_client_config/call_api.js"
         }
       }
     ]

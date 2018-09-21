@@ -1,64 +1,130 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
+import PropTypes from "prop-types";
 import Copy from "../common/components/Copy";
-import { formLineWidth } from "../common/variables";
-import FormDiv from "../common/components/FormDiv";
+import ErrorText from "../common/components/ErrorText";
+import {
+  formLineWidth,
+  labelBackgroundColor,
+  labelSize,
+  formComponentBackgroundColor,
+  elementPadding,
+  errorColor
+} from "../common/variables";
 
-const StyledFormDiv = styled(FormDiv)`
+import StyledLabel, { Label } from "../common/components/Label";
+
+const StyledFormDiv = styled.div`
   min-height: ${props => props.theme.factor * 100}px;
+  background-color: ${formComponentBackgroundColor};
+  position: relative;
+  hr {
+    height: ${props => formLineWidth(props) * 0.3}px;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    border: none;
+    background-color: ${labelBackgroundColor};
+  }
 `;
+const StyledCopy = styled(Copy)`
+  padding: ${elementPadding}px;
+`;
+const BorderAnimationWrapper = styled.div`
+  position: absolute;
+  top: ${props => labelSize(props) - 2}px;
+  height: calc(100% - ${props => labelSize(props) - 2}px);
+  width: 100%;
+  overflow: hidden;
+`;
+const transitionDuration = 0.25;
 
-const getTransition = function(delay) {
-  return `  
-      transition-delay: ${delay};
-      transition-property: transform;
-      transition-duration: 1s;
-      ${StyledFormDiv}:hover & {
-          transform: 0;
-        }
-      `;
+const getTransition = function(delay, transform, reverse) {
+  return css`
+    transition-delay: ${reverse}s;
+    transition-property: transform;
+    transition-duration: ${transitionDuration}s;
+    transition-function: ease-in;
+    ${StyledFormDiv}:hover & {
+      transform: ${transform + "(0)"};
+      transition: transform ${transitionDuration}s ease-in ${delay}s;
+    }
+  `;
 };
 const Line = styled.div`
   position: absolute;
   height: ${formLineWidth}px;
+  background-color: ${labelBackgroundColor};
+  ${StyledFormDiv}.error & {
+    background-color: ${errorColor};
+  }
 `;
 const Top = styled(Line)`
   width: 100%;
-  top: 0px;
+  top: 0;
   transform: translateX(-100%);
-  ${getTransition("100ms")};
+  ${getTransition(0, "translateX", 3 * transitionDuration)};
 `;
 const Right = styled(Line)`
   height: 100%;
-  top: 0;
+  width: ${formLineWidth}px;
+  top: 0px;
   right: 0;
   transform: translateY(-100%);
-  ${getTransition("1100ms")};
+  ${getTransition(
+    1 * transitionDuration,
+    "translateY",
+    2 * transitionDuration
+  )};
 `;
 const Bottom = styled(Line)`
   width: 100%;
   bottom: 0px;
   transform: translateX(100%);
-  ${getTransition("2100ms")};
+  ${getTransition(
+    2 * transitionDuration,
+    "translateX",
+    1 * transitionDuration
+  )};
 `;
 
 const Left = styled(Line)`
   height: 100%;
   top: 0;
   left: 0;
-  transform: translateY(-100%);
-  ${getTransition("3100ms")};
+  width: ${formLineWidth}px;
+  transform: translateY(100%);
+  ${getTransition(3 * transitionDuration, "translateY", 0)};
 `;
-export const ListLayout = props => {
+
+const ListLayout = props => {
+  const { errors } = props;
+  const errorClass = (errors && errors.length && "error") || "";
   return (
-    <StyledFormDiv>
-      <Label>{props.value}</Label>
-      <Copy>{props.description}</Copy>
+    <StyledFormDiv className={errorClass}>
+      <StyledLabel className={errorClass}>{props.value}</StyledLabel>
+      <StyledCopy>
+        {props.description}
+        {errors && errors.map(x => <ErrorText key={x}>{x}</ErrorText>)}
+      </StyledCopy>
+      <BorderAnimationWrapper>
+        <Top />
+        <Right />
+        <Bottom />
+        <Left />
+      </BorderAnimationWrapper>
       {props.children}
-      <Top />
-      <Right />
-      <Bottom />
-      <Left />
     </StyledFormDiv>
   );
 };
+
+ListLayout.propTypes = {
+  value: PropTypes.string,
+  description: PropTypes.string,
+  children: PropTypes.oneOf([
+    PropTypes.arrayOf(PropTypes.element),
+    PropTypes.object
+  ])
+};
+
+export default ListLayout;

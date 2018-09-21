@@ -1,10 +1,10 @@
 import React from "react";
 import { utils } from "furmly-client";
 import styled from "styled-components";
-import Button from "../common/components/Button/Button";
-import { media } from "../common/utils";
+import PropTypes from "prop-types";
 import ListItem from "./ListItem";
-
+import { IconButton } from "../common/components/Button";
+import { camelCaseToWord } from "../common/utils";
 const BasicInfoLabel = styled.span``;
 const ListDivider = styled.hr``;
 const List = styled.div`
@@ -40,13 +40,13 @@ export const BasicInfo = ({ rowData, withoutLabel, dataTemplate }) =>
 export const rowTemplates = {
   basic: (
     rowData,
-    { withoutLabel, itemClicked, index, dataTemplate, disabled }
+    { withoutLabel, itemClicked, index, dataTemplate, disabled, itemRemoved }
   ) => (
     <ListItem
       key={index}
       onClick={itemClicked}
       disabled={disabled}
-      rightActions={[<IconButton icon="delete" onClick={itemRemoved} />]}
+      rightActions={[<IconButton icon="trash" onClick={itemRemoved} />]}
     >
       <BasicInfo
         rowData={rowData}
@@ -63,7 +63,7 @@ export const rowTemplates = {
     <ListItem
       key={index}
       onClick={itemClicked}
-      rightActions={[<IconButton icon="delete" onClick={itemRemoved} />]}
+      rightActions={[<IconButton icon="trash" onClick={itemRemoved} />]}
       disabled={disabled}
     >
       <p>
@@ -80,14 +80,16 @@ export const rowTemplates = {
       avatar={image}
       onClick={itemClicked}
       disabled={disabled}
-      rightActions={[<IconButton icon="delete" onClick={itemRemoved} />]}
+      rightActions={[
+        <IconButton icon="trash" onClick={itemRemoved.bind(this, index)} />
+      ]}
     >
       <BasicInfo {...rowData} />
     </ListItem>
   )
 };
 
-export default props => {
+const ListImplementation = props => {
   let rowTemplate =
       rowTemplates[(props.rowTemplate && props.rowTemplate.name) || "basic"],
     elements = props.items
@@ -101,10 +103,13 @@ export default props => {
                 index,
                 dataTemplate: props.rowTemplate && props.rowTemplate.config,
                 itemClicked: !props.disabled
-                  ? props.rowClicked.bind(null, index)
+                  ? e => props.rowClicked(index)
                   : undefined,
                 itemRemoved: !props.disabled
-                  ? props.rowRemoved.bind(null, index)
+                  ? e => {
+                      e.stopPropagation();
+                      props.rowRemoved(index);
+                    }
                   : undefined,
                 disabled: props.disabled
               })
@@ -115,3 +120,12 @@ export default props => {
       : null;
   return <List>{elements}</List>;
 };
+
+ListImplementation.propTypes = {
+  rowTemplate: PropTypes.object,
+  items: PropTypes.array,
+  rowClicked: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
+  rowRemoved: PropTypes.func.isRequired
+};
+export default ListImplementation;

@@ -4,13 +4,7 @@ const npmBase = path.join(__dirname, "../node_modules");
 const furmlyClient = fs.realpathSync(path.join(npmBase, "furmly-client"));
 
 module.exports = (baseConfig, env, defaultConfig) => {
-  // Extend defaultConfig as you need.
 
-  // For example, add typescript loader:
-  defaultConfig.module.rules.push({
-    test: /\.ttf$/,
-    loader: "file-loader?prefix=fonts/"
-  });
   defaultConfig.module.rules[0].include.push(furmlyClient);
   const babelRule = defaultConfig.module.rules[0].query;
   babelRule.presets[0] = fs.realpathSync(
@@ -25,6 +19,5 @@ module.exports = (baseConfig, env, defaultConfig) => {
     }
     return x;
   });
-
   return defaultConfig;
 };

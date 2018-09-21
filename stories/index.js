@@ -9,7 +9,7 @@ const defaultTheme = {
   labelBackgroundColor: "#282828",
   labelColor: "white",
   factor: 1.2,
-  errorColor: "red"
+  errorColor: "#ab0101"
 };
 
 const Provider = storyFn => (

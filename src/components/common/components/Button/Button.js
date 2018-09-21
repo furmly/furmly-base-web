@@ -17,7 +17,7 @@ export default styled.button`
   overflow: hidden;
   position: relative;
   border: none;
-  min-height: ${minimumInputHeight}px;
+  height: ${minimumInputHeight}px;
   &:hover {
     font-weight: bold;
   }
