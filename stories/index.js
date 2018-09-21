@@ -19,3 +19,4 @@ addDecorator(Provider);
 require("./input");
 require("./select");
 require("./file_upload");
+require("./list");

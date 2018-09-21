@@ -5,7 +5,9 @@ import { getSlice, convertToString } from "../common/utils";
 import {
   labelBackgroundColor,
   minimumInputHeight,
-  inputPadding
+  inputPadding,
+  dropDownMenuColor,
+  boxShadow
 } from "../common/variables";
 import PropTypes from "prop-types";
 import { IconButton } from "../common/components/Button/Button";
@@ -46,6 +48,7 @@ const UploadContainer = styled.div`
   align-items: center;
   padding: ${inputPadding};
 `;
+
 const Input = styled.input`
   position: absolute;
   top: 0;
@@ -53,8 +56,24 @@ const Input = styled.input`
   opacity: 0;
   width: 100%;
   height: 100%;
-  z-index: 1;
   cursor: pointer;
+`;
+const UploadPreviewContainer = styled.div`
+  display: inline-block;
+  background-color: red;
+  & > :first-child {
+    visibility: hidden;
+    position: absolute;
+    top: calc(100% + 2px);
+    left: 0px;
+    width: 100%;
+    background-color: ${dropDownMenuColor};
+    ${boxShadow};
+  }
+  ${Input}:hover + & > :first-child,
+  & > :first-child:hover {
+    visibility: visible;
+  }
 `;
 const UploadButton = styled(IconButton).attrs({
   icon: "file-upload"
@@ -64,7 +83,7 @@ const UploadButton = styled(IconButton).attrs({
 `;
 const StyledImagePreview = styled.img``;
 
-class FileUpload extends Component {
+export class FileUpload extends Component {
   constructor(props) {
     super(props);
     this.dropped = this.dropped.bind(this);
@@ -100,7 +119,6 @@ class FileUpload extends Component {
     return (
       <UploadContainer onDrop={this.dropped}>
         <UploadButton disabled={!!this.props.disabled} icon="file-upload" />
-        {preview}
         <b>{this.props.title}</b>
         {isAdvancedUpload && (
           <small>
@@ -108,6 +126,7 @@ class FileUpload extends Component {
             {"Drag and drop or select files"}
           </small>
         )}
+
         <Input
           onChange={this.openFileSelector}
           accept={convertToBrowserFilter(this.props.allowed)}
@@ -116,6 +135,9 @@ class FileUpload extends Component {
           key={this.props.component_uid}
           disabled={!!this.props.disabled}
         />
+        <UploadPreviewContainer>
+          <div>{preview}</div>
+        </UploadPreviewContainer>
       </UploadContainer>
     );
   }
@@ -130,6 +152,7 @@ FileUpload.propTypes = {
   previewType: PropTypes.any,
   upload: PropTypes.func.isRequired
 };
+
 export default inputFactory(FileUpload, true);
 
 export const ImagePreview = props => (

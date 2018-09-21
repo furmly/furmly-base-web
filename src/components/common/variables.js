@@ -3,6 +3,7 @@ export const lineHeight = 1.3;
 export const smallText = props => props.theme.factor * 14;
 export const smallestText = props => props.theme.factor * 12;
 export const bodyText = props => props.theme.factor * 16;
+export const titleText = props => props.theme.factor * 18;
 export const labelBackgroundColor = props => props.theme.labelBackgroundColor;
 export const labelColor = props => props.theme.labelColor;
 export const errorColor = props => props.theme.errorColor || "red";

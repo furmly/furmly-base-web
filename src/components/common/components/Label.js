@@ -25,20 +25,23 @@ export const Label = styled.label`
 const FormLabelContainer = styled.div`
   width: 100%;
   position: relative;
+  overflow: hidden;
   visibility: ${props => (props.hide && "hidden") || "visible"};
 `;
 const FocusIndicator = styled.hr`
-  width: 0%;
+  width: 100%;
+  transform: translateX(-100%);
   position: absolute;
   bottom: 0px;
   border: none;
   margin: 0px;
   height: ${formLineWidth}px;
   background-color: ${labelBackgroundColor};
-  transition: width ease-in-out 0.5s;
+  transition-property: transform;
+  transition-duration: 0.5s;
   transition-delay: 200ms;
   ${FormDiv}:hover & {
-    width: 100%;
+    transform: translateX(0);
   }
   ${Label}.error+& {
     background-color: ${errorColor};

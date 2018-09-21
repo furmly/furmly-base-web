@@ -1,0 +1,15 @@
+{
+  "presets": ["babel-preset-react"],
+  "plugins": [
+    [
+      "babel-plugin-module-resolver",
+      {
+        "alias": {
+          "error_handler": "./src/errorhandler.js",
+          "client_config": "./.storybook/dynamo.client.config",
+          "call_api": "./node_modules/redux-api-middleware/lib/RSAA"
+        }
+      }
+    ]
+  ]
+}
