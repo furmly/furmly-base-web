@@ -12,7 +12,7 @@ import {
   errorColor
 } from "../common/variables";
 
-import StyledLabel, { Label } from "../common/components/Label";
+import StyledLabel from "../common/components/Label";
 
 const StyledFormDiv = styled.div`
   min-height: ${props => props.theme.factor * 100}px;

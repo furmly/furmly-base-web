@@ -1,7 +1,7 @@
 import React from "react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
-import List, { Layout, Button } from "../src/components/list";
+import List, { Layout, Button } from "../src/components/List";
 
 const itemClicked = action("itemClicked");
 const itemRemoved = action("itemRemoved");

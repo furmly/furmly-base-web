@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { getPager } from "../common/components/Pager/Pager";
 import { getSlice, convertToString } from "../common/utils";
 import {
@@ -9,7 +10,7 @@ import {
   dropDownMenuColor,
   boxShadow
 } from "../common/variables";
-import PropTypes from "prop-types";
+
 import { IconButton } from "../common/components/Button/Button";
 import {
   Table,
@@ -17,7 +18,7 @@ import {
   TableHead,
   TableRow
 } from "../common/components/Table";
-import { inputFactory } from "../input/input";
+
 // More info on all the options is below in the README...just some common use cases shown here
 const convertToBrowserFilter = function(filter) {
   if (filter)
@@ -153,7 +154,7 @@ FileUpload.propTypes = {
   upload: PropTypes.func.isRequired
 };
 
-export default inputFactory(FileUpload, true);
+export default FileUpload;
 
 export const ImagePreview = props => (
   <StyledImagePreview src={props.data.uri} />

@@ -66,7 +66,7 @@ export const inputFactory = (InnerInput, noLabel) => {
   return Input;
 };
 
-const Input = ({ type, value, valueChanged }) => {
+export const Input = ({ type, value, valueChanged }) => {
   return (
     <StyledInput
       type={type}

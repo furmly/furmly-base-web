@@ -11,7 +11,7 @@ import {
   labelColor,
   formLineWidth
 } from "../common/variables";
-import { inputFactory } from "../input/input";
+
 import { hover } from "../common/animations";
 
 const Container = styled.div`
@@ -103,6 +103,7 @@ class Select extends React.Component {
     this.state = { showMenu: [] };
     this.toggleMenu = this.toggleMenu.bind(this);
     this.revealClicked = this.revealClicked.bind(this);
+    this.setRef = this.setRef.bind(this);
   }
   toggleMenu(cb) {
     let i = this.state.showMenu.slice();
@@ -119,12 +120,21 @@ class Select extends React.Component {
     if (cb) args.push(cb);
     setTimeout(() => {
       this.setState.apply(this, args);
-    }, 300);
+    }, 0);
   }
   revealClicked(e) {
     if (e && e.target) this.toggleMenu();
   }
 
+  outsideClick(e) {
+    if (this.state.showMenu.length)
+      this.setState({
+        showMenu: []
+      });
+  }
+  setRef(node) {
+    this.ref = node;
+  }
   render() {
     const {
       disabled,
@@ -137,7 +147,7 @@ class Select extends React.Component {
     } = this.props;
     const showMenu = this.state.showMenu.join(" ");
     return (
-      <Container onBlur={this.revealClicked}>
+      <Container innerRef={node => this.props.innerRef(this, node)}>
         <RevealButton
           className={showMenu}
           onClick={this.revealClicked}
@@ -162,4 +172,4 @@ class Select extends React.Component {
   }
 }
 
-export default inputFactory(Select, true);
+export default Select;

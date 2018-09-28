@@ -1,8 +1,8 @@
 import React from "react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
-import Select from "../src/components/select";
-import Input from "../src/components/input";
+import Select from "../src/components/Select";
+import Input from "../src/components/Input";
 import { userProps } from "./input";
 
 const valueChanged = action("valueChanged");

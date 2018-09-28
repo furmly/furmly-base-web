@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { inputFactory, onChange } from "./input";
+import { inputFactory, onChange } from "./Input";
 import {
   labelColor,
   minimumInputHeight,
