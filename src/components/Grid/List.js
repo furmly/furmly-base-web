@@ -7,7 +7,8 @@ import {
   TableRow
 } from "../common/components/Table";
 import { smallestText } from "../common/variables";
-import { getPager, getSlice } from "../common/components/utils";
+import { getSlice } from "../common/utils";
+import getPager from "../common/components/Pager";
 
 const NotFoundText = styled.p`
   font-size: ${smallestText};
@@ -21,6 +22,8 @@ const renderFooter = props => {
 const isInTemplate = (x, templateConfig) => {
   return !templateConfig || (templateConfig && templateConfig.config[x]);
 };
+
+const Wrapper = styled.div``;
 
 const templates = {
   basic: (items, templateConfig) => {
@@ -93,7 +96,7 @@ class List extends Component {
   }
   render() {
     const { start, end } = getSlice(this.state.page, this.state.count);
-    const items = (this.props.data && this.props.data.slice(start, end)) || [];
+    const items = (this.props.items && this.props.items.slice(start, end)) || [];
     let table =
       this.props.items && this.props.items.length
         ? [
@@ -103,7 +106,7 @@ class List extends Component {
               </TableHead>
               {items.map((item, idx) => (
                 <TableRow key={idx}>
-                  {renderItem(item, this.props.templateConfig, this.props)}
+                  {this.renderItem(item, this.props.templateConfig, this.props)}
                 </TableRow>
               ))}
             </Table>,
@@ -127,10 +130,10 @@ class List extends Component {
       }, 0);
 
       return (
-        <div>
+        <Wrapper>
           {renderHeader(this.props)}
           {renderFooter(this.props)}
-        </div>
+        </Wrapper>
       );
     }
 

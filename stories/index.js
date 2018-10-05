@@ -20,3 +20,4 @@ require("./input");
 require("./select");
 require("./file_upload");
 require("./list");
+require("./grid");

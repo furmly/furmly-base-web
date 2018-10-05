@@ -16,6 +16,7 @@ const Button = styled.button`
   color: ${labelColor};
   overflow: hidden;
   position: relative;
+  cursor: pointer;
   border: none;
   height: ${minimumInputHeight}px;
   &:hover {

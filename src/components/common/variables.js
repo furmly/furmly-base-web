@@ -15,6 +15,10 @@ export const dropDownMenuColor = props =>
   props.theme.dropDownMenuColor || "white";
 export const minimumInputHeight = props =>
   (props.large && props.theme.factor * 10 + 50) || props.theme.factor * 30;
+export const minimumModalHeight = props =>
+  props.theme.minimumModalHeight || "40vh";
+export const minimumModalWidth = props =>
+  props.theme.minimumModalWidth || "40vw";
 export const highLightColor = props =>
   props.theme.highLightColor || "#0000001a";
 export const inputPadding = props => `0px 5px`;

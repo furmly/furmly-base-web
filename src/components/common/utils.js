@@ -89,3 +89,5 @@ export const camelCaseToWord = string => {
     return str.toUpperCase();
   });
 };
+
+export const navigationActionss = {};

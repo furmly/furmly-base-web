@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { getPager } from "../common/components/Pager/Pager";
+import getPager from "../common/components/Pager";
 import { getSlice, convertToString } from "../common/utils";
 import {
   labelBackgroundColor,

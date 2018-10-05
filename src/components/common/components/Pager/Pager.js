@@ -10,7 +10,7 @@ const PrevButtonDefault = props => (
 );
 const ContainerDefault = styled.div``;
 const FootnoteDefault = styled.small``;
-export const getPager = (
+const getPager = (
   NextButton = NextButtonDefault,
   PrevButton = PrevButtonDefault,
   Container = ContainerDefault,
@@ -56,3 +56,5 @@ export const getPager = (
     );
   };
 };
+
+export default getPager;
