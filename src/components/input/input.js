@@ -5,7 +5,8 @@ import {
   minimumInputHeight,
   inputPadding,
   highLightColor,
-  labelSize
+  labelSize,
+  inputBackgroundColor
 } from "../common/variables";
 import { hover } from "../common/animations";
 import FormDiv from "../common/components/FormDiv";
@@ -16,7 +17,7 @@ import Copy from "../common/components/Copy";
 const StyledInput = styled.input`
   border: none;
   display: block;
-  background-color: transparent;
+  background-color: ${inputBackgroundColor};
   min-height: ${minimumInputHeight}px;
   padding: ${inputPadding};
   width: 100%;

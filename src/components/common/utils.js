@@ -90,4 +90,4 @@ export const camelCaseToWord = string => {
   });
 };
 
-export const navigationActionss = {};
+export const navigationActions = {};

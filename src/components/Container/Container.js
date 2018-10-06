@@ -71,7 +71,7 @@ export const Dynamic = styled(Container)`
       width: 100%;
     }
   }
-  ${media.medium`
+  ${media.xSmall`
   & {
     .input,
     .select,

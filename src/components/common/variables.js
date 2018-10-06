@@ -21,6 +21,9 @@ export const minimumModalWidth = props =>
   props.theme.minimumModalWidth || "40vw";
 export const highLightColor = props =>
   props.theme.highLightColor || "#0000001a";
+
+export const inputBackgroundColor = props =>
+  props.theme.inputBackgroundColor || "#ababab1a";
 export const inputPadding = props => `0px 5px`;
 export const iconSize = props => props.size || props.theme.factor * 10;
 export const buttonDefaults = "display: block;  border: none;";

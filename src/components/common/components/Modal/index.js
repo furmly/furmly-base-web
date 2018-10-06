@@ -51,7 +51,10 @@ Modal.propTypes = {
   visibility: PropTypes.bool,
   done: PropTypes.func.isRequired,
   title: PropTypes.string,
-  template: PropTypes.arrayOf(PropTypes.element)
+  template: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.element),
+    PropTypes.object
+  ])
 };
 
 export default Modal;

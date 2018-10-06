@@ -4,13 +4,16 @@ import styled from "styled-components";
 import Button from "../common/components/Button";
 
 const HeaderButton = styled(Button)``;
+const Container = styled.div``;
 const GridHeader = props => {
-  return [
-    props.children,
-    <HeaderButton icon="search" onClick={props.filter}>
-      SEARCH
-    </HeaderButton>
-  ];
+  return (
+    <Container>
+      {props.children}
+      <HeaderButton icon="search" onClick={props.filter}>
+        SEARCH
+      </HeaderButton>
+    </Container>
+  );
 };
 
 GridHeader.propTypes = {

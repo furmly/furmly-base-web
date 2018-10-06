@@ -1,3 +1,4 @@
-export default function() {
-  console.log("error has been handled");
-}
+const React = require("react");
+module.exports = function(e) {
+  return <p>{`error has been handled ${e}`}</p>;
+};
