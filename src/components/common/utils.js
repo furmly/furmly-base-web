@@ -1,4 +1,13 @@
 import { css, injectGlobal } from "styled-components";
+import { replace, push } from "react-router-redux";
+import qs from "query-string";
+import {
+  setParams,
+  goBack,
+  clearNavigationStack,
+  replaceStack,
+  alreadyVisible
+} from "furmly-client";
 import Lato from "../../fonts/Lato-Light.ttf";
 import Roboto from "../../fonts/Roboto-Thin.ttf";
 import { lineHeight } from "./variables";
@@ -90,4 +99,55 @@ export const camelCaseToWord = string => {
   });
 };
 
-export const navigationActions = {};
+const navigationMap = {
+  Furmly: { path: "/home/furmly/:id", routeParams: ["id"] }
+};
+const extractLocationAndParams = function({ params, key }, navigationContext) {
+  let loc = (navigationContext || navigationMap)[key];
+  if (!loc) throw new Error("unknown navigation");
+  if (loc.routeParams) {
+    loc.routeParams.forEach(x => {
+      if (!params[x]) throw new Error(`routeParam missing ${x}`);
+    });
+  }
+  let path = loc.path
+    .split("/")
+    .map(x => {
+      if (x.indexOf(":") !== -1) return params[x.substring(1)];
+      return x;
+    })
+    .join("/");
+  if (params.fetchParams) {
+    path += `?${qs.stringify(params.fetchParams)}`;
+  }
+  return path;
+};
+export const navigationActions = {
+  setParams: function(args, navigationContext, navigation) {
+    let path = extractLocationAndParams(args, navigationContext);
+    return (
+      navigation.dispatch(setParams(args)), navigation.dispatch(push(path))
+    );
+  },
+  replaceStack: function(arr, navigationContext, navigation) {
+    let path = extractLocationAndParams(arr[arr.length - 1], navigationContext);
+    return (
+      navigation.dispatch(replaceStack(arr)), navigation.dispatch(replace(path))
+    );
+  },
+  navigate: function(args, navigationContext, navigation) {
+    let path = extractLocationAndParams(args, navigationContext);
+    return (
+      navigation.dispatch(setParams(args)), navigation.dispatch(push(path))
+    );
+  },
+  goBack: function(navigation, args) {
+    return navigation.dispatch(goBack(args));
+  },
+  clear: function(navigation) {
+    return navigation.dispatch(clearNavigationStack());
+  },
+  alreadyVisible: function(navigation, args) {
+    return navigation.dispatch(alreadyVisible(args));
+  }
+};

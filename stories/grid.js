@@ -4,11 +4,7 @@ import { action } from "@storybook/addon-actions";
 import { Provider } from "react-redux";
 import { reducers as furmly_reducers } from "furmly-client";
 import { createStore, combineReducers } from "redux";
-import GridList, {
-  GridHeader,
-  GridLayout,
-  GridCommandsView
-} from "../src/components/Grid";
+import GridList, { GridHeader, GridCommandsView } from "../src/components/Grid";
 import Input from "../src/components/Input";
 import { userProps } from "./input";
 import configure from "../src/configure";
@@ -69,6 +65,7 @@ const layoutProps = {
 };
 
 const gridProps = {
+  items: listProps.items,
   asyncValidators: [],
   validators: [],
   component_uid: "0925e37f-a48a-418d-a5cd-cf9569d5ad82",
@@ -76,14 +73,18 @@ const gridProps = {
   args: {
     filter: [
       {
-        args: { processor: "ascfkajenfkjeabkajb" },
+        args: {
+          config: { value: "b41a05b1-e2c8-46dc-87b6-772a1700c55e" },
+          type: "PROCESSOR"
+        },
         validators: [],
         description: "",
         asyncValidators: [],
         name: "gender",
         label: "Gender",
         elementType: "SELECT",
-        component_uid: "b41a05b1-e2c8-46dc-87b6-772a1700c55e"
+        component_uid: "b41a05b1-e2c8-46dc-87b6-772a1700c55e",
+        items: [{ name: "something", _id: 1 }]
       },
       {
         validators: [],
@@ -221,12 +222,14 @@ storiesOf("Grid", module)
   ))
   .add("CommandView only", () => <GridCommandsView {...commandsProps} />)
   .add("Full", () => {
-    const controls = configure();
-    const { GRID } = controls;
-    const store = createStore(combineReducers({ furmly: furmly_reducers }));
-    return (
-      <Provider store={store}>
-        <GRID {...gridProps} />
-      </Provider>
-    );
+    const { controls } = configure();
+    const { GRID, PROCESS } = controls;
+    controls.cook("provider", [
+      props => (
+        <div>
+          <PROCESS />
+        </div>
+      )
+    ]);
+    return <GRID {...gridProps} />;
   });

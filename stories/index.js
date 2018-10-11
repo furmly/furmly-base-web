@@ -3,6 +3,7 @@ import { addDecorator } from "@storybook/react";
 import { ThemeProvider } from "styled-components";
 import { injectFontsAndCSSBase } from "../src/components/common/utils";
 
+
 injectFontsAndCSSBase();
 
 const defaultTheme = {
@@ -12,10 +13,11 @@ const defaultTheme = {
   errorColor: "#ab0101"
 };
 
-const Provider = storyFn => (
+const ProviderForTheme = storyFn => (
   <ThemeProvider theme={defaultTheme}>{storyFn()}</ThemeProvider>
 );
-addDecorator(Provider);
+//const ProviderForFurmly = storyFn => <
+addDecorator(ProviderForTheme);
 require("./input");
 require("./select");
 require("./file_upload");

@@ -1,8 +1,5 @@
-import controlMap from "furmly-client";
-import FurmlyContainer, {
-  Dynamic,
-  componentWrapper
-} from "../src/components/Container";
+import controlMap, { Deferred } from "furmly-client";
+import { Dynamic, componentWrapper } from "../src/components/Container";
 import SubTitle from "./components/common/components/SubTitle";
 import GridList, {
   GridHeader,
@@ -10,7 +7,10 @@ import GridList, {
   GridCommandResultView,
   GridCommandsView
 } from "./components/Grid";
+import { TextView as ProcessTextView } from "./components/Process";
+import { default as Provider } from "./components/Provider";
 import View from "./components/View";
+import Select from "./components/Select";
 import Warning from "./components/common/components/Warning";
 import Modal from "./components/common/components/Modal";
 import ProgressBar from "./components/common/components/ProgressBar";
@@ -23,25 +23,32 @@ import FurmlyInput, {
 
 export default config => {
   const maps = controlMap();
+  const container = new Deferred("container");
   //create component locator
   const componentLocator = maps.componentLocator(config && config.interceptors);
-  //create default container
-  const DefaultContainer = maps
-    .CONTAINER(Dynamic, SubTitle, componentWrapper, componentLocator)
-    .getComponent();
+
+  maps.addCONTAINERRecipe([
+    Dynamic,
+    SubTitle,
+    componentWrapper,
+    componentLocator
+  ]);
 
   //create view class.
-  maps.VIEW = maps.VIEW(View, Warning, DefaultContainer).getComponent();
+  maps.addVIEWRecipe([View, Warning, container]);
 
   //create input class
-  maps.addRecipe("INPUT", [
+  maps.addINPUTRecipe([
     layoutWrapper,
     FurmlyInput,
     FurmlyDatePicker,
     FurmlyCheckbox
   ]);
 
-  maps.addRecipe("GRID", [
+  //create select.
+  maps.addSELECTRecipe([ProgressBar, layoutWrapper, Select]);
+
+  maps.addGRIDRecipe([
     GridLayout,
     GridList,
     Modal,
@@ -50,8 +57,10 @@ export default config => {
     GridCommandsView,
     navigationActions,
     GridCommandResultView,
-    DefaultContainer
+    container
   ]);
+
+  maps.addPROCESSRecipe([ProgressBar, ProcessTextView, new Deferred("view")]);
 
   return maps.cook();
 };
