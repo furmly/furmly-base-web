@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
 const Text = styled.p``;
 export const TextView = props => {
@@ -9,4 +10,3 @@ export const TextView = props => {
 TextView.propTypes = {
   text: PropTypes.string
 };
-

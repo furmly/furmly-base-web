@@ -1,1 +1,3 @@
-module.exports = {};
+module.exports = {
+  preDispatch(req) {return req;}
+};

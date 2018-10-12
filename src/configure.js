@@ -8,7 +8,7 @@ import GridList, {
   GridCommandsView
 } from "./components/Grid";
 import { TextView as ProcessTextView } from "./components/Process";
-import { default as Provider } from "./components/Provider";
+import Page from "./components/Page";
 import View from "./components/View";
 import Select from "./components/Select";
 import Warning from "./components/common/components/Warning";
@@ -48,6 +48,7 @@ export default config => {
   //create select.
   maps.addSELECTRecipe([ProgressBar, layoutWrapper, Select]);
 
+  //create grid
   maps.addGRIDRecipe([
     GridLayout,
     GridList,
@@ -61,6 +62,18 @@ export default config => {
   ]);
 
   maps.addPROCESSRecipe([ProgressBar, ProcessTextView, new Deferred("view")]);
+
+  maps.addPROVIDERRecipe([new Deferred("process"), ...config.providerConfig]);
+
+  // this creates a furmly page.
+  // this could be done better.
+  maps.createPage = (WrappedComponent, ...args) =>
+    maps
+      .PROVIDER(
+        Page(WrappedComponent, config.loginUrl, config.homeUrl),
+        ...args
+      )
+      .getComponent();
 
   return maps.cook();
 };
