@@ -7,7 +7,19 @@ const furmlyClient = fs.realpathSync(path.join(npmBase, "furmly-client"));
 module.exports = (baseConfig, env, defaultConfig) => {
   console.log("babel config working");
   defaultConfig.plugins.push(
-    new CopyWebpackPlugin([{ from: "static" }, { from: "stories/fixtures" }])
+    new CopyWebpackPlugin([
+      { from: "static" },
+      {
+        from: "stories/fixtures",
+        transform: function(content) {
+          const es5 = require("babel-core").transform(content, {
+            presets: [["babel-preset-env", { useBuiltIns: "entry" }]]
+          }).code;
+
+          return `exports={};\n ${es5}`;
+        }
+      }
+    ])
   );
   defaultConfig.module.rules[0].include.push(furmlyClient);
   const babelRule = defaultConfig.module.rules[0].query;

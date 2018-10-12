@@ -1,7 +1,7 @@
-const fixtures = self.importScripts("index.js");
-const process = fixtures.getProcess();
-process.steps.push(fixtures.getStep());
-process.steps[0].form.elements.push(fixtures.getSimpleGrid());
+self.importScripts("index.js");
+const process = exports.getProcess();
+process.steps.push(exports.getStep());
+process.steps[0].form.elements.push(exports.getSimpleGrid());
 const matches = [
   { pattern: /describe\/59bf14940774e451fcd2f0df/, response: process }
 ];

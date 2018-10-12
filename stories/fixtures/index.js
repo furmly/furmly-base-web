@@ -1,15 +1,7 @@
-import { action } from "@storybook/react";
-export const itemClicked = action("itemClicked");
-export const itemRemoved = action("itemRemoved");
-export const done = action("done");
-export const execCommand = action("execCommand");
-
 export function getCommands() {
   return {
     visibility: true,
     title: "What would you like to do ?",
-    done,
-    execCommand,
     commands: [
       {
         commandText: "Do some creative thing at the backend",
@@ -30,13 +22,13 @@ export function getCommands() {
   };
 }
 
-export function getList() {
+export function getList(rowClicked, rowRemoved) {
   const listProps = {
     description: "This is a description",
     disabled: false,
     label: "Select something...",
-    rowClicked: itemClicked,
-    rowRemoved: itemRemoved,
+    rowClicked,
+    rowRemoved,
     items: []
   };
   for (let i = 1; i <= 23; i += 1) {
