@@ -1,14 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
-import styled from "styled-components";
 
-const Layout = styled.div`
-  width: 100%;
-`;
+
 const GridLayout = props => {
   const { list, itemView, commandView, commandViewResult, filter } = props;
   const elements = [filter, list, itemView, commandView, commandViewResult];
-  return <Layout>{elements}</Layout>;
+  return <React.Fragment>{elements}</React.Fragment>;
 };
 
 GridLayout.propTypes = {

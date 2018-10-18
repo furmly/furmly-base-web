@@ -4,21 +4,25 @@ import {
   labelBackgroundColor,
   smallText,
   errorColor,
+  errorForegroundColor,
   labelColor,
   formLineWidth
 } from "../variables";
 import FormDiv from "../components/FormDiv";
+import { setupReversal } from "../utils";
 
 export const Label = styled.label`
-  background-color: ${labelBackgroundColor};
-  color: ${labelColor};
+  background-color: ${setupReversal(labelBackgroundColor, labelColor)};
+  color: ${setupReversal(labelColor, labelBackgroundColor)};
   padding: ${props => props.theme.factor * 5}px;
   font-size: ${smallText}px;
   text-transform: uppercase;
+  font-weight:bold;
   display: inline-block;
   transition: background-color 1s;
   &.error {
     background-color: ${errorColor};
+    color: ${errorForegroundColor};
   }
 `;
 

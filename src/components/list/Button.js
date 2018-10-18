@@ -3,6 +3,7 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import { StyledIconButton } from "../common/components/Button/Button";
 import { labelSize } from "../common/variables";
+import { INTENTS } from "../common/utils";
 
 const StyledListButton = styled(StyledIconButton)`
   position: absolute;
@@ -12,6 +13,7 @@ const StyledListButton = styled(StyledIconButton)`
 `;
 const ListButton = props => (
   <StyledListButton
+    intent={INTENTS.DEFAULT}
     disabled={!!props.disabled}
     icon="plus"
     onClick={() => props.click()}

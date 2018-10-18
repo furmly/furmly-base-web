@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { inputFactory, onChange } from "./Input";
+import { inputFactory, onChangeFactory } from "./Input";
 import {
   labelColor,
   minimumInputHeight,
@@ -8,11 +8,14 @@ import {
   errorColor,
   labelBackgroundColor
 } from "../common/variables";
+import { setupReversal } from "../common/utils";
 
+const onChange = onChangeFactory("checked");
 const size = props => props.theme.factor * 20;
 const Label = styled.label`
   margin-left: ${props => props.theme.factor * 5}px;
   vertical-align: middle;
+  font-weight: bold;
   font-size: ${smallText}px;
   text-transform: uppercase;
   display: inline-block;
@@ -24,55 +27,59 @@ const Label = styled.label`
 
 const Wrapper = styled.div`
   height: ${minimumInputHeight}px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 `;
 
+const tickWidth = props => (props.theme.factor * 20) / 2 + 2;
+const Tick = styled.span`
+  width: ${tickWidth}px;
+  height: 6px;
+  position: absolute;
+  top: 6px;
+  left: 5px;
+  border: 3px solid ${setupReversal(labelColor, labelBackgroundColor)};
+  border-top: none;
+  border-right: none;
+  background: transparent;
+  opacity: 0;
+  transform: rotate(-45deg);
+`;
 const Nob = styled.label`
   display: inline-block;
   position: relative;
   width: ${size}px;
   height: ${size}px;
   cursor: pointer;
-  background: ${labelBackgroundColor};
-  &:after {
-    content: "";
-    width: ${props => (props.theme.factor * 20) / 2 + 2}px;
-    height: 5px;
-    position: absolute;
-    top: 4px;
-    left: 4px;
-    border: 3px solid ${labelColor};
-    border-top: none;
-    border-right: none;
-    background: transparent;
-    opacity: 0;
-    transform: rotate(-45deg);
-  }
-  &:hover::after {
+  background: ${setupReversal(labelBackgroundColor, labelColor)};
+  &:hover > ${Tick} {
     opacity: 0.3;
   }
 `;
 const Checkbox = styled.input.attrs({ type: "checkbox" })`
   &[type="checkbox"] {
     visibility: hidden;
-    &:checked + label:after {
+    &:checked + ${Tick} {
       opacity: 1;
     }
   }
 `;
 
-export default inputFactory(props => {
+export const RawCheckbox = props => {
   return (
     <Wrapper>
-      <Nob>
+      <Nob reverse={props.reverse}>
         <Checkbox
-          value={!!props.value}
           checked={!!props.value}
-          onChange={onChange.bind(this, value =>
-            props.valueChanged(value === "true")
-          )}
+          onChange={event =>
+            onChange(value => props.valueChanged(value), event, true)
+          }
         />
+        <Tick reverse={props.reverse} />
       </Nob>
       <Label>{props.label}</Label>
     </Wrapper>
   );
-}, true);
+};
+export default inputFactory(RawCheckbox, true);

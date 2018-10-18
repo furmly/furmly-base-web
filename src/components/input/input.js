@@ -29,11 +29,15 @@ const StyledInput = styled.input`
 const FakeLabel = styled.div`
   height: ${labelSize}px;
 `;
-export const onChange = (valueChanged, evt) => {
-  if (evt.preventDefault && typeof evt.preventDefault !== null)
-    evt.preventDefault();
-  valueChanged(evt.target.value);
+export const onChangeFactory = (propName = "value") => {
+  return (valueChanged, evt, skipPreventDefault) => {
+    if (evt.preventDefault && !skipPreventDefault) {
+      evt.preventDefault();
+    }
+    valueChanged(evt.target[propName]);
+  };
 };
+export const onChange = onChangeFactory();
 
 export const inputFactory = (InnerInput, noLabel) => {
   const Input = props => {
@@ -41,7 +45,10 @@ export const inputFactory = (InnerInput, noLabel) => {
     return (
       <FormDiv>
         {!noLabel ? (
-          <FormLabel className={(errors && errors.length && "error") || ""}>
+          <FormLabel
+            reverse={true}
+            className={(errors && errors.length && "error") || ""}
+          >
             {label}
           </FormLabel>
         ) : (

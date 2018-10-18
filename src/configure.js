@@ -7,6 +7,7 @@ import GridList, {
   GridCommandResultView,
   GridCommandsView
 } from "./components/Grid";
+import SectionLayout, { Header as SectionHeader } from "./components/Section";
 import { TextView as ProcessTextView } from "./components/Process";
 import Page from "./components/Page";
 import View from "./components/View";
@@ -60,6 +61,8 @@ export default config => {
     GridCommandResultView,
     container
   ]);
+
+  maps.addSECTIONRecipe([SectionLayout, SectionHeader, container]);
 
   maps.addPROCESSRecipe([ProgressBar, ProcessTextView, new Deferred("view")]);
 

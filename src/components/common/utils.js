@@ -10,7 +10,31 @@ import {
 } from "furmly-client";
 import Lato from "../../fonts/Lato-Light.ttf";
 import Roboto from "../../fonts/Roboto-Thin.ttf";
-import { lineHeight } from "./variables";
+import {
+  lineHeight,
+  accentColor,
+  labelBackgroundColor,
+  labelColor
+} from "./variables";
+
+export const INTENTS = {
+  ACCENT: "ACCENT",
+  DEFAULT: "DEFAULT"
+};
+export const getColorFromIntent = name => {
+  switch (name) {
+    case INTENTS.ACCENT:
+      return { backgoundColor: accentColor, foregroundColor: labelColor };
+    case INTENTS.DEFAULT:
+      return {
+        backgoundColor: labelBackgroundColor,
+        foregroundColor: labelColor
+      };
+  }
+};
+
+export const setupReversal = (x, y) => props =>
+  (props.reverse && y(props)) || x(props);
 
 export const createMedia = (
   xSmall = 600,

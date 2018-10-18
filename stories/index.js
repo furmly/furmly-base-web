@@ -6,10 +6,12 @@ import registerServiceWorker from "./utils/registerServiceWorker";
 registerServiceWorker();
 injectFontsAndCSSBase();
 const defaultTheme = {
-  labelBackgroundColor: "#282828",
+  labelBackgroundColor: "#383838",
+  formComponentBackgroundColor: "white",
   labelColor: "white",
   factor: 1.2,
-  errorColor: "#ab0101"
+  errorColor: "#ab0101",
+  errorForeground: "white"
 };
 
 const ProviderForTheme = storyFn => (
@@ -22,4 +24,4 @@ require("./select");
 require("./file_upload");
 require("./list");
 require("./grid");
-
+require("./section");

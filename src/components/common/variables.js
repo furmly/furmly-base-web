@@ -5,8 +5,11 @@ export const smallestText = props => props.theme.factor * 12;
 export const bodyText = props => props.theme.factor * 16;
 export const titleText = props => props.theme.factor * 18;
 export const labelBackgroundColor = props => props.theme.labelBackgroundColor;
+export const accentColor = props => props.theme.accentColor || "#783196";
 export const labelColor = props => props.theme.labelColor;
 export const errorColor = props => props.theme.errorColor || "red";
+export const errorForegroundColor = props =>
+  props.theme.errorForegroundColor || "white";
 export const elementPadding = props => props.theme.factor * 5;
 export const borderColor = props => props.theme.borderColor || "gray";
 export const labelSize = props =>
@@ -15,6 +18,7 @@ export const dropDownMenuColor = props =>
   props.theme.dropDownMenuColor || "white";
 export const minimumInputHeight = props =>
   (props.large && props.theme.factor * 10 + 50) || props.theme.factor * 30;
+export const containerPadding = props => props.theme.factor * 10;
 export const minimumModalHeight = props =>
   props.theme.minimumModalHeight || "40vh";
 export const minimumModalWidth = props =>
@@ -26,7 +30,13 @@ export const inputBackgroundColor = props =>
   props.theme.inputBackgroundColor || "#ababab1a";
 export const inputPadding = props => `0px 5px`;
 export const iconSize = props => props.size || props.theme.factor * 10;
+export const largeIconSize = props => props.size || props.theme.factor * 20;
 export const buttonDefaults = "display: block;  border: none;";
-export const formComponentBackgroundColor = "#00000003";
-export const boxShadow = "box-shadow:0px 2px 4px -1px #0000002e";
+export const formComponentBackgroundColor = props =>
+  props.theme.formComponentBackgroundColor || "#00000003";
+const dropShadowColor = "#0000002e";
+export const boxShadow = `box-shadow:0px 0px 2px 0px ${dropShadowColor}`;
+export const largerBoxShadow = `box-shadow:0px 5px 4px -1px ${dropShadowColor}`;
+export const iconDropShadow = `filter: drop-shadow(0px 3px 1px ${dropShadowColor})`;
 export const formLineWidth = props => props.theme.factor * 2;
+export const aboveOthers = "z-index:1";

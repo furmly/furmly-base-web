@@ -1,26 +1,34 @@
 import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { media } from "../../utils";
+import { media, getColorFromIntent, INTENTS } from "../../utils";
 import {
-  labelBackgroundColor,
   minimumInputHeight,
-  labelColor
+  labelColor,
+  elementPadding,
+  iconDropShadow,
+  largerBoxShadow
 } from "../../variables";
 import { ripple } from "../../animations";
 import Icon from "../Icon";
 
 const Button = styled.button`
   ${media.medium`min-width:${props => props.theme.factor * 54}px`};
-  background-color: ${labelBackgroundColor};
-  color: ${labelColor};
+  ${largerBoxShadow};
+  background-color: ${props =>
+    getColorFromIntent(props.intent || INTENTS.ACCENT).backgoundColor};
+  color: ${props =>
+    getColorFromIntent(props.intent || INTENTS.ACCENT).foregroundColor};
   overflow: hidden;
   position: relative;
   cursor: pointer;
+  font-weight: bold;
+  padding: ${elementPadding}px;
   border: none;
   height: ${minimumInputHeight}px;
   &:hover {
-    font-weight: bold;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2),
+      0 6px 20px 0 rgba(0, 0, 0, 0.19);
   }
   &:focus:not(:active)::after {
     animation: ${ripple} 1s ease-out;
@@ -57,10 +65,14 @@ const IconButtonWrapper = styled.button`
   border: none;
   background: none;
   cursor: pointer;
+  svg {
+    ${iconDropShadow};
+  }
 `;
 export const IconButton = props => (
   <IconButtonWrapper onClick={props.onClick}>
     <Icon size={props.iconSize} icon={props.icon} />
+    {props.label}
   </IconButtonWrapper>
 );
 

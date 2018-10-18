@@ -10,14 +10,7 @@ module.exports = (baseConfig, env, defaultConfig) => {
     new CopyWebpackPlugin([
       { from: "static" },
       {
-        from: "stories/fixtures",
-        transform: function(content) {
-          const es5 = require("babel-core").transform(content, {
-            presets: [["babel-preset-env", { useBuiltIns: "entry" }]]
-          }).code;
-
-          return `exports={};\n ${es5}`;
-        }
+        from: "stories/fixtures"
       }
     ])
   );

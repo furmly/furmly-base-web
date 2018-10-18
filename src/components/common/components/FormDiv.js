@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { formComponentBackgroundColor } from "../variables";
+import { formComponentBackgroundColor , containerPadding } from "../variables";
 export default styled.div`
-  padding: ${props => props.theme.factor * 10}px;
+  padding: ${containerPadding}px;
   background-color: ${formComponentBackgroundColor};
 `;

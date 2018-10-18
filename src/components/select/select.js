@@ -9,7 +9,8 @@ import {
   labelBackgroundColor,
   borderColor,
   labelColor,
-  formLineWidth
+  formLineWidth,
+  aboveOthers
 } from "../common/variables";
 
 import { hover } from "../common/animations";
@@ -31,6 +32,7 @@ const MenuContainer = styled.div`
   max-height: 25vh;
 `;
 const Menu = styled.div`
+  ${aboveOthers};
   position: absolute;
   border-top-color: ${borderColor};
   border-top-width: 2px;

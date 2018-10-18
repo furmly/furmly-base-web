@@ -1,3 +1,6 @@
 module.exports = {
-  preDispatch(req) {return req;}
+	preDispatch(req) {
+		return req;
+	},
+	waitingProcessors: []
 };

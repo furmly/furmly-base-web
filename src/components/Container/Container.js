@@ -60,16 +60,16 @@ export const Dynamic = styled(Container)`
       width: 50%;
     }
 
-    .select:nth-child(even) + .input,
-    .input:nth-child(even) + .select,
-    .select:nth-child(odd) + .input,
-    .input:nth-child(odd) + .select,
-    .label:first-child + .input:last-child,
-    .label:first-child + .select:last-child,
-    .label:first-child + .download:last-child,
-    .label:first-child + .fileupload:last-child {
-      width: 100%;
-    }
+    // .select:nth-child(even) + .input,
+    // .input:nth-child(even) + .select,
+    // .select:nth-child(odd) + .input,
+    // .input:nth-child(odd) + .select,
+    // .label:first-child + .input:last-child,
+    // .label:first-child + .select:last-child,
+    // .label:first-child + .download:last-child,
+    // .label:first-child + .fileupload:last-child {
+    //   width: 100%;
+    // }
   }
   ${media.xSmall`
   & {

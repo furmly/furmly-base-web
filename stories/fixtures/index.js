@@ -22,6 +22,21 @@ export function getCommands() {
   };
 }
 
+export function getGridList() {
+  const listProps = {
+    items: []
+  };
+  for (let i = 1; i <= 23; i += 1) {
+    listProps.items.push({
+      firstName: "Person " + i,
+      _id: i,
+      middlename: "Chidi",
+      surname: "Bond"
+    });
+  }
+  listProps.total = listProps.items.length;
+  return listProps;
+}
 export function getList(rowClicked, rowRemoved) {
   const listProps = {
     description: "This is a description",
@@ -29,7 +44,8 @@ export function getList(rowClicked, rowRemoved) {
     label: "Select something...",
     rowClicked,
     rowRemoved,
-    items: []
+    items: [],
+    selectedItems: {}
   };
   for (let i = 1; i <= 23; i += 1) {
     listProps.items.push({
@@ -43,6 +59,25 @@ export function getList(rowClicked, rowRemoved) {
   return listProps;
 }
 
+export function getAddTemplate() {
+  return [
+    {
+      elementType: "INPUT",
+      args: {
+        type: "text"
+      },
+      name: "name",
+      label: "First Name",
+      component_uid: "7089f0e4-0d22-4dd8-9c85-18768ba73054"
+    },
+    {
+      elementType: "INPUT",
+      name: "surname",
+      label: "Surname",
+      component_uid: "c9a6cd6e-b937-4710-90ee-80523ce91356"
+    }
+  ];
+}
 export function getComplexGrid() {
   return {
     items: getList().items,
@@ -202,6 +237,40 @@ export function getSimpleGrid() {
     args: {
       filter: [
         {
+          validators: [{ validatorType: "REQUIRED" }],
+          elementType: "INPUT",
+          args: {
+            type: "text"
+          },
+          name: "code",
+          label: "Search for snippet",
+          component_uid: "7089f0e4-0d22-4dd8-9c85-08768ba73054"
+        },
+        {
+          validators: [],
+          description: "",
+          asyncValidators: [],
+          args: {
+            type: "password"
+          },
+          name: "password",
+          label: "Password (Current User)",
+          elementType: "INPUT",
+          component_uid: "45572c9a-0f1c-4a31-8bcd-8ddc553d9713"
+        },
+        {
+          validators: [],
+          description: "",
+          asyncValidators: [],
+          args: {
+            type: "checkbox"
+          },
+          name: "requiresIdentity",
+          label: "Requires Identity",
+          elementType: "INPUT",
+          component_uid: "f768dfd5-cf25-4419-877b-970b09512740"
+        },
+        {
           elementType: "SELECT",
           args: {
             type: "PROCESSOR",
@@ -215,7 +284,7 @@ export function getSimpleGrid() {
           component_uid: "3d997424-8e27-4164-8cc6-05a02412f472"
         }
       ],
-      mode: "EDITONLY",
+      mode: "CRUD",
       templateConfig:
         '{\n    "name":"basic",\n    "config":{\n        "firstName":"First Name",\n        "middlename":"Middlename",\n        "surname":"Surname"\n    }\n}',
       extra: {
@@ -245,9 +314,60 @@ export function getStep() {
   };
 }
 
-export function getProcess() {
+export function getSection() {
   return {
-    _id: "59bf14940774e451fcd2f0df",
+    args: {
+      elements: [
+        {
+          validators: [],
+          description: "Family name",
+          asyncValidators: [],
+          args: {
+            type: "text"
+          },
+          name: "Surname",
+          label: "Surname",
+          elementType: "INPUT",
+          component_uid: "bdea2277-f04f-4126-a806-91cf43da9327"
+        },
+        {
+          validators: [],
+          description: "",
+          asyncValidators: [],
+          name: "firstName",
+          label: "First Name",
+          elementType: "INPUT",
+          component_uid: "e4a2b238-48ed-44d5-81eb-4dfc440df1fd"
+        }
+      ]
+    },
+    asyncValidators: [],
+    validators: [],
+    elementType: "SECTION",
+    label: "Personal Details",
+    description:
+      "All confidential information provided by you is kept with utmost secrecy",
+    name: "personalDetails",
+    _id: "59c02c2ff0c3e43dcc70c4e1",
+    component_uid: "745c0c25-546f-4e54-aa04-a1589186a6ae"
+  };
+}
+export function runSelectProcessor() {
+  return [
+    {
+      _id: "MALE",
+      displayLabel: "Male"
+    },
+    {
+      _id: "FEMALE",
+      displayLabel: "Female"
+    }
+  ];
+}
+
+export function getProcess(id) {
+  return {
+    _id: id || "59bf14940774e451fcd2f0df",
     title: "Student Clearance",
     description: "Used by clearance officers to clear students",
     uid: "CLEAR_STUDENT",

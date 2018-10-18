@@ -10,6 +10,7 @@ import {
   minimumModalHeight,
   minimumModalWidth
 } from "../../variables";
+import { INTENTS, media } from "../../utils";
 
 const Title = styled(Label)`
   display: block;
@@ -20,17 +21,23 @@ const Title = styled(Label)`
 const ModalContainer = styled.div`
   background-color: white;
   color: red;
+  ${boxShadow};
   min-height: ${minimumModalHeight};
   min-width: ${minimumModalWidth};
-  ${boxShadow};
+  ${media.xSmall`
+  min-width:100%;
+`};
 `;
 const Modal = props => {
   const actions = props.actions || [
-    { content: "cancel", onClick: () => props.done(false), accent: true },
+    {
+      content: "cancel",
+      onClick: () => props.done(false),
+      intent: INTENTS.DEFAULT
+    },
     {
       onClick: () => props.done(true),
-      content: "ok",
-      accent: true
+      content: "ok"
     }
   ];
   return (

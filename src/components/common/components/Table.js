@@ -22,7 +22,7 @@ const TableRow = styled.div`
   padding: ${inputPadding};
   background-color: ${highLightColor};
   min-width: 100%;
-  text-align: center;
+  text-align: left;
 `;
 const TableHead = styled(TableRow)`
   p,
@@ -33,7 +33,6 @@ const TableHead = styled(TableRow)`
   h4,
   h5,
   * {
-    font-weight: bold;
     text-transform: uppercase;
   }
   background-color: ${labelBackgroundColor};

@@ -26,7 +26,7 @@ const Icon = ({ icon, size, color }) => {
 };
 
 Icon.propTypes = {
-  icon: PropTypes.string.isRequired
+  icon: PropTypes.oneOf(Object.keys(icons))
 };
 
 export default Icon;

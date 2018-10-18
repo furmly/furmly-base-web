@@ -6,10 +6,30 @@ import {
   TableHead,
   TableRow
 } from "../common/components/Table";
-import { smallestText } from "../common/variables";
+import { smallestText, minimumInputHeight } from "../common/variables";
 import { getSlice } from "../common/utils";
 import getPager from "../common/components/Pager";
+import { RawCheckbox as Checkbox } from "../Input/Checkbox";
+import { IconButton } from "../common/components/Button";
 
+const ListTable = styled(Table)`
+  margin-top: 10px;
+  padding-top: ${minimumInputHeight}px;
+  position: relative;
+`;
+const NewButtonWrapper = styled.div`
+  position: absolute;
+  left: 0;
+  top: 0;
+`;
+const NewButton = props => (
+  <NewButtonWrapper>
+    <IconButton label={"Add"} {...props} />
+  </NewButtonWrapper>
+);
+const ToggleCell = styled(TableCell)`
+  flex: 0.2;
+`;
 const NotFoundText = styled.p`
   font-size: ${smallestText};
 `;
@@ -25,28 +45,6 @@ const isInTemplate = (x, templateConfig) => {
 
 const Wrapper = styled.div``;
 
-const templates = {
-  basic: (items, templateConfig) => {
-    let item = items && items.length ? items[0] || {} : {};
-    return Object.keys(
-      (templateConfig && templateConfig.config) || item
-    ).reduce((sum, x) => {
-      if (isInTemplate(x, templateConfig))
-        return (
-          sum.push(
-            <TableCell key={x}>
-              {templateConfig && templateConfig.config
-                ? templateConfig.config[x]
-                : x}
-            </TableCell>
-          ),
-          sum
-        );
-
-      return sum;
-    }, []);
-  }
-};
 const Pager = getPager();
 
 class List extends Component {
@@ -55,6 +53,9 @@ class List extends Component {
     this.state = { count: 5, page: 1 };
     this.setCurrentItems = this.setCurrentItems.bind(this);
     this.renderItem = this.renderItem.bind(this);
+    this.renderHeader = this.renderHeader.bind(this);
+    this.toggleItem = this.toggleItem.bind(this);
+    this.toggleSelectAll = this.toggleSelectAll.bind(this);
   }
   componentDidMount() {
     this._mounted = true;
@@ -77,6 +78,13 @@ class List extends Component {
   setCurrentItems(page) {
     this.setState({ page });
   }
+  toggleItem(item, value) {
+    if (value) {
+      this.props.selectItem(item);
+    } else {
+      this.props.unSelectItem(item);
+    }
+  }
   renderItem(item, templateConfig) {
     let renderedItem = Object.keys(
       (templateConfig && templateConfig.config) || item
@@ -91,25 +99,74 @@ class List extends Component {
         );
       return sum;
     }, []);
+    renderedItem.unshift(
+      <ToggleCell>
+        <Checkbox
+          value={!!this.props.selectedItems[item._id]}
+          valueChanged={value => this.toggleItem(item, value)}
+        />
+      </ToggleCell>
+    );
 
     return renderedItem;
   }
+  toggleSelectAll(value) {
+    if (value) this.props.selectAllItems();
+    else this.props.clearSelectedItems();
+  }
+  renderHeader(items, templateConfig, total) {
+    let item = items && items.length ? items[0] || {} : {};
+    let rows = Object.keys(
+      (templateConfig && templateConfig.config) || item
+    ).reduce((sum, x) => {
+      if (isInTemplate(x, templateConfig))
+        return (
+          sum.push(
+            <TableCell key={x}>
+              {templateConfig && templateConfig.config
+                ? templateConfig.config[x]
+                : x}
+            </TableCell>
+          ),
+          sum
+        );
+
+      return sum;
+    }, []);
+    rows.unshift(
+      <ToggleCell key={"selector_head"}>
+        <Checkbox
+          reverse={true}
+          value={items.length == Object.keys(this.props.selectedItems).length}
+          valueChanged={this.toggleSelectAll}
+        />
+      </ToggleCell>
+    );
+    return rows;
+  }
   render() {
     const { start, end } = getSlice(this.state.page, this.state.count);
-    const items = (this.props.items && this.props.items.slice(start, end)) || [];
+    const items =
+      (this.props.items && this.props.items.slice(start, end)) || [];
     let table =
       this.props.items && this.props.items.length
         ? [
-            <Table style={{ marginTop: 10 }}>
+            <ListTable>
+              {this.props.canAddOrEdit && (
+                <NewButton
+                  onClick={() => this.props.showItemView("NEW")}
+                  icon="plus"
+                />
+              )}
               <TableHead>
-                {templates.basic(this.props.items, this.props.templateConfig)}
+                {this.renderHeader(this.props.items, this.props.templateConfig)}
               </TableHead>
               {items.map((item, idx) => (
                 <TableRow key={idx}>
                   {this.renderItem(item, this.props.templateConfig, this.props)}
                 </TableRow>
               ))}
-            </Table>,
+            </ListTable>,
             <Pager
               {...this.state}
               items={this.props.items}
@@ -142,12 +199,6 @@ class List extends Component {
       table,
       renderFooter(this.props)
     ];
-
-    if (this.props.canAddOrEdit) {
-      allElements.unshift(
-        <NewButton onClick={() => this.props.showItemView("NEW")} icon="add" />
-      );
-    }
 
     return <Wrapper>{allElements}</Wrapper>;
   }

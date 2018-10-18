@@ -1,8 +1,9 @@
 import React from "react";
-import styled, { ThemeProvider, withTheme } from "styled-components";
+import styled, { ThemeProvider } from "styled-components";
 import PropTypes from "prop-types";
 import ReactDOM from "react-dom";
 import Overlay from "../Overlay";
+import { media } from "../../utils";
 import StyledButton from "../Button";
 
 const ActionContainer = styled.div`
@@ -13,6 +14,9 @@ const ContentContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  ${media.xSmall`
+  min-width:100%;
+`};
 `;
 
 class Portal extends React.Component {
@@ -55,7 +59,11 @@ class Portal extends React.Component {
             {this.props.actionButtons && (
               <ActionContainer>
                 {this.props.actionButtons.map(x => (
-                  <StyledButton onClick={x.onClick} key={x.key}>
+                  <StyledButton
+                    onClick={x.onClick}
+                    key={x.key}
+                    intent={x.intent}
+                  >
                     {x.icon && <Icon icon={x.icon} />}
                     {x.content}
                   </StyledButton>
