@@ -10,7 +10,8 @@ import {
   borderColor,
   labelColor,
   formLineWidth,
-  aboveOthers
+  aboveOthers,
+  inputBackgroundColor
 } from "../common/variables";
 
 import { hover } from "../common/animations";
@@ -62,7 +63,7 @@ const Menu = styled.div`
 const RevealButton = styled.button`
   display: block;
   border: none;
-  background-color: transparent;
+  background-color: ${inputBackgroundColor};
   min-height: ${minimumInputHeight}px;
   width: 100%;
   text-align: left;
