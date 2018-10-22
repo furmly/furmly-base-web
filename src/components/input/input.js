@@ -36,7 +36,6 @@ export const onChangeFactory = (propName = "value") => {
     if (evt.preventDefault && !skipPreventDefault) {
       evt.preventDefault();
     }
-    evt.stopPropagation();
     valueChanged(evt.target[propName]);
   };
 };

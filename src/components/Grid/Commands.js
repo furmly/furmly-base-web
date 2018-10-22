@@ -18,13 +18,14 @@ const Commands = props => {
           &nbsp;|&nbsp;
         </React.Fragment>
       )}
-      {props.commands.length > 0 && (
-        <IconButton
-          icon="caret-square-down"
-          onClick={props.openCommandMenu}
-          label={"Do something"}
-        />
-      )}
+      {props.commands.length > 0 &&
+        props.canShowCommands() && (
+          <IconButton
+            icon="caret-square-down"
+            onClick={props.openCommandMenu}
+            label={"Do something"}
+          />
+        )}
     </CommandsContainer>
   );
 };

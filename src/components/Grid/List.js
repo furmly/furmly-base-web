@@ -47,6 +47,7 @@ class List extends Component {
     this.renderHeader = this.renderHeader.bind(this);
     this.toggleItem = this.toggleItem.bind(this);
     this.toggleSelectAll = this.toggleSelectAll.bind(this);
+    this.hasSelectedProps = this.hasSelectedProps.bind(this);
   }
   componentDidMount() {
     this._mounted = true;
@@ -91,7 +92,7 @@ class List extends Component {
       return sum;
     }, []);
     renderedItem.unshift(
-      <ToggleCell>
+      <ToggleCell key={"cell_toggle"}>
         <Checkbox
           value={!!this.props.selectedItems[item._id]}
           valueChanged={value => this.toggleItem(item, value)}
@@ -135,6 +136,9 @@ class List extends Component {
     );
     return rows;
   }
+  hasSelectedProps() {
+    return !!Object.keys(this.props.selectedItems).length;
+  }
   render() {
     const { start, end } = getSlice(this.state.page, this.state.count);
     const [editCommand, ...commands] = this.props.getCommands() || [];
@@ -145,6 +149,7 @@ class List extends Component {
         <React.Fragment>
           <ListTable>
             <Commands
+              canShowCommands={this.hasSelectedProps}
               canAddOrEdit={this.props.canAddOrEdit}
               openCommandMenu={this.props.openCommandMenu}
               showItemView={this.props.showItemView}

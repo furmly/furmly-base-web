@@ -8,7 +8,10 @@ const IconContainer = styled.svg`
   width: ${props => props.iconSize || iconSize}px;
   height: ${props => props.iconSize || iconSize}px;
   margin-right: ${elementPadding}px;
-  fill: ${props => props.color || "auto"};
+  fill: ${props =>
+    (typeof props.iconColor == "function" && props.iconColor(props)) ||
+    props.iconColor ||
+    "auto"};
 `;
 
 const Icon = ({ icon, size, color }) => {
@@ -18,7 +21,7 @@ const Icon = ({ icon, size, color }) => {
     <IconContainer
       iconSize={size}
       viewBox={`0 0 ${iconInfo[0]} ${iconInfo[1]}`}
-      color={color}
+      iconColor={color}
     >
       <path d={iconInfo[4]} />
     </IconContainer>

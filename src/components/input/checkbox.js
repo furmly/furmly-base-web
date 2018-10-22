@@ -69,7 +69,7 @@ const Checkbox = styled.input.attrs({ type: "checkbox" })`
 
 export const RawCheckbox = props => {
   return (
-    <Wrapper>
+    <Wrapper onClick={evt => evt.stopPropagation()}>
       <Label>
         <Nob reverse={props.reverse}>
           <Checkbox

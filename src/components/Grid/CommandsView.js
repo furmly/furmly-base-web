@@ -26,7 +26,9 @@ const CommandsView = props => {
       ]}
     >
       {props.commands.map(x => (
-        <Button onClick={() => props.execCommand(x)}>{x.commandText}</Button>
+        <Button key={x.commandText} onClick={() => props.execCommand(x)}>
+          {x.commandText}
+        </Button>
       ))}
     </Modal>
   );

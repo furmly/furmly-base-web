@@ -20,7 +20,10 @@ const TableRow = styled.div`
   align-items: center;
   justify-content: stretch;
   padding: ${inputPadding};
-  background-color: ${highLightColor};
+  &:hover {
+    background-color: ${highLightColor};
+    cursor: pointer;
+  }
   min-width: 100%;
   text-align: left;
 `;

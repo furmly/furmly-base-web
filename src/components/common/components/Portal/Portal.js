@@ -68,10 +68,10 @@ class Portal extends React.Component {
             {this.props.children}
             {this.props.actionButtons && (
               <ActionContainer>
-                {this.props.actionButtons.map(x => (
+                {this.props.actionButtons.map((x, index) => (
                   <StyledButton
                     onClick={x.onClick}
-                    key={x.key}
+                    key={x.key || index}
                     intent={x.intent}
                   >
                     {x.icon && <Icon icon={x.icon} />}
