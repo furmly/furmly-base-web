@@ -1,4 +1,3 @@
-import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { media } from "../common/utils";
@@ -11,6 +10,10 @@ const Container = styled.div`
   height: 100%;
   align-items: stretch;
   flex-wrap: wrap;
+  ${media.xSmall`
+  flex-direction:column;
+  
+  `};
 `;
 
 Container.propTypes = {

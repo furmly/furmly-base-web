@@ -5,12 +5,18 @@ import ReactDOM from "react-dom";
 import Overlay from "../Overlay";
 import { media } from "../../utils";
 import StyledButton from "../Button";
+import { containerPadding } from "../../variables";
 
 const ActionContainer = styled.div`
   align-self: flex-end;
+  transform: translate(
+    -${containerPadding}px,
+    calc(-${containerPadding}px - 100%)
+  );
 `;
 const ContentContainer = styled.div`
   display: flex;
+  height: 100%;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -48,7 +54,11 @@ class Portal extends React.Component {
   }
   componentWillUnmount() {
     this.portalElement.removeEventListener("click", this.overlayClicked);
-    document.body.removeChild(this.portalElement);
+    try {
+      document.body.removeChild(this.portalElement);
+    } catch (e) {
+      if (e.message == "Failed to execute 'removeChild' on 'Node'") return;
+    }
   }
   componentDidUpdate() {
     ReactDOM.render(

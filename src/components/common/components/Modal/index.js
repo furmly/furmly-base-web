@@ -20,7 +20,7 @@ const Title = styled(Label)`
 `;
 const ModalContainer = styled.div`
   background-color: white;
-  color: red;
+  height: 100%;
   ${boxShadow};
   min-height: ${minimumModalHeight};
   min-width: ${minimumModalWidth};
@@ -43,7 +43,11 @@ const Modal = props => {
   return (
     /*jshint ignore:start */
 
-    <Portal actionButtons={actions} isOpen={props.visibility}>
+    <Portal
+      portalId={props.id}
+      actionButtons={actions}
+      isOpen={props.visibility}
+    >
       <ModalContainer>
         {props.title && <Title>{props.title}</Title>}
         {(props.busy && <ProgressBar />) || props.template || props.children}
@@ -58,6 +62,7 @@ Modal.propTypes = {
   visibility: PropTypes.bool,
   done: PropTypes.func.isRequired,
   title: PropTypes.string,
+  id: PropTypes.string,
   template: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.element),
     PropTypes.object

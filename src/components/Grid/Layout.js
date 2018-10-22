@@ -3,8 +3,8 @@ import PropTypes from "prop-types";
 
 
 const GridLayout = props => {
-  const { list, itemView, commandView, commandViewResult, filter } = props;
-  const elements = [filter, list, itemView, commandView, commandViewResult];
+  const { list, itemView, commandsView, commandViewResult, filter } = props;
+  const elements = [filter, list, itemView, commandsView, commandViewResult];
   return <React.Fragment>{elements}</React.Fragment>;
 };
 

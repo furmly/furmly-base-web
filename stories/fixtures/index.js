@@ -6,17 +6,26 @@ export function getCommands() {
       {
         commandText: "Do some creative thing at the backend",
         commandIcon: "person",
-        commandType: "BACKEND"
+        commandType: "PROCESSOR",
+        command: {
+          value: "3"
+        }
       },
       {
         commandText: "Write a cheque",
         commandIcon: "person",
-        commandType: "WRITE_A_CHEQUE"
+        commandType: "PROCESSOR",
+        command: {
+          value: "2"
+        }
       },
       {
         commandText: "Cash a cheque",
         commandIcon: "person",
-        commandType: "CHEQUE_CASHER"
+        commandType: "PROCESSOR",
+        command: {
+          value: "1"
+        }
       }
     ]
   };
@@ -45,7 +54,10 @@ export function getList(rowClicked, rowRemoved) {
     rowClicked,
     rowRemoved,
     items: [],
-    selectedItems: {}
+    selectedItems: {},
+    getCommands: function() {
+      return getCommands().commands;
+    }
   };
   for (let i = 1; i <= 23; i += 1) {
     listProps.items.push({
@@ -66,7 +78,7 @@ export function getAddTemplate() {
       args: {
         type: "text"
       },
-      name: "name",
+      name: "firstName",
       label: "First Name",
       component_uid: "7089f0e4-0d22-4dd8-9c85-18768ba73054"
     },
@@ -235,6 +247,7 @@ export function getSimpleGrid() {
     asyncValidators: [],
     validators: [],
     args: {
+      commands: getCommands().commands,
       filter: [
         {
           validators: [{ validatorType: "REQUIRED" }],
@@ -290,7 +303,6 @@ export function getSimpleGrid() {
       extra: {
         editTemplate: [],
         fetchTemplateProcessor: "59bfb357fb766f1ff0c2adc0",
-        fetchSingleItemProcessor: "59bfbb67fb766f1ff0c2adc3",
         editProcessor: "59c02947f0c3e43dcc70c4df"
       },
       source: "59bf231a3315c24ef080d369"
@@ -319,7 +331,7 @@ export function getSection() {
     args: {
       elements: [
         {
-          validators: [],
+          validators: [{ validatorType: "REQUIRED" }],
           description: "Family name",
           asyncValidators: [],
           args: {
@@ -331,7 +343,7 @@ export function getSection() {
           component_uid: "bdea2277-f04f-4126-a806-91cf43da9327"
         },
         {
-          validators: [],
+          validators: [{ validatorType: "REQUIRED" }],
           description: "",
           asyncValidators: [],
           name: "firstName",

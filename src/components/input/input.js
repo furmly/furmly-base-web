@@ -13,6 +13,7 @@ import FormDiv from "../common/components/FormDiv";
 import FormLabel from "../common/components/Label";
 import ErrorText from "../common/components/ErrorText";
 import Copy from "../common/components/Copy";
+import { media } from "../common/utils";
 
 const StyledInput = styled.input`
   border: none;
@@ -28,12 +29,14 @@ const StyledInput = styled.input`
 `;
 const FakeLabel = styled.div`
   height: ${labelSize}px;
+  ${media.xSmall`height:0px;`};
 `;
 export const onChangeFactory = (propName = "value") => {
   return (valueChanged, evt, skipPreventDefault) => {
     if (evt.preventDefault && !skipPreventDefault) {
       evt.preventDefault();
     }
+    evt.stopPropagation();
     valueChanged(evt.target[propName]);
   };
 };
@@ -78,7 +81,7 @@ export const Input = ({ type, value, valueChanged }) => {
   return (
     <StyledInput
       type={type}
-      value={value}
+      value={value || ""}
       onChange={onChange.bind(this, valueChanged)}
     />
   );

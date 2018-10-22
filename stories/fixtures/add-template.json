@@ -4,7 +4,7 @@
   "args": {
    "type": "text"
   },
-  "name": "name",
+  "name": "firstName",
   "label": "First Name",
   "component_uid": "7089f0e4-0d22-4dd8-9c85-18768ba73054"
  },

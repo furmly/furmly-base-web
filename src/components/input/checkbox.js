@@ -13,7 +13,7 @@ import { setupReversal } from "../common/utils";
 const onChange = onChangeFactory("checked");
 const size = props => props.theme.factor * 20;
 const Label = styled.label`
-  margin-left: ${props => props.theme.factor * 5}px;
+  cursor: pointer;
   vertical-align: middle;
   font-weight: bold;
   font-size: ${smallText}px;
@@ -46,7 +46,8 @@ const Tick = styled.span`
   opacity: 0;
   transform: rotate(-45deg);
 `;
-const Nob = styled.label`
+const Nob = styled.span`
+  margin-right: ${props => props.theme.factor * 5}px;
   display: inline-block;
   position: relative;
   width: ${size}px;
@@ -69,16 +70,18 @@ const Checkbox = styled.input.attrs({ type: "checkbox" })`
 export const RawCheckbox = props => {
   return (
     <Wrapper>
-      <Nob reverse={props.reverse}>
-        <Checkbox
-          checked={!!props.value}
-          onChange={event =>
-            onChange(value => props.valueChanged(value), event, true)
-          }
-        />
-        <Tick reverse={props.reverse} />
-      </Nob>
-      <Label>{props.label}</Label>
+      <Label>
+        <Nob reverse={props.reverse}>
+          <Checkbox
+            checked={!!props.value}
+            onChange={event =>
+              onChange(value => props.valueChanged(value), event, true)
+            }
+          />
+          <Tick reverse={props.reverse} />
+        </Nob>
+        {props.label}
+      </Label>
     </Wrapper>
   );
 };

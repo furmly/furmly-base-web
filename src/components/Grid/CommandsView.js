@@ -17,6 +17,7 @@ const Button = styled.button`
 const CommandsView = props => {
   return (
     <Modal
+      id={"commands-dialog"}
       visibility={!!props.visibility}
       title={"What would you like to do ?"}
       done={props.close}

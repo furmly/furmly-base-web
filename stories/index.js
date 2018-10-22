@@ -25,3 +25,4 @@ require("./file_upload");
 require("./list");
 require("./grid");
 require("./section");
+require("./progressbar");

@@ -10,23 +10,14 @@ import { smallestText, minimumInputHeight } from "../common/variables";
 import { getSlice } from "../common/utils";
 import getPager from "../common/components/Pager";
 import { RawCheckbox as Checkbox } from "../Input/Checkbox";
-import { IconButton } from "../common/components/Button";
+import Commands from "./Commands";
 
 const ListTable = styled(Table)`
   margin-top: 10px;
   padding-top: ${minimumInputHeight}px;
   position: relative;
 `;
-const NewButtonWrapper = styled.div`
-  position: absolute;
-  left: 0;
-  top: 0;
-`;
-const NewButton = props => (
-  <NewButtonWrapper>
-    <IconButton label={"Add"} {...props} />
-  </NewButtonWrapper>
-);
+
 const ToggleCell = styled(TableCell)`
   flex: 0.2;
 `;
@@ -146,41 +137,47 @@ class List extends Component {
   }
   render() {
     const { start, end } = getSlice(this.state.page, this.state.count);
+    const [editCommand, ...commands] = this.props.getCommands() || [];
     const items =
       (this.props.items && this.props.items.slice(start, end)) || [];
     let table =
-      this.props.items && this.props.items.length
-        ? [
-            <ListTable>
-              {this.props.canAddOrEdit && (
-                <NewButton
-                  onClick={() => this.props.showItemView("NEW")}
-                  icon="plus"
-                />
-              )}
-              <TableHead>
-                {this.renderHeader(this.props.items, this.props.templateConfig)}
-              </TableHead>
-              {items.map((item, idx) => (
-                <TableRow key={idx}>
-                  {this.renderItem(item, this.props.templateConfig, this.props)}
-                </TableRow>
-              ))}
-            </ListTable>,
-            <Pager
-              {...this.state}
-              items={this.props.items}
-              total={this.props.total}
-              more={this.props.more}
-              setCurrentItems={this.setCurrentItems}
+      this.props.items && this.props.items.length ? (
+        <React.Fragment>
+          <ListTable>
+            <Commands
+              canAddOrEdit={this.props.canAddOrEdit}
+              openCommandMenu={this.props.openCommandMenu}
+              showItemView={this.props.showItemView}
+              commands={commands}
             />
-          ]
-        : (this.props.items && (
-            <NotFoundText styleName={"list-text"}>
-              We couldnt find anything.
-            </NotFoundText>
-          )) ||
-          null;
+            <TableHead>
+              {this.renderHeader(this.props.items, this.props.templateConfig)}
+            </TableHead>
+            {items.map((item, idx) => (
+              <TableRow
+                key={idx}
+                onClick={() => this.props.execCommand(editCommand, item)}
+              >
+                {this.renderItem(item, this.props.templateConfig)}
+              </TableRow>
+            ))}
+          </ListTable>
+          <Pager
+            {...this.state}
+            items={this.props.items}
+            total={this.props.total}
+            more={this.props.more}
+            setCurrentItems={this.setCurrentItems}
+          />
+        </React.Fragment>
+      ) : (
+        (this.props.items && (
+          <NotFoundText styleName={"list-text"}>
+            We couldnt find anything.
+          </NotFoundText>
+        )) ||
+        null
+      );
     if (!table && !this.props.items) {
       setTimeout(() => {
         if (this._mounted && this.props.autoFetch) this.props.more();
@@ -194,13 +191,13 @@ class List extends Component {
       );
     }
 
-    let allElements = [
-      renderHeader(this.props),
-      table,
-      renderFooter(this.props)
-    ];
-
-    return <Wrapper>{allElements}</Wrapper>;
+    return (
+      <Wrapper>
+        {renderHeader(this.props)}
+        {table}
+        {renderFooter(this.props)}
+      </Wrapper>
+    );
   }
 }
 export default List;
