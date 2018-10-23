@@ -22,7 +22,7 @@ const Commands = props => {
         props.canShowCommands() && (
           <IconButton
             icon="caret-square-down"
-            onClick={props.openCommandMenu}
+            onClick={() => props.openCommandMenu()}
             label={"Do something"}
           />
         )}

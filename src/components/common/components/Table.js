@@ -14,20 +14,23 @@ const Table = styled.div`
   width: 100%;
   overflow: auto;
 `;
-const TableRow = styled.div`
+const Row = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: stretch;
   padding: ${inputPadding};
+  min-width: 100%;
+  text-align: left;
+`;
+
+const TableRow = styled(Row)`
   &:hover {
     background-color: ${highLightColor};
     cursor: pointer;
   }
-  min-width: 100%;
-  text-align: left;
 `;
-const TableHead = styled(TableRow)`
+const TableHead = styled(Row)`
   p,
   span,
   h1,
