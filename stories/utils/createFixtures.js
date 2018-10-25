@@ -5,7 +5,10 @@ import {
   runSelectProcessor,
   getGridList,
   getSection,
-  getAddTemplate
+  getAddTemplate,
+  getActionView,
+  runSaveActionProcessor,
+  webview
 } from "../fixtures/index";
 import { writeFileSync } from "fs";
 import { join } from "path";
@@ -26,6 +29,16 @@ const sectionProcessWithData = Object.assign({}, sectionProcess, {
   _id: "section-with-data"
 });
 
+const actionViewProcess = getProcess("actionview");
+const aVStep = getStep();
+aVStep.form.elements.push(getActionView());
+actionViewProcess.steps.push(aVStep);
+
+const webviewProcess = getProcess("webview");
+const webStep = getStep();
+webStep.form.elements.push(webview());
+webviewProcess.steps.push(webStep);
+
 writeFileSync(getFileName("section"), wrapDescription(sectionProcess));
 
 writeFileSync(
@@ -36,6 +49,8 @@ writeFileSync(
   })
 );
 
+writeFileSync(getFileName("actionview"), wrapDescription(actionViewProcess));
+
 writeFileSync(getFileName("grid"), wrapDescription(_p));
 
 writeFileSync(getFileName("select"), out(runSelectProcessor()));
@@ -43,3 +58,7 @@ writeFileSync(getFileName("select"), out(runSelectProcessor()));
 writeFileSync(getFileName("grid-source"), out(getGridList()));
 
 writeFileSync(getFileName("add-template"), out(getAddTemplate()));
+
+writeFileSync(getFileName("save_processor"), out(runSaveActionProcessor()));
+
+writeFileSync(getFileName("webview"), wrapDescription(webviewProcess));

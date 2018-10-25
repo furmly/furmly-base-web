@@ -7,7 +7,6 @@ const Container = styled.div`
   flex: 1;
   flex-direction: row;
   width: 100%;
-  height: 100%;
   align-items: stretch;
   flex-wrap: wrap;
   ${media.xSmall`

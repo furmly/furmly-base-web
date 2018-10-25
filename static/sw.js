@@ -4,7 +4,10 @@ const matches = [
   { pattern: /59bf231a3315c24ef080d369/, url: "/grid-source.json" },
   { pattern: /59bfb357fb766f1ff0c2adc0/, url: "/add-template.json" },
   { pattern: /section-width-data/, url: "/section-with-data.json" },
-  { pattern: /section/, url: "/section.json" }
+  { pattern: /section/, url: "/section.json" },
+  { pattern: /actionview/, url: "/actionview.json" },
+  { pattern: /save_processor/, url: "/save_processor.json" },
+  { pattern: /webview/, url: "/webview.json" }
 ];
 self.addEventListener("install", function(event) {
   console.log("sw installed successfully");

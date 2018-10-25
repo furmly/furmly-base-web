@@ -27,3 +27,4 @@ require("./grid");
 require("./section");
 require("./progressbar");
 require("./actionview");
+require("./webview");

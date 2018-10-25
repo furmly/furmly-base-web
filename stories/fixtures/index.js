@@ -364,6 +364,48 @@ export function getSection() {
     component_uid: "745c0c25-546f-4e54-aa04-a1589186a6ae"
   };
 }
+
+export function getActionView() {
+  return {
+    args: {
+      commandText: "SAVE",
+      action: "save_processor",
+      elements: [
+        {
+          validators: [{ validatorType: "REQUIRED" }],
+          description: "Family name",
+          asyncValidators: [],
+          args: {
+            type: "text"
+          },
+          name: "Surname",
+          label: "Surname",
+          elementType: "INPUT",
+          component_uid: "bdea2277-f04f-4126-a806-91cf43da9327"
+        },
+        {
+          validators: [{ validatorType: "REQUIRED" }],
+          description: "",
+          asyncValidators: [],
+          name: "firstName",
+          label: "First Name",
+          elementType: "INPUT",
+          component_uid: "e4a2b238-48ed-44d5-81eb-4dfc440df1fd"
+        }
+      ]
+    },
+    asyncValidators: [],
+    validators: [],
+    elementType: "ACTIONVIEW",
+    label: "Personal Details",
+    description:
+      "All confidential information provided by you is kept with utmost secrecy",
+    name: "personalDetails",
+    _id: "59c02c2ff0klndflkn3dcc70c4e1",
+    component_uid: "745c0c25-546f-4e5-a04-a1589186a6ae"
+  };
+}
+
 export function runSelectProcessor() {
   return [
     {
@@ -375,6 +417,39 @@ export function runSelectProcessor() {
       displayLabel: "Female"
     }
   ];
+}
+
+export function runSaveActionProcessor() {
+  return [
+    {
+      args: {
+        config: { value: "59c027fdf0c3e43dcc70c4dd" },
+        type: "PROCESSOR"
+      },
+      validators: [],
+      description: "",
+      asyncValidators: [],
+      name: "gender",
+      label: "Gender",
+      elementType: "SELECT",
+      component_uid: "b41a05b1-e2c8-46dc-87b6-772a1700c55e"
+    }
+  ];
+}
+
+export function webview() {
+  return {
+    args: {
+      url: "https://chidionuekwusi.github.io/Twaija-web"
+    },
+    validators: [],
+    description: "",
+    asyncValidators: [],
+    name: "webview",
+    label: "Web View",
+    elementType: "WEBVIEW",
+    component_uid: "b41a05b1-e2c8-46dc-87b6-772a1700c55e"
+  };
 }
 
 export function getProcess(id) {

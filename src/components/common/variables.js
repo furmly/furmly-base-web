@@ -28,7 +28,7 @@ export const highLightColor = props =>
 
 export const inputBackgroundColor = props =>
   props.theme.inputBackgroundColor || "#ababab1a";
-export const inputPadding = props => `0px 5px`;
+export const inputPadding = () => `0px 5px`;
 export const iconSize = props => props.size || props.theme.factor * 10;
 export const largeIconSize = props => props.size || props.theme.factor * 20;
 export const buttonDefaults = "display: block;  border: none;";
@@ -40,3 +40,23 @@ export const largerBoxShadow = `box-shadow:0px 5px 4px -1px ${dropShadowColor}`;
 export const iconDropShadow = `filter: drop-shadow(0px 3px 1px ${dropShadowColor})`;
 export const formLineWidth = props => props.theme.factor * 2;
 export const aboveOthers = "z-index:1";
+
+
+
+// switch (props.uid) {
+//   case DISPLAY:
+//     return css`
+//       ${displayImageSize};
+//     `;
+//   case AVATAR:
+//     return css`
+//       ${avatarImageSize};
+//       border-radius: 100%;
+//     `;
+//   case THUMBNAIL:
+//     return `${avatarImageSize};`;
+//   case PROFILE:
+//     return `${avatarImageSize};`;
+//   default:
+//     return `${defaultImageSize}`;
+// }

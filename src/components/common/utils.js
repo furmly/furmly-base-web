@@ -175,3 +175,51 @@ export const navigationActions = {
     return navigation.dispatch(alreadyVisible(args));
   }
 };
+
+const createImageSize = (propName, defaultDimensions,defaultMediaQueries) => {
+  return `${props =>
+    (props.theme[propName] &&
+      `width:${props.theme[propName].width}px;height:${
+        props.theme[propName].height
+      }px;`) ||
+    "width:50px;height:50px;"}
+    
+    ${props.theme[propName] &&
+      props.theme[propName].media &&
+      props.theme[propName].media()}`;
+};
+
+export const displayImageSize = `${props =>
+  (props.theme.displayImageSize &&
+    `width:${props.theme.displayImageSize.width}px;height:${
+      props.theme.displayImageSize.height
+    }px;`) ||
+  "width:50px;height:50px;"}`;
+
+export const avatarImageSize = `${props =>
+  (props.theme.avatarImageSize &&
+    `width:${props.theme.avatarImageSize.width}px;height:${
+      props.theme.avatarImageSize.height
+    }px;`) ||
+  "width:32px;height:32px"}`;
+
+export const thumbnailImageSize = `${props =>
+  (props.theme.thumbnailImageSize &&
+    `width:${props.theme.thumbnailImageSize.width}px;height:${
+      props.theme.thumbnailImageSize.height
+    }px;`) ||
+  "width:16px;height:16px"}`;
+
+export const profileImageSize = `${props =>
+  (props.theme.profileImageSize &&
+    `width:${props.theme.profileImageSize.width}px;height:${
+      props.theme.profileImageSize.height
+    }px;`) ||
+  "width:64px;height:64px"}`;
+
+export const defaultImageSize = `${props =>
+  (props.theme.defaultImageSize &&
+    `width:${props.theme.defaultImageSize.width}px;height:${
+      props.theme.defaultImageSize.height
+    }px;`) ||
+  "width:120px;height:120px"}`;

@@ -7,6 +7,8 @@ import GridList, {
   GridCommandResultView,
   GridCommandsView
 } from "./components/Grid";
+import Webview, { WebViewErrorText } from "./components/WebView";
+import ActionViewLayout, { ActionViewFilter } from "./components/ActionView";
 import SectionLayout, { Header as SectionHeader } from "./components/Section";
 import { TextView as ProcessTextView } from "./components/Process";
 import Page from "./components/Page";
@@ -64,12 +66,20 @@ export default config => {
 
   maps.addSECTIONRecipe([SectionLayout, SectionHeader, container]);
 
+  maps.addACTIONVIEWRecipe([
+    ActionViewLayout,
+    ProgressBar,
+    ActionViewFilter,
+    container
+  ]);
+
+  maps.addWEBVIEWRecipe([Webview, WebViewErrorText]);
+
   maps.addPROCESSRecipe([ProgressBar, ProcessTextView, new Deferred("view")]);
 
   maps.addPROVIDERRecipe([new Deferred("process"), ...config.providerConfig]);
 
   // this creates a furmly page.
-  // this could be done better.
   maps.createPage = (WrappedComponent, ...args) =>
     maps
       .PROVIDER(
