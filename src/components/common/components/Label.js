@@ -34,7 +34,7 @@ const FormLabelContainer = styled.div`
 `;
 const FocusIndicator = styled.hr`
   width: 100%;
-  transform: translateX(-100%);
+  transform: translateX(-101%);
   position: absolute;
   bottom: 0px;
   border: none;

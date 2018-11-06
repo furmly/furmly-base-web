@@ -176,50 +176,57 @@ export const navigationActions = {
   }
 };
 
-const createImageSize = (propName, defaultDimensions,defaultMediaQueries) => {
-  return `${props =>
-    (props.theme[propName] &&
-      `width:${props.theme[propName].width}px;height:${
-        props.theme[propName].height
-      }px;`) ||
-    "width:50px;height:50px;"}
-    
-    ${props.theme[propName] &&
-      props.theme[propName].media &&
-      props.theme[propName].media()}`;
+const createImageSize = (
+  propName,
+  defaultDimensions = {},
+  defaultMediaQueries = ""
+) => {
+  return css`
+    ${props =>
+      (props.theme[propName] &&
+        "width:" +
+          props.theme[propName].width +
+          "px;height:" +
+          props.theme[propName].height +
+          "px;") ||
+      " width: " +
+        defaultDimensions.width +
+        "px;height:" +
+        defaultDimensions.height +
+        "px;"}
+    ${props =>
+      (props.theme[propName] &&
+        props.theme[propName].media &&
+        props.theme[propName].media()) ||
+      defaultMediaQueries};
+  `;
 };
-
-export const displayImageSize = `${props =>
-  (props.theme.displayImageSize &&
-    `width:${props.theme.displayImageSize.width}px;height:${
-      props.theme.displayImageSize.height
-    }px;`) ||
-  "width:50px;height:50px;"}`;
-
-export const avatarImageSize = `${props =>
-  (props.theme.avatarImageSize &&
-    `width:${props.theme.avatarImageSize.width}px;height:${
-      props.theme.avatarImageSize.height
-    }px;`) ||
-  "width:32px;height:32px"}`;
-
-export const thumbnailImageSize = `${props =>
-  (props.theme.thumbnailImageSize &&
-    `width:${props.theme.thumbnailImageSize.width}px;height:${
-      props.theme.thumbnailImageSize.height
-    }px;`) ||
-  "width:16px;height:16px"}`;
-
-export const profileImageSize = `${props =>
-  (props.theme.profileImageSize &&
-    `width:${props.theme.profileImageSize.width}px;height:${
-      props.theme.profileImageSize.height
-    }px;`) ||
-  "width:64px;height:64px"}`;
-
-export const defaultImageSize = `${props =>
-  (props.theme.defaultImageSize &&
-    `width:${props.theme.defaultImageSize.width}px;height:${
-      props.theme.defaultImageSize.height
-    }px;`) ||
-  "width:120px;height:120px"}`;
+const width = 16;
+const height = 16;
+export const displayImageSize = createImageSize("displayImageSize", {
+  width: width * 8,
+  height: height * 8
+});
+export const avatarImageSize = createImageSize("avatarImageSize", {
+  width: width * 3,
+  height: height * 3
+});
+export const thumbnailImageSize = createImageSize("thumbnailImageSize", {
+  width,
+  height
+});
+export const profileImageSize = createImageSize("profileImageSize", {
+  width: width * 4,
+  height: height * 4
+});
+export const defaultImageSize = createImageSize(
+  "defaultImageSize",
+  {
+    width: width * 5,
+    height: width * 5
+  },
+  media.xSmall`
+height:60px;
+width:60px;
+`
+);

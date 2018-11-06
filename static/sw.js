@@ -7,7 +7,10 @@ const matches = [
   { pattern: /section/, url: "/section.json" },
   { pattern: /actionview/, url: "/actionview.json" },
   { pattern: /save_processor/, url: "/save_processor.json" },
-  { pattern: /webview/, url: "/webview.json" }
+  { pattern: /webview/, url: "/webview.json" },
+  { pattern: /htmlview/, url: "/htmlview.json" },
+  { pattern: /label/, url: "/label.json" },
+  { pattern: /image/, url: "/image.json" }
 ];
 self.addEventListener("install", function(event) {
   console.log("sw installed successfully");

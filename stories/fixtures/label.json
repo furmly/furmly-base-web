@@ -1,0 +1,28 @@
+{
+ "description": {
+  "_id": "label",
+  "title": "Student Clearance",
+  "description": "Used by clearance officers to clear students",
+  "uid": "CLEAR_STUDENT",
+  "steps": [
+   {
+    "_id": "59bf14940774e451fcd2f0de",
+    "stepType": "CLIENT",
+    "mode": "VIEW",
+    "form": {
+     "elements": [
+      {
+       "validators": [],
+       "description": "Every is just fine. This is the description.",
+       "asyncValidators": [],
+       "name": "htmlView",
+       "label": "This is a fantastic label bruh.",
+       "elementType": "LABEL",
+       "component_uid": "b41a05b1-e2c8-46dc-87b6-772a1700c55e"
+      }
+     ]
+    }
+   }
+  ]
+ }
+}

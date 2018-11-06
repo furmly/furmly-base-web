@@ -48,6 +48,7 @@ export const Dynamic = styled(Container)`
     .selectset,
     .label,
     .webview,
+    .image:only-child,
     .input:only-child,
     .select:only-child,
     .download:only-child,
@@ -58,6 +59,7 @@ export const Dynamic = styled(Container)`
     .select,
     .download,
     .fileupload,
+    .image,
     .download {
       width: 50%;
     }

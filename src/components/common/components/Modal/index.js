@@ -8,7 +8,8 @@ import {
   titleText,
   boxShadow,
   minimumModalHeight,
-  minimumModalWidth
+  minimumModalWidth,
+  modalBackgroundColor
 } from "../../variables";
 import { INTENTS, media } from "../../utils";
 
@@ -19,7 +20,7 @@ const Title = styled(Label)`
   transform: translateY(-100%);
 `;
 const ModalContainer = styled.div`
-  background-color: white;
+  background-color: ${modalBackgroundColor};
   height: 100%;
   ${boxShadow};
   min-height: ${minimumModalHeight};

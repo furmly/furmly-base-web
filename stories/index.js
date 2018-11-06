@@ -6,19 +6,25 @@ import registerServiceWorker from "./utils/registerServiceWorker";
 registerServiceWorker();
 injectFontsAndCSSBase();
 const defaultTheme = {
-  labelBackgroundColor: "#383838",
-  formComponentBackgroundColor: "white",
-  labelColor: "white",
+  labelBackgroundColor: "rgb(203, 163, 163)",
+  formComponentBackgroundColor: "transparent",
+  labelColor: "rgb(110, 88, 88)",
+  accentColor: "orange",
   factor: 1.2,
+  modalBackgroundColor:"#ffd3d3",
   errorColor: "#ab0101",
   errorForeground: "white"
 };
 
+const Wrapper = storyFn => (
+  <div style={{ backgroundColor: "#ffd3d3", padding: 25 }}>{storyFn()}</div>
+);
 const ProviderForTheme = storyFn => (
   <ThemeProvider theme={defaultTheme}>{storyFn()}</ThemeProvider>
 );
 
 addDecorator(ProviderForTheme);
+addDecorator(Wrapper);
 require("./input");
 require("./select");
 require("./file_upload");
@@ -28,3 +34,6 @@ require("./section");
 require("./progressbar");
 require("./actionview");
 require("./webview");
+require("./html_view");
+require("./label");
+require("./image");

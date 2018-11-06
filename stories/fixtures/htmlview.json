@@ -1,0 +1,31 @@
+{
+ "description": {
+  "_id": "htmlview",
+  "title": "Student Clearance",
+  "description": "Used by clearance officers to clear students",
+  "uid": "CLEAR_STUDENT",
+  "steps": [
+   {
+    "_id": "59bf14940774e451fcd2f0de",
+    "stepType": "CLIENT",
+    "mode": "VIEW",
+    "form": {
+     "elements": [
+      {
+       "args": {
+        "html": "<div><h3>This is injected content from the backend!!!!!</h3></div>"
+       },
+       "validators": [],
+       "description": "",
+       "asyncValidators": [],
+       "name": "htmlView",
+       "label": "Html View",
+       "elementType": "HTMLVIEW",
+       "component_uid": "b41a05b1-e2c8-46dc-87b6-772a1700c55e"
+      }
+     ]
+    }
+   }
+  ]
+ }
+}

@@ -8,7 +8,10 @@ import {
   getAddTemplate,
   getActionView,
   runSaveActionProcessor,
-  webview
+  webview,
+  image,
+  label,
+  html
 } from "../fixtures/index";
 import { writeFileSync } from "fs";
 import { join } from "path";
@@ -39,6 +42,36 @@ const webStep = getStep();
 webStep.form.elements.push(webview());
 webviewProcess.steps.push(webStep);
 
+const labelProcess = getProcess("label");
+const labelStep = getStep();
+labelStep.form.elements.push(label());
+labelProcess.steps.push(labelStep);
+
+const imageProcess = getProcess("image");
+const imageStep = getStep();
+imageStep.form.elements.push(image());
+imageStep.form.elements.push(
+  image({
+    type: "URL",
+    uid: "THUMBNAIL",
+    data: "https://via.placeholder.com/150"
+  })
+);
+imageStep.form.elements.push(
+  image({
+    type: "URL",
+    uid: "AVATAR",
+    data:
+      "https://chidionuekwusi.github.io/Twaija-web/static/media/team.e8ae5bbd.jpg"
+  })
+);
+imageProcess.steps.push(imageStep);
+
+const htmlProcess = getProcess("htmlview");
+const htmlStep = getStep();
+htmlStep.form.elements.push(html());
+htmlProcess.steps.push(htmlStep);
+
 writeFileSync(getFileName("section"), wrapDescription(sectionProcess));
 
 writeFileSync(
@@ -62,3 +95,9 @@ writeFileSync(getFileName("add-template"), out(getAddTemplate()));
 writeFileSync(getFileName("save_processor"), out(runSaveActionProcessor()));
 
 writeFileSync(getFileName("webview"), wrapDescription(webviewProcess));
+
+writeFileSync(getFileName("label"), wrapDescription(labelProcess));
+
+writeFileSync(getFileName("image"), wrapDescription(imageProcess));
+
+writeFileSync(getFileName("htmlview"), wrapDescription(htmlProcess));
