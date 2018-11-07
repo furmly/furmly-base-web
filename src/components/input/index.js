@@ -1,6 +1,6 @@
-import Input from "./Input";
-import DatePicker from "./Datepicker";
-import Checkbox from "./Checkbox";
+import Input from "./input";
+import DatePicker from "./datepicker";
+import Checkbox from "./checkbox";
 
 export default Input;
 export { DatePicker, Checkbox };

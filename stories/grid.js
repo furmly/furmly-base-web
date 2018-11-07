@@ -1,6 +1,6 @@
 import React from "react";
 import { storiesOf, action } from "@storybook/react";
-import GridList, { GridHeader, GridCommandsView } from "../src/components/Grid";
+import GridList, { GridHeader, GridCommandsView } from "../src/components/grid";
 import Input from "../src/components/Input";
 import { userProps } from "./input";
 import configure from "../src/configure";

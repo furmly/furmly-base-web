@@ -1,7 +1,7 @@
 import React from "react";
 import Calendar from "react-calendar/dist/entry.nostyle";
 import styled from "styled-components";
-import { inputFactory } from "./Input";
+import { inputFactory } from "./input";
 import {
   labelBackgroundColor,
   labelColor,

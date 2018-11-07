@@ -3,8 +3,12 @@ import PropTypes from "prop-types";
 
 const Layout = props => {
   const { content, filter } = props;
-  const elements = [filter, content];
-  return <React.Fragment>{elements}</React.Fragment>;
+  return (
+    <React.Fragment>
+      {filter}
+      {content}
+    </React.Fragment>
+  );
 };
 
 Layout.propTypes = {

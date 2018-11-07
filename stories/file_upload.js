@@ -4,7 +4,7 @@ import { decorateAction, action } from "@storybook/addon-actions";
 import FileUpload, {
   XlsxPreview,
   ImagePreview
-} from "../src/components/File_upload/File_upload";
+} from "../src/components/file_upload/file_upload";
 
 const props = {
   displayProperty: "name",
