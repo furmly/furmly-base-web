@@ -14,6 +14,12 @@ const matches = [
 ];
 self.addEventListener("install", function(event) {
   console.log("sw installed successfully");
+  self.skipWaiting();
+});
+
+self.addEventListener("activate", event => {
+  // force all fetches to go through the service worker.
+  event.waitUntil(clients.claim());
 });
 
 self.addEventListener("fetch", event => {
@@ -22,7 +28,7 @@ self.addEventListener("fetch", event => {
   for (let i = 0; i < matches.length; i += 1) {
     if (matches[i].pattern.exec(event.request.url)) {
       skip = true;
-      event.respondWith(fetch(new Request("."+matches[i].url)));
+      event.respondWith(fetch(new Request("." + matches[i].url)));
       break;
     }
   }
