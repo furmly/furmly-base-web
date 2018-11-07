@@ -1,0 +1,10 @@
+[
+ {
+  "_id": "MALE",
+  "displayLabel": "Male"
+ },
+ {
+  "_id": "FEMALE",
+  "displayLabel": "Female"
+ }
+]

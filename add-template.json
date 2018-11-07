@@ -1,0 +1,17 @@
+[
+ {
+  "elementType": "INPUT",
+  "args": {
+   "type": "text"
+  },
+  "name": "firstName",
+  "label": "First Name",
+  "component_uid": "7089f0e4-0d22-4dd8-9c85-18768ba73054"
+ },
+ {
+  "elementType": "INPUT",
+  "name": "surname",
+  "label": "Surname",
+  "component_uid": "c9a6cd6e-b937-4710-90ee-80523ce91356"
+ }
+]
