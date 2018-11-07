@@ -5,7 +5,6 @@ const npmBase = path.join(__dirname, "../node_modules");
 const furmlyClient = fs.realpathSync(path.join(npmBase, "furmly-client"));
 
 module.exports = (baseConfig, env, defaultConfig) => {
-  console.log("babel config working");
   defaultConfig.plugins.push(
     new CopyWebpackPlugin([
       { from: "static" },
