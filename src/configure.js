@@ -1,20 +1,20 @@
 import controlMap, { Deferred } from "furmly-client";
-import { Dynamic, componentWrapper } from "../src/components/Container";
+import { Dynamic, componentWrapper } from "../src/components/container";
 import SubTitle from "./components/common/components/SubTitle";
 import GridList, {
   GridHeader,
   GridLayout,
   GridCommandResultView,
   GridCommandsView
-} from "./components/Grid";
-import HTMLView from "./components/HTMLView";
-import Webview, { WebViewErrorText } from "./components/WebView";
-import ActionViewLayout, { ActionViewFilter } from "./components/ActionView";
-import SectionLayout, { Header as SectionHeader } from "./components/Section";
+} from "./components/grid";
+import HTMLView from "./components/htmlView";
+import Webview, { WebViewErrorText } from "./components/webView";
+import ActionViewLayout, { ActionViewFilter } from "./components/actionView";
+import SectionLayout, { Header as SectionHeader } from "./components/section";
 import { TextView as ProcessTextView } from "./components/Process";
 import Page from "./components/Page";
 import View from "./components/View";
-import Select from "./components/Select";
+import Select from "./components/select";
 import Warning from "./components/common/components/Warning";
 import Modal from "./components/common/components/Modal";
 import ProgressBar from "./components/common/components/ProgressBar";

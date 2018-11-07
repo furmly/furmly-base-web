@@ -5,6 +5,7 @@
     [
       "babel-plugin-module-resolver",
       {
+        "cwd":"babelrc",
         "alias": {
           "error_handler": "./src/errorhandler.js",
           "client_config": "./.storybook/dynamo_client_config/config.js",

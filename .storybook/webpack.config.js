@@ -15,6 +15,14 @@ module.exports = (baseConfig, env, defaultConfig) => {
     ])
   );
   defaultConfig.module.rules[0].include.push(furmlyClient);
+  defaultConfig.module.rules[0].exclude = function(modulePath) {
+    //console.log("module path:" + modulePath);
+    path.sep
+    return (
+      /node_modules/i.test(modulePath) &&
+      !/node_modules(\/|\\)furmly-client/i.test(modulePath)
+    );
+  };
   const babelRule = defaultConfig.module.rules[0].query;
   babelRule.presets[0] = fs.realpathSync(
     path.join(npmBase, babelRule.presets[0])
@@ -28,5 +36,6 @@ module.exports = (baseConfig, env, defaultConfig) => {
     }
     return x;
   });
+  console.log(JSON.stringify(defaultConfig, null, " "));
   return defaultConfig;
 };
