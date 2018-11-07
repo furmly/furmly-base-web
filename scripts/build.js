@@ -1,0 +1,30 @@
+let rollup = require("rollup").rollup,
+  babel = require("rollup-plugin-babel"),
+  resolve = require("rollup-plugin-node-resolve"),
+  path = require("path"),
+  package = require("../package.json"),
+  input = path.resolve(__dirname, "../src/configure.js"),
+  output = path.resolve(__dirname, "../dist/bundle.js");
+
+rollup({
+  input,
+  external: Object.keys(package.dependencies),
+  plugins: [
+    resolve({ modulesOnly: true }),
+    babel({
+      exclude: "node_modules/**"
+    })
+  ]
+})
+  .then(function(e) {
+    console.log("everything rolled up like a g");
+    e.write({
+      file: output,
+      format: "cjs",
+      sourcemap: true,
+      exports: "named"
+    });
+  })
+  .catch(e => {
+    console.log("failed to roll it up:" + e);
+  });

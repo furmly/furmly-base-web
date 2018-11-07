@@ -1,0 +1,7 @@
+src/
+scripts/
+static/
+.storybook/
+stories/
+docs/
+.babelrc

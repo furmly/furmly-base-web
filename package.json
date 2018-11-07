@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "Base web library for furmly web themes",
   "main": "index.js",
+  "homepage": "https://chidionuekwusi.github.io/furmly-base-web",
   "scripts": {
+    "build-web": "build-storybook -c .storybook -o docs",
+    "deploy": "npm run build-web && gh-pages -d docs",
+    "build": "node ./scripts/build.js",
     "test": "node ./node_modules/jest/bin/jest",
     "storybook": "npm run fixtures && start-storybook -p 9001 -c .storybook",
     "fixtures": "./node_modules/.bin/babel-node  ./stories/utils/createFixtures.js --presets=babel-preset-react,babel-preset-env"
@@ -35,10 +39,14 @@
     "enzyme": "^3.6.0",
     "enzyme-adapter-react-16": "^1.5.0",
     "enzyme-to-json": "^3.3.4",
+    "gh-pages": "^2.0.1",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^23.5.0",
     "react-redux": "^5.0.7",
-    "redux": "^4.0.0"
+    "redux": "^4.0.0",
+    "rollup": "^0.67.0",
+    "rollup-plugin-babel": "^4.0.3",
+    "rollup-plugin-node-resolve": "^3.4.0"
   },
   "jest": {
     "moduleNameMapper": {
