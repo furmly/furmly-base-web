@@ -1,4 +1,5 @@
 import controlMap, { Deferred } from "furmly-client";
+export { ThemeProvider } from "styled-components";
 import { Dynamic, componentWrapper } from "../src/components/container";
 import SubTitle from "./components/common/components/SubTitle";
 import GridList, {
@@ -31,7 +32,7 @@ export default config => {
   const maps = controlMap();
   const container = new Deferred("container");
   //create component locator
-  const componentLocator = maps.componentLocator(config && config.interceptors);
+  const componentLocator = maps.componentLocator(config && config.interceptor);
 
   maps.addCONTAINERRecipe([
     Dynamic,
@@ -92,10 +93,13 @@ export default config => {
   maps.createPage = (WrappedComponent, ...args) =>
     maps
       .PROVIDER(
-        Page(WrappedComponent, config.loginUrl, config.homeUrl),
+        Page(WrappedComponent, config.loginUrl, config.homeUrl).getComponent(),
         ...args
       )
       .getComponent();
+
+  if (config.extend && typeof config.extend == "function")
+    return config.extend(maps, maps._defaultMap);
 
   return maps.cook();
 };
