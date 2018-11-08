@@ -2,7 +2,7 @@
 
 ## Simple implementation of furmly components using react & styled-components.
 
----
+
 
 [ @Demo ](https://chidionuekwusi.github.io/furmly-base-web)
 
