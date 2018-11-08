@@ -10,6 +10,9 @@ module.exports = (baseConfig, env, defaultConfig) => {
       { from: "static" },
       {
         from: "stories/fixtures"
+      },
+      {
+        from: "src/fonts"
       }
     ])
   );

@@ -8,8 +8,8 @@ import {
   replaceStack,
   alreadyVisible
 } from "furmly-client";
-import Lato from "../../fonts/Lato-Light.ttf";
-import Roboto from "../../fonts/Roboto-Thin.ttf";
+//import Lato from "../../fonts/Lato-Light.ttf";
+//import Roboto from "../../fonts/Roboto-Thin.ttf";
 import {
   lineHeight,
   accentColor,
@@ -86,11 +86,11 @@ button {
 }
 @font-face {
   font-family:'Lato';
-  src:url(${Lato})
+  src:url(./Lato-Light.ttf)
 }
 @font-face {
   font-family:'Roboto';
-  src:url(${Roboto})
+  src:url(./Roboto-Thin.ttf)
 }
 
 body,button{

@@ -2,7 +2,7 @@
   "name": "furmly-base-web",
   "version": "1.0.0",
   "description": "Base web library for furmly web themes",
-  "main": "index.js",
+  "main": "dist/bundle.js",
   "homepage": "https://chidionuekwusi.github.io/furmly-base-web",
   "scripts": {
     "build-web": "build-storybook -c .storybook -o docs",
@@ -45,7 +45,8 @@
     "react-redux": "^5.0.7",
     "redux": "^4.0.0",
     "rollup": "^0.67.0",
-    "rollup-plugin-babel": "^4.0.3",
+    "rollup-plugin-babel": "^3.0.7",
+    "rollup-plugin-copy": "^0.2.3",
     "rollup-plugin-node-resolve": "^3.4.0"
   },
   "jest": {

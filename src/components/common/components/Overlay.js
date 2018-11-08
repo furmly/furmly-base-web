@@ -7,7 +7,7 @@ export default styled.div.attrs({
   visibility: hidden;
   left: 0;
   top: 0;
-  position: absolute;
+  position: fixed;
   background-color: #0000007d;
   display: flex;
   flex-direction: row;

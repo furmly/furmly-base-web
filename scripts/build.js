@@ -1,10 +1,12 @@
-let rollup = require("rollup").rollup,
+const rollup = require("rollup").rollup,
   babel = require("rollup-plugin-babel"),
   resolve = require("rollup-plugin-node-resolve"),
+  copy = require("rollup-plugin-copy"),
   path = require("path"),
   package = require("../package.json"),
   input = path.resolve(__dirname, "../src/configure.js"),
   output = path.resolve(__dirname, "../dist/bundle.js");
+const babelrc = path.join(__dirname, "./.babelrc");
 
 rollup({
   input,
@@ -12,7 +14,11 @@ rollup({
   plugins: [
     resolve({ modulesOnly: true }),
     babel({
-      exclude: "node_modules/**"
+      exclude: ["node_modules/**", ".storybook/**", "stories/**", "static/**"],
+      extends: babelrc
+    }),
+    copy({
+      "src/fonts/": "dist/"
     })
   ]
 })
