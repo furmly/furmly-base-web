@@ -105,6 +105,29 @@ const createMedia = (xSmall = 600, small = 600, medium = 768, large = 992, xlarg
 });
 const media = createMedia();
 
+const injectFontsAndCSSBase = () => styled.injectGlobal`
+textarea, select, input, button { outline: none; }
+button {
+  padding:0px;
+}
+* {
+  box-sizing: border-box;
+}
+@font-face {
+  font-family:'Lato';
+  src:url(./Lato-Light.ttf)
+}
+@font-face {
+  font-family:'Roboto';
+  src:url(./Roboto-Thin.ttf)
+}
+
+body,button{
+  font-family:Lato;
+  line-height:${lineHeight};
+}
+`;
+
 const getSlice = (page, count) => {
   let start = (page - 1) * count;
   let end = start + count;
@@ -3036,10 +3059,14 @@ var configure = (config$$1 => {
   return maps.cook();
 });
 
+exports.ThemeProvider = styled.ThemeProvider;
 exports.Button = Button;
 exports.Input = Input$1;
 exports.Checkbox = FurmlyCheckbox;
 exports.DatePicker = FurmlyDatePicker;
 exports.Select = Select$1;
+exports.injectFontsAndCSSBase = injectFontsAndCSSBase;
+exports.createMedia = createMedia;
+exports.media = media;
 exports.setup = configure;
 //# sourceMappingURL=bundle.js.map
