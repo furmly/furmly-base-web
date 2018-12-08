@@ -4,7 +4,7 @@ const rollup = require("rollup").rollup,
   copy = require("rollup-plugin-copy"),
   path = require("path"),
   package = require("../package.json"),
-  input = path.resolve(__dirname, "../src/configure.js"),
+  input = path.resolve(__dirname, "../src/index.js"),
   output = path.resolve(__dirname, "../dist/bundle.js");
 const babelrc = path.join(__dirname, "./.babelrc");
 

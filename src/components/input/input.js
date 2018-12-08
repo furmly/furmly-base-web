@@ -63,16 +63,6 @@ export const inputFactory = (InnerInput, noLabel) => {
     );
   };
 
-  Input.propTypes = {
-    description: PropTypes.string,
-    label: PropTypes.string,
-    value: PropTypes.oneOfType([
-      PropTypes.object,
-      PropTypes.string,
-      PropTypes.number
-    ]),
-    valueChanged: PropTypes.func.isRequired
-  };
   return Input;
 };
 
@@ -84,6 +74,17 @@ export const Input = ({ type, value, valueChanged }) => {
       onChange={onChange.bind(this, valueChanged)}
     />
   );
+};
+
+Input.propTypes = {
+  description: PropTypes.string,
+  label: PropTypes.string,
+  value: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.string,
+    PropTypes.number
+  ]),
+  valueChanged: PropTypes.func.isRequired
 };
 
 export default inputFactory(Input);

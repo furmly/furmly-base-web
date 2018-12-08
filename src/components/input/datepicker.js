@@ -1,5 +1,6 @@
 import React from "react";
 import Calendar from "react-calendar/dist/entry.nostyle";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { inputFactory } from "./input";
 import {
@@ -115,8 +116,8 @@ class DatePicker extends React.Component {
     const dateValue = isRange
       ? [fromValue, toValue]
       : typeof value === "string"
-        ? new Date(value)
-        : value;
+      ? new Date(value)
+      : value;
     const valueString =
       dateValue &&
       (Array.prototype.isPrototypeOf(dateValue)
@@ -146,4 +147,17 @@ class DatePicker extends React.Component {
     return elements;
   }
 }
+
+const dateType = PropTypes.oneOfType([
+  PropTypes.instanceOf(Date),
+  PropTypes.string
+]);
+DatePicker.propTypes = {
+  isRange: PropTypes.bool,
+  value: dateType,
+  toValue: dateType,
+  fromValue: dateType,
+  minDate: dateType,
+  maxDate: dateType
+};
 export default inputFactory(DatePicker);

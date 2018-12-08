@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import {
   minimumInputHeight,
   inputPadding,
@@ -146,8 +147,10 @@ class Select extends React.Component {
       value,
       keyProperty,
       label,
-      items
+      items,
+      ItemElement
     } = this.props;
+    const MenuItem = ItemElement || Item;
     const showMenu = this.state.showMenu.join(" ");
     return (
       <Container innerRef={node => this.props.innerRef(this, node)}>
@@ -156,17 +159,18 @@ class Select extends React.Component {
           onClick={this.revealClicked}
           disabled={disabled}
         >
-          {value || `${label}`}
+          {value || label || ""}
         </RevealButton>
         <Menu className={showMenu}>
           <MenuContainer>
             {items.map(x => (
-              <Item
+              <MenuItem
                 onClick={() => this.toggleMenu(valueChanged(x[keyProperty]))}
                 key={x[keyProperty]}
+                data={x}
               >
                 {x[displayProperty]}
-              </Item>
+              </MenuItem>
             ))}
           </MenuContainer>
         </Menu>
@@ -175,4 +179,14 @@ class Select extends React.Component {
   }
 }
 
+Select.propTypes = {
+  disabled: PropTypes.bool,
+  displayProperty: PropTypes.string,
+  valueChanged: PropTypes.func,
+  value: PropTypes.object,
+  keyProperty: PropTypes.string.isRequired,
+  label: PropTypes.string,
+  items: PropTypes.array.isRequired,
+  ItemElement: PropTypes.element
+};
 export default Select;
