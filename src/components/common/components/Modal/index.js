@@ -6,10 +6,10 @@ import ProgressBar from "../ProgressBar";
 import { Label } from "../Label";
 import {
   titleText,
+  largerBoxShadow,
   minimumModalHeight,
   minimumModalWidth,
-  modalBackgroundColor,
-  largerBoxShadow
+  modalBackgroundColor
 } from "../../variables";
 import { INTENTS, media } from "../../utils";
 
@@ -20,18 +20,13 @@ const Title = styled(Label)`
   transform: translateY(-100%);
 `;
 const ModalContainer = styled.div`
+  overflow-y: auto;
   background-color: ${modalBackgroundColor};
   height: 100%;
-
+  min-width: ${minimumModalWidth};
   ${media.xSmall`
   min-width:100%;
 `};
-`;
-
-const ContentContainer = styled.div`
-  overflow-y: auto;
-  min-height: ${minimumModalHeight};
-  min-width: ${minimumModalWidth};
 `;
 const Modal = props => {
   const actions = props.actions || [
@@ -55,13 +50,12 @@ const Modal = props => {
       extend={props => css`
         background-color: ${modalBackgroundColor(props)};
         ${largerBoxShadow};
+        min-height: ${minimumModalHeight};
       `}
     >
       <ModalContainer>
         {props.title && <Title>{props.title}</Title>}
-        <ContentContainer>
-          {(props.busy && <ProgressBar />) || props.template || props.children}
-        </ContentContainer>
+        {(props.busy && <ProgressBar />) || props.template || props.children}
       </ModalContainer>
     </Portal>
 

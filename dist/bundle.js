@@ -583,18 +583,13 @@ const Title = styled__default(Label)`
   transform: translateY(-100%);
 `;
 const ModalContainer = styled__default.div`
+  overflow-y: auto;
   background-color: ${modalBackgroundColor};
   height: 100%;
-
+  min-width: ${minimumModalWidth};
   ${media.xSmall`
   min-width:100%;
 `};
-`;
-
-const ContentContainer$1 = styled__default.div`
-  overflow-y: auto;
-  min-height: ${minimumModalHeight};
-  min-width: ${minimumModalWidth};
 `;
 const Modal = props => {
   const actions = props.actions || [{
@@ -617,6 +612,7 @@ const Modal = props => {
         extend: props => styled.css`
         background-color: ${modalBackgroundColor(props)};
         ${largerBoxShadow};
+        min-height: ${minimumModalHeight};
       `
       },
       React__default.createElement(
@@ -627,11 +623,7 @@ const Modal = props => {
           null,
           props.title
         ),
-        React__default.createElement(
-          ContentContainer$1,
-          null,
-          props.busy && React__default.createElement(Indeterminate, null) || props.template || props.children
-        )
+        props.busy && React__default.createElement(Indeterminate, null) || props.template || props.children
       )
     )
 
