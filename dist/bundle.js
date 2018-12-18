@@ -366,6 +366,11 @@ IconButton.propTypes = {
   icon: PropTypes.string.isRequired
 };
 
+var FormDiv = styled__default.div`
+  padding: ${containerPadding}px;
+  background-color: ${formComponentBackgroundColor};
+`;
+
 var Overlay = styled__default.div.attrs({
   className: props => props.isOpen && "show"
 })`
@@ -519,11 +524,6 @@ const Indeterminate = props => React__default.createElement(
     )
   )
 );
-
-var FormDiv = styled__default.div`
-  padding: ${containerPadding}px;
-  background-color: ${formComponentBackgroundColor};
-`;
 
 const Label = styled__default.label`
   background-color: ${setupReversal(labelBackgroundColor, labelColor)};
@@ -981,7 +981,7 @@ const Menu = styled__default.div`
 const RevealButton$1 = styled__default.button`
   display: block;
   border: none;
-  color:${inputColor};
+  color: ${inputColor};
   background-color: ${inputBackgroundColor};
   min-height: ${minimumInputHeight}px;
   width: 100%;
@@ -1103,7 +1103,7 @@ Select.propTypes = {
   disabled: PropTypes.bool,
   displayProperty: PropTypes.string,
   valueChanged: PropTypes.func,
-  value: PropTypes.object,
+  value: PropTypes.oneOfType(PropTypes.object, PropTypes.string),
   keyProperty: PropTypes.string.isRequired,
   label: PropTypes.string,
   items: PropTypes.array.isRequired,
@@ -3073,6 +3073,10 @@ var configure = (config$$1 => {
 });
 
 exports.ThemeProvider = styled.ThemeProvider;
+exports.Button = Button;
+exports.IconButton = IconButton;
+exports.StyledIconButton = StyledIconButton;
+exports.FormContainer = FormDiv;
 exports.Icon = Icon$1;
 exports.Modal = Modal;
 exports.Input = Input$1;
@@ -3087,6 +3091,4 @@ exports.injectFontsAndCSSBase = injectFontsAndCSSBase;
 exports.createMedia = createMedia;
 exports.media = media;
 exports.setup = configure;
-exports.IconButton = IconButton;
-exports.StyledIconButton = StyledIconButton;
 //# sourceMappingURL=bundle.js.map
