@@ -18,14 +18,6 @@ const StyledFormDiv = styled.div`
   min-height: ${props => props.theme.factor * 100}px;
   background-color: ${formComponentBackgroundColor};
   position: relative;
-  hr {
-    height: ${props => formLineWidth(props) * 0.3}px;
-    padding: 0;
-    margin: 0;
-    width: 100%;
-    border: none;
-    background-color: ${labelBackgroundColor};
-  }
 `;
 const StyledCopy = styled(Copy)`
   padding: ${elementPadding}px;

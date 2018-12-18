@@ -5,10 +5,12 @@ import { media } from "../common/utils";
 import {
   minimumInputHeight,
   inputPadding,
-  highLightColor
+  highLightColor,
+  inputColor
 } from "../common/variables";
 
 const ListItemWrapper = styled.div`
+  color: ${inputColor};
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -54,10 +56,9 @@ const ListItem = props => (
   <ListItemWrapper onClick={props.onClick} disabled={props.disabled}>
     {props.avatar && <Avatar src={props.avatar} />}
     <ListContentWrapper>{props.children}</ListContentWrapper>
-    {props.rightActions &&
-      props.rightActions.length && (
-        <ActionButtons>{props.rightActions}</ActionButtons>
-      )}
+    {props.rightActions && props.rightActions.length && (
+      <ActionButtons>{props.rightActions}</ActionButtons>
+    )}
   </ListItemWrapper>
 );
 

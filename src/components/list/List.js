@@ -5,13 +5,26 @@ import PropTypes from "prop-types";
 import ListItem from "./ListItem";
 import { IconButton } from "../common/components/Button";
 import { camelCaseToWord } from "../common/utils";
+import {
+  inputColor,
+  formLineWidth,
+  labelBackgroundColor
+} from "../common/variables";
 const BasicInfoLabel = styled.span``;
-const ListDivider = styled.hr``;
+const ListDivider = styled.hr`
+  height: ${props => formLineWidth(props) * 0.3}px;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  border: none;
+  background-color: ${labelBackgroundColor};
+`;
 const List = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: stretch;
+
 `;
 
 export const BasicInfo = ({ rowData, withoutLabel, dataTemplate }) =>
