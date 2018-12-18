@@ -1157,6 +1157,7 @@ var withOutsideClickHandler = (WrappedComponent => {
 var Select$1 = inputFactory(withOutsideClickHandler(Select, false));
 
 const ListItemWrapper = styled__default.div`
+  color: ${inputColor};
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -1180,6 +1181,7 @@ const ListItemWrapper = styled__default.div`
 const ListContentWrapper = styled__default.div`
   flex: 0.7;
   display: flex;
+  align-items: center;
 `;
 const largeAvatarSize = props => props.theme.factor * 65;
 const mediumAvatarSize = props => props.theme.factor * 32;
@@ -1222,12 +1224,20 @@ ListItem.propTypes = {
 
 var _this$1 = undefined;
 const BasicInfoLabel = styled__default.span``;
-const ListDivider = styled__default.hr``;
+const ListDivider = styled__default.hr`
+  height: ${props => formLineWidth(props) * 0.3}px;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  border: none;
+  background-color: ${labelBackgroundColor};
+`;
 const List = styled__default.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: stretch;
+
 `;
 
 const BasicInfo = ({ rowData, withoutLabel, dataTemplate }) => Object.keys(rowData).reduce((sum, x, index) => {
@@ -1348,14 +1358,6 @@ const StyledFormDiv = styled__default.div`
   min-height: ${props => props.theme.factor * 100}px;
   background-color: ${formComponentBackgroundColor};
   position: relative;
-  hr {
-    height: ${props => formLineWidth(props) * 0.3}px;
-    padding: 0;
-    margin: 0;
-    width: 100%;
-    border: none;
-    background-color: ${labelBackgroundColor};
-  }
 `;
 const StyledCopy = styled__default(Copy)`
   padding: ${elementPadding}px;

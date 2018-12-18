@@ -11,7 +11,8 @@ const defaultTheme = {
   labelColor: "rgb(110, 88, 88)",
   accentColor: "orange",
   factor: 1.2,
-  modalBackgroundColor:"#ffd3d3",
+  inputColor: "rgb(39, 15, 15)",
+  modalBackgroundColor: "#ffd3d3",
   errorColor: "#ab0101",
   errorForeground: "white"
 };
