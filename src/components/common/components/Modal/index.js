@@ -1,15 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import Portal from "../Portal";
 import ProgressBar from "../ProgressBar";
 import { Label } from "../Label";
 import {
   titleText,
-  boxShadow,
   minimumModalHeight,
   minimumModalWidth,
-  modalBackgroundColor
+  modalBackgroundColor,
+  largerBoxShadow
 } from "../../variables";
 import { INTENTS, media } from "../../utils";
 
@@ -22,12 +22,16 @@ const Title = styled(Label)`
 const ModalContainer = styled.div`
   background-color: ${modalBackgroundColor};
   height: 100%;
-  ${boxShadow};
-  min-height: ${minimumModalHeight};
-  min-width: ${minimumModalWidth};
+
   ${media.xSmall`
   min-width:100%;
 `};
+`;
+
+const ContentContainer = styled.div`
+  overflow-y: auto;
+  min-height: ${minimumModalHeight};
+  min-width: ${minimumModalWidth};
 `;
 const Modal = props => {
   const actions = props.actions || [
@@ -48,10 +52,16 @@ const Modal = props => {
       portalId={props.id}
       actionButtons={actions}
       isOpen={props.visibility}
+      extend={props => css`
+        background-color: ${modalBackgroundColor(props)};
+        ${largerBoxShadow};
+      `}
     >
       <ModalContainer>
         {props.title && <Title>{props.title}</Title>}
-        {(props.busy && <ProgressBar />) || props.template || props.children}
+        <ContentContainer>
+          {(props.busy && <ProgressBar />) || props.template || props.children}
+        </ContentContainer>
       </ModalContainer>
     </Portal>
 

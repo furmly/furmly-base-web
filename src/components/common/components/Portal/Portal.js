@@ -9,10 +9,7 @@ import { containerPadding } from "../../variables";
 
 const ActionContainer = styled.div`
   align-self: flex-end;
-  transform: translate(
-    -${containerPadding}px,
-    calc(-${containerPadding}px - 100%)
-  );
+  margin: ${containerPadding}px;
 `;
 const ContentContainer = styled.div`
   display: flex;
@@ -23,6 +20,7 @@ const ContentContainer = styled.div`
   ${media.xSmall`
   min-width:100%;
 `};
+  ${props => props.extend && props.extend(props)}
 `;
 
 class Portal extends React.Component {
@@ -64,7 +62,7 @@ class Portal extends React.Component {
     ReactDOM.render(
       <ThemeProvider theme={this.props.theme}>
         <Overlay isOpen={this.props.isOpen}>
-          <ContentContainer>
+          <ContentContainer extend={this.props.extend}>
             {this.props.children}
             {this.props.actionButtons && (
               <ActionContainer>

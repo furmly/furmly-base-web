@@ -23,6 +23,7 @@ export {
 export {
   injectFontsAndCSSBase,
   createMedia,
+  INTENTS,
   media
 } from "./components/common/utils";
 export { default as setup } from "./configure";
