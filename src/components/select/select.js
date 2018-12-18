@@ -64,7 +64,7 @@ const Menu = styled.div`
 const RevealButton = styled.button`
   display: block;
   border: none;
-  color:${inputColor};
+  color: ${inputColor};
   background-color: ${inputBackgroundColor};
   min-height: ${minimumInputHeight}px;
   width: 100%;
@@ -183,7 +183,7 @@ Select.propTypes = {
   disabled: PropTypes.bool,
   displayProperty: PropTypes.string,
   valueChanged: PropTypes.func,
-  value: PropTypes.object,
+  value: PropTypes.oneOfType(PropTypes.object, PropTypes.string),
   keyProperty: PropTypes.string.isRequired,
   label: PropTypes.string,
   items: PropTypes.array.isRequired,

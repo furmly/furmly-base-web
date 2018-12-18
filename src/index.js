@@ -1,5 +1,12 @@
 export { ThemeProvider } from "styled-components";
-export * from "./components/common/components/Button";
+export {
+  default as Button,
+  IconButton,
+  StyledIconButton
+} from "./components/common/components/Button";
+export {
+  default as FormContainer
+} from "./components/common/components/FormDiv";
 export { default as Icon } from "./components/common/components/Icon";
 export { default as Modal } from "./components/common/components/Modal";
 export { default as Input } from "./components/Input/input";
