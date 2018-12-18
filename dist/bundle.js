@@ -405,10 +405,7 @@ var Overlay = styled__default.div.attrs({
 
 const ActionContainer = styled__default.div`
   align-self: flex-end;
-  transform: translate(
-    -${containerPadding}px,
-    calc(-${containerPadding}px - 100%)
-  );
+  margin: ${containerPadding}px;
 `;
 const ContentContainer = styled__default.div`
   display: flex;
@@ -419,6 +416,7 @@ const ContentContainer = styled__default.div`
   ${media.xSmall`
   min-width:100%;
 `};
+  ${props => props.extend && props.extend(props)}
 `;
 
 class Portal extends React__default.Component {
@@ -465,7 +463,7 @@ class Portal extends React__default.Component {
         { isOpen: this.props.isOpen },
         React__default.createElement(
           ContentContainer,
-          null,
+          { extend: this.props.extend },
           this.props.children,
           this.props.actionButtons && React__default.createElement(
             ActionContainer,
@@ -587,12 +585,16 @@ const Title = styled__default(Label)`
 const ModalContainer = styled__default.div`
   background-color: ${modalBackgroundColor};
   height: 100%;
-  ${boxShadow};
-  min-height: ${minimumModalHeight};
-  min-width: ${minimumModalWidth};
+
   ${media.xSmall`
   min-width:100%;
 `};
+`;
+
+const ContentContainer$1 = styled__default.div`
+  overflow-y: auto;
+  min-height: ${minimumModalHeight};
+  min-width: ${minimumModalWidth};
 `;
 const Modal = props => {
   const actions = props.actions || [{
@@ -611,7 +613,11 @@ const Modal = props => {
       {
         portalId: props.id,
         actionButtons: actions,
-        isOpen: props.visibility
+        isOpen: props.visibility,
+        extend: props => styled.css`
+        background-color: ${modalBackgroundColor(props)};
+        ${largerBoxShadow};
+      `
       },
       React__default.createElement(
         ModalContainer,
@@ -621,7 +627,11 @@ const Modal = props => {
           null,
           props.title
         ),
-        props.busy && React__default.createElement(Indeterminate, null) || props.template || props.children
+        React__default.createElement(
+          ContentContainer$1,
+          null,
+          props.busy && React__default.createElement(Indeterminate, null) || props.template || props.children
+        )
       )
     )
 
@@ -3422,6 +3432,7 @@ exports.ThreeColumn = ThreeColumn;
 exports.Dynamic = Dynamic;
 exports.injectFontsAndCSSBase = injectFontsAndCSSBase;
 exports.createMedia = createMedia;
+exports.INTENTS = INTENTS;
 exports.media = media;
 exports.setup = configure;
 //# sourceMappingURL=bundle.js.map
