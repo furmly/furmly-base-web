@@ -122,7 +122,7 @@ button {
   src:url(${resourceDir}Roboto-Thin.ttf)
 }
 
-body,button,input,textarea, {
+body,button,input,textarea {
   font-family:Lato;
   line-height:${lineHeight};
 }
