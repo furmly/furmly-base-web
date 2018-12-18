@@ -49,7 +49,7 @@ storiesOf("Input", module)
         <Input {...userProps} />
       </div>
       <div style={{ display: "inline", width: "50%" }}>
-        <Input {...userProps} name="lastname" label="surname" />
+        <Input {...userProps} name="lastname" label="surname" description="" />
       </div>
     </div>
   ))

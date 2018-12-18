@@ -8,7 +8,7 @@ export default styled.div.attrs({
   left: 0;
   top: 0;
   position: fixed;
-  background-color: #0000007d;
+  background-color: rgba(0,0,0,0.49);
   display: flex;
   flex-direction: row;
   justify-content: center;

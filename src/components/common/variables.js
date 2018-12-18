@@ -24,7 +24,7 @@ export const minimumModalHeight = props =>
 export const minimumModalWidth = props =>
   props.theme.minimumModalWidth || "40vw";
 export const highLightColor = props =>
-  props.theme.highLightColor || "#0000001a";
+  props.theme.highLightColor || "rgba(0,0,0,0.1)";
 export const inputColor = props => props.theme.inputColor || "black";
 export const inputBackgroundColor = props =>
   props.theme.inputBackgroundColor || "rgba(53, 53, 53, 0.08)";
@@ -33,10 +33,10 @@ export const iconSize = props => props.size || props.theme.factor * 10;
 export const largeIconSize = props => props.size || props.theme.factor * 20;
 export const buttonDefaults = "display: block;  border: none;";
 export const formComponentBackgroundColor = props =>
-  props.theme.formComponentBackgroundColor || "#00000003";
+  props.theme.formComponentBackgroundColor || "rgba(0,0,0,0.01)";
 export const modalBackgroundColor = props =>
   props.theme.modalBackgroundColor || "white";
-const dropShadowColor = "#0000002e";
+const dropShadowColor = "rgba(0,0,0,0.18)";
 export const boxShadow = `box-shadow:0px 0px 2px 0px ${dropShadowColor}`;
 export const largerBoxShadow = `box-shadow:0px 5px 4px -1px ${dropShadowColor}`;
 export const iconDropShadow = `filter: drop-shadow(0px 3px 1px ${dropShadowColor})`;

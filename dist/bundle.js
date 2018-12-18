@@ -38,15 +38,15 @@ const minimumInputHeight = props => props.large && props.theme.factor * 10 + 50 
 const containerPadding = props => props.theme.factor * 10;
 const minimumModalHeight = props => props.theme.minimumModalHeight || "40vh";
 const minimumModalWidth = props => props.theme.minimumModalWidth || "40vw";
-const highLightColor = props => props.theme.highLightColor || "#0000001a";
+const highLightColor = props => props.theme.highLightColor || "rgba(0,0,0,0.1)";
 const inputColor = props => props.theme.inputColor || "black";
 const inputBackgroundColor = props => props.theme.inputBackgroundColor || "rgba(53, 53, 53, 0.08)";
 const inputPadding = () => `0px 5px`;
 const iconSize = props => props.size || props.theme.factor * 10;
 const buttonDefaults = "display: block;  border: none;";
-const formComponentBackgroundColor = props => props.theme.formComponentBackgroundColor || "#00000003";
+const formComponentBackgroundColor = props => props.theme.formComponentBackgroundColor || "rgba(0,0,0,0.01)";
 const modalBackgroundColor = props => props.theme.modalBackgroundColor || "white";
-const dropShadowColor = "#0000002e";
+const dropShadowColor = "rgba(0,0,0,0.18)";
 const boxShadow = `box-shadow:0px 0px 2px 0px ${dropShadowColor}`;
 const largerBoxShadow = `box-shadow:0px 5px 4px -1px ${dropShadowColor}`;
 const iconDropShadow = `filter: drop-shadow(0px 3px 1px ${dropShadowColor})`;
@@ -135,6 +135,12 @@ const getSlice = (page, count) => {
     start,
     end
   };
+};
+const camelCaseToWord = string => {
+  if (!string) return;
+  return string.replace(/([A-Z]+)/g, " $1").replace(/^./, function (str) {
+    return str.toUpperCase();
+  });
 };
 
 const navigationMap = {
@@ -380,7 +386,7 @@ var Overlay = styled__default.div.attrs({
   left: 0;
   top: 0;
   position: fixed;
-  background-color: #0000007d;
+  background-color: rgba(0,0,0,0.49);
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -565,7 +571,7 @@ const FocusIndicator = styled__default.hr`
     background-color: ${errorColor};
   }
 `;
-var FormLabel = (props => React__default.createElement(
+var StyledLabel = (props => React__default.createElement(
   FormLabelContainer,
   null,
   React__default.createElement(Label, props),
@@ -681,7 +687,7 @@ const inputFactory = (InnerInput, noLabel) => {
       FormDiv,
       null,
       !noLabel ? React__default.createElement(
-        FormLabel,
+        StyledLabel,
         {
           reverse: reverse,
           className: errors && errors.length && "error" || ""
@@ -1103,7 +1109,7 @@ Select.propTypes = {
   disabled: PropTypes.bool,
   displayProperty: PropTypes.string,
   valueChanged: PropTypes.func,
-  value: PropTypes.oneOfType(PropTypes.object, PropTypes.string),
+  value: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
   keyProperty: PropTypes.string.isRequired,
   label: PropTypes.string,
   items: PropTypes.array.isRequired,
@@ -1149,6 +1155,330 @@ var withOutsideClickHandler = (WrappedComponent => {
 });
 
 var Select$1 = inputFactory(withOutsideClickHandler(Select, false));
+
+const ListItemWrapper = styled__default.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  min-height: ${minimumInputHeight}px;
+  padding: ${inputPadding};
+  position: relative;
+  &[disabled]:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #efefefb0;
+  }
+  &:hover:not([disabled]) {
+    background-color: ${highLightColor};
+    cursor: pointer;
+  }
+`;
+const ListContentWrapper = styled__default.div`
+  flex: 0.7;
+  display: flex;
+`;
+const largeAvatarSize = props => props.theme.factor * 65;
+const mediumAvatarSize = props => props.theme.factor * 32;
+
+const Avatar = styled__default.img`
+  height: ${largeAvatarSize}px;
+  width: ${mediumAvatarSize}px;
+  ${media.medium`
+     height:${mediumAvatarSize}px;
+     width:${mediumAvatarSize}px;
+  `};
+`;
+const ActionButtons = styled__default.div`
+  display: flex;
+  flex-direction: row;
+  flex: 0.3;
+  justify-content: flex-end;
+`;
+const ListItem = props => React__default.createElement(
+  ListItemWrapper,
+  { onClick: props.onClick, disabled: props.disabled },
+  props.avatar && React__default.createElement(Avatar, { src: props.avatar }),
+  React__default.createElement(
+    ListContentWrapper,
+    null,
+    props.children
+  ),
+  props.rightActions && props.rightActions.length && React__default.createElement(
+    ActionButtons,
+    null,
+    props.rightActions
+  )
+);
+
+ListItem.propTypes = {
+  avatar: PropTypes.string,
+  rightAction: PropTypes.arrayOf(PropTypes.element),
+  disabled: PropTypes.bool
+};
+
+var _this$1 = undefined;
+const BasicInfoLabel = styled__default.span``;
+const ListDivider = styled__default.hr``;
+const List = styled__default.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: stretch;
+`;
+
+const BasicInfo = ({ rowData, withoutLabel, dataTemplate }) => Object.keys(rowData).reduce((sum, x, index) => {
+  if (dataTemplate && !dataTemplate[x]) return sum;
+
+  let displayText = rowData[x];
+  let label = dataTemplate ? dataTemplate[x] : camelCaseToWord(x);
+  let element = withoutLabel ? React__default.createElement(
+    BasicInfoLabel,
+    { key: index },
+    displayText
+  ) : React__default.createElement(
+    BasicInfoLabel,
+    { key: index },
+    React__default.createElement(
+      "b",
+      null,
+      label
+    ),
+    " \xA0",
+    typeof rowData[x] == "object" ? Date.prototype.isPrototypeOf(rowData[x]) ? rowData[x].toLocaleDateString() : "..." : displayText
+  );
+
+  sum.push(element);
+  return sum;
+}, []);
+
+const rowTemplates = {
+  basic: (rowData, { withoutLabel, itemClicked, index, dataTemplate, disabled, itemRemoved }) => React__default.createElement(
+    ListItem,
+    {
+      key: index,
+      onClick: itemClicked,
+      disabled: disabled,
+      rightActions: [React__default.createElement(IconButton, { icon: "trash", onClick: itemRemoved })]
+    },
+    React__default.createElement(BasicInfo, {
+      rowData: rowData,
+      withoutLabel: withoutLabel,
+      dataTemplate: dataTemplate,
+      index: index
+    })
+  ),
+  expression: (rowData, { itemClicked, itemRemoved, dataTemplate, index, disabled }) => React__default.createElement(
+    ListItem,
+    {
+      key: index,
+      onClick: itemClicked,
+      rightActions: [React__default.createElement(IconButton, { icon: "trash", onClick: itemRemoved })],
+      disabled: disabled
+    },
+    React__default.createElement(
+      "p",
+      null,
+      React__default.createElement(
+        "span",
+        { style: { float: "left" } },
+        React__default.createElement(
+          "b",
+          null,
+          "" + (index + 1),
+          "."
+        ),
+        React__default.createElement(
+          "span",
+          null,
+          controlMap.utils.formatExpression(dataTemplate.exp, rowData)
+        )
+      )
+    )
+  ),
+  includesImage: (rowData, { itemClicked, itemRemoved, index, disabled }) => React__default.createElement(
+    ListItem,
+    {
+      key: index,
+      avatar: image,
+      onClick: itemClicked,
+      disabled: disabled,
+      rightActions: [React__default.createElement(IconButton, { icon: "trash", onClick: itemRemoved.bind(_this$1, index) })]
+    },
+    React__default.createElement(BasicInfo, rowData)
+  )
+};
+
+const ListImplementation = props => {
+  let rowTemplate = rowTemplates[props.rowTemplate && props.rowTemplate.name || "basic"],
+      elements = props.items ? props.items.reduce((sum, x, index) => {
+    if (index > 0) sum.push(React__default.createElement(ListDivider, { key: index + "_divider" }));
+    let rowData = Object.assign({}, x);
+    return sum.push(rowTemplate(rowData, {
+      withoutLabel: false,
+      index,
+      dataTemplate: props.rowTemplate && props.rowTemplate.config,
+      itemClicked: !props.disabled ? e => props.rowClicked(index) : undefined,
+      itemRemoved: !props.disabled ? e => {
+        e.stopPropagation();
+        props.rowRemoved(index);
+      } : undefined,
+      disabled: props.disabled
+    })), sum;
+  }, []) : null;
+  return React__default.createElement(
+    List,
+    null,
+    elements
+  );
+};
+
+ListImplementation.propTypes = {
+  rowTemplate: PropTypes.object,
+  items: PropTypes.array,
+  rowClicked: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
+  rowRemoved: PropTypes.func.isRequired
+};
+
+const StyledFormDiv = styled__default.div`
+  min-height: ${props => props.theme.factor * 100}px;
+  background-color: ${formComponentBackgroundColor};
+  position: relative;
+  hr {
+    height: ${props => formLineWidth(props) * 0.3}px;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    border: none;
+    background-color: ${labelBackgroundColor};
+  }
+`;
+const StyledCopy = styled__default(Copy)`
+  padding: ${elementPadding}px;
+`;
+const BorderAnimationWrapper = styled__default.div`
+  position: absolute;
+  top: ${props => labelSize(props) - 2}px;
+  height: calc(100% - ${props => labelSize(props) - 2}px);
+  width: 100%;
+  overflow: hidden;
+`;
+const transitionDuration = 0.25;
+
+const getTransition = function (delay, transform, reverse) {
+  return styled.css`
+    transition-delay: ${reverse}s;
+    transition-property: transform;
+    transition-duration: ${transitionDuration}s;
+    transition-function: ease-in;
+    ${StyledFormDiv}:hover & {
+      transform: ${transform + "(0)"};
+      transition: transform ${transitionDuration}s ease-in ${delay}s;
+    }
+  `;
+};
+const Line = styled__default.div`
+  position: absolute;
+  height: ${formLineWidth}px;
+  background-color: ${labelBackgroundColor};
+  ${StyledFormDiv}.error & {
+    background-color: ${errorColor};
+  }
+`;
+const Top = styled__default(Line)`
+  width: 100%;
+  top: 0;
+  transform: translateX(-100%);
+  ${getTransition(0, "translateX", 3 * transitionDuration)};
+`;
+const Right = styled__default(Line)`
+  height: 100%;
+  width: ${formLineWidth}px;
+  top: 0px;
+  right: 0;
+  transform: translateY(-100%);
+  ${getTransition(1 * transitionDuration, "translateY", 2 * transitionDuration)};
+`;
+const Bottom = styled__default(Line)`
+  width: 100%;
+  bottom: 0px;
+  transform: translateX(100%);
+  ${getTransition(2 * transitionDuration, "translateX", 1 * transitionDuration)};
+`;
+
+const Left = styled__default(Line)`
+  height: 100%;
+  top: 0;
+  left: 0;
+  width: ${formLineWidth}px;
+  transform: translateY(100%);
+  ${getTransition(3 * transitionDuration, "translateY", 0)};
+`;
+
+const ListLayout = props => {
+  const { errors } = props;
+  const errorClass = errors && errors.length && "error" || "";
+  return React__default.createElement(
+    StyledFormDiv,
+    { className: errorClass },
+    React__default.createElement(
+      StyledLabel,
+      { className: errorClass },
+      props.value
+    ),
+    React__default.createElement(
+      StyledCopy,
+      null,
+      props.description,
+      errors && errors.map(x => React__default.createElement(
+        ErrorText,
+        { key: x },
+        x
+      ))
+    ),
+    React__default.createElement(
+      BorderAnimationWrapper,
+      null,
+      React__default.createElement(Top, null),
+      React__default.createElement(Right, null),
+      React__default.createElement(Bottom, null),
+      React__default.createElement(Left, null)
+    ),
+    props.children
+  );
+};
+
+ListLayout.propTypes = {
+  value: PropTypes.string,
+  description: PropTypes.string,
+  children: PropTypes.oneOf([PropTypes.arrayOf(PropTypes.element), PropTypes.object])
+};
+
+const StyledListButton = styled__default(StyledIconButton)`
+  position: absolute;
+  right: 0px;
+  height: ${labelSize}px;
+  top: 0px;
+`;
+const ListButton = props => React__default.createElement(
+  StyledListButton,
+  {
+    intent: INTENTS.DEFAULT,
+    disabled: !!props.disabled,
+    icon: "plus",
+    onClick: () => props.click()
+  },
+  "ADD"
+);
+
+ListButton.propTypes = {
+  disabled: PropTypes.bool,
+  click: PropTypes.func.isRequired
+};
 
 const Container$1 = styled__default.div`
   display: flex;
@@ -1487,7 +1817,7 @@ const Wrapper$2 = styled__default.div``;
 
 const Pager = getPager();
 
-class List extends React.Component {
+class List$1 extends React.Component {
   constructor(props) {
     super(props);
     this.state = { count: 5, page: 1 };
@@ -3046,7 +3376,7 @@ var configure = (config$$1 => {
   maps.addSELECTRecipe([Indeterminate, InnerComponentWrapper, Select$1]);
 
   //create grid
-  maps.addGRIDRecipe([GridLayout, List, Modal, GridHeader, Indeterminate, CommandsView, navigationActions, ResultView, container]);
+  maps.addGRIDRecipe([GridLayout, List$1, Modal, GridHeader, Indeterminate, CommandsView, navigationActions, ResultView, container]);
 
   maps.addSECTIONRecipe([Layout$1, Header, container]);
 
@@ -3083,6 +3413,7 @@ exports.Input = Input$1;
 exports.Checkbox = FurmlyCheckbox;
 exports.DatePicker = FurmlyDatePicker;
 exports.Select = Select$1;
+exports.List = ListImplementation;
 exports.Container = Container$1;
 exports.TwoColumn = TwoColumn;
 exports.ThreeColumn = ThreeColumn;
