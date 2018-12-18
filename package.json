@@ -1,6 +1,6 @@
 {
   "name": "furmly-base-web",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "description": "Base web library for furmly web themes",
   "main": "dist/bundle.js",
   "homepage": "https://chidionuekwusi.github.io/furmly-base-web",
