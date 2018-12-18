@@ -4,8 +4,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
-var Calendar = _interopDefault(require('react-calendar/dist/entry.nostyle'));
 var ReactDOM = _interopDefault(require('react-dom'));
+var Calendar = _interopDefault(require('react-calendar/dist/entry.nostyle'));
 var hoistNonReactStatic = _interopDefault(require('hoist-non-react-statics'));
 var invariant = _interopDefault(require('invariant'));
 var reactIs = require('react-is');
@@ -122,7 +122,7 @@ button {
   src:url(${resourceDir}Roboto-Thin.ttf)
 }
 
-body,button{
+body,button,input,textarea, {
   font-family:Lato;
   line-height:${lineHeight};
 }
@@ -366,228 +366,6 @@ IconButton.propTypes = {
   icon: PropTypes.string.isRequired
 };
 
-var FormDiv = styled__default.div`
-  padding: ${containerPadding}px;
-  background-color: ${formComponentBackgroundColor};
-`;
-
-const Label = styled__default.label`
-  background-color: ${setupReversal(labelBackgroundColor, labelColor)};
-  color: ${setupReversal(labelColor, labelBackgroundColor)};
-  padding: ${props => props.theme.factor * 5}px;
-  font-size: ${smallText}px;
-  text-transform: uppercase;
-  font-weight:bold;
-  display: inline-block;
-  transition: background-color 1s;
-  &.error {
-    background-color: ${errorColor};
-    color: ${errorForegroundColor};
-  }
-`;
-
-const FormLabelContainer = styled__default.div`
-  width: 100%;
-  position: relative;
-  overflow: hidden;
-  visibility: ${props => props.hide && "hidden" || "visible"};
-`;
-const FocusIndicator = styled__default.hr`
-  width: 100%;
-  transform: translateX(-101%);
-  position: absolute;
-  bottom: 0px;
-  border: none;
-  margin: 0px;
-  height: ${formLineWidth}px;
-  background-color: ${labelBackgroundColor};
-  transition-property: transform;
-  transition-duration: 0.5s;
-  transition-delay: 200ms;
-  ${FormDiv}:hover & {
-    transform: translateX(0);
-  }
-  ${Label}.error+& {
-    background-color: ${errorColor};
-  }
-`;
-var FormLabel = (props => React__default.createElement(
-  FormLabelContainer,
-  null,
-  React__default.createElement(Label, props),
-  React__default.createElement(FocusIndicator, null)
-));
-
-var ErrorText = styled__default.p`
-  color: ${errorColor};
-  font-size: ${smallestText}px;
-  margin: 1px 0px;
-  display: block;
-`;
-
-var Copy = styled__default.span`
-  color: ${props => props.theme.copyColor || "gray"};
-  font-size: ${smallestText}px;
-  display: block;
-`;
-
-var _this = undefined;
-
-const StyledInput = styled__default.input`
-  border: none;
-  display: block;
-  background-color: ${inputBackgroundColor};
-  color: ${inputColor};
-  min-height: ${minimumInputHeight}px;
-  padding: ${inputPadding};
-  width: 100%;
-  ${hover};
-  &:hover {
-    background-color: ${highLightColor};
-  }
-`;
-const FakeLabel = styled__default.div`
-  height: ${labelSize}px;
-  ${media.xSmall`height:0px;`};
-`;
-const onChangeFactory = (propName = "value") => {
-  return (valueChanged, evt, skipPreventDefault) => {
-    if (evt.preventDefault && !skipPreventDefault) {
-      evt.preventDefault();
-    }
-    valueChanged(evt.target[propName]);
-  };
-};
-const onChange = onChangeFactory();
-
-const inputFactory = (InnerInput, noLabel) => {
-  const Input = props => {
-    const { description, errors, label, reverse = false } = props;
-    return React__default.createElement(
-      FormDiv,
-      null,
-      !noLabel ? React__default.createElement(
-        FormLabel,
-        {
-          reverse: reverse,
-          className: errors && errors.length && "error" || ""
-        },
-        label
-      ) : React__default.createElement(FakeLabel, null),
-      React__default.createElement(InnerInput, props),
-      React__default.createElement(
-        Copy,
-        null,
-        description
-      ),
-      errors && errors.map(x => React__default.createElement(
-        ErrorText,
-        { key: x },
-        x
-      ))
-    );
-  };
-
-  return Input;
-};
-
-const Input = ({ type, value, valueChanged }) => {
-  return React__default.createElement(StyledInput, {
-    type: type,
-    value: value || "",
-    onChange: onChange.bind(_this, valueChanged)
-  });
-};
-
-Input.propTypes = {
-  description: PropTypes.string,
-  label: PropTypes.string,
-  value: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.number]),
-  valueChanged: PropTypes.func.isRequired
-};
-
-var Input$1 = inputFactory(Input);
-
-const onChange$1 = onChangeFactory("checked");
-const size = props => props.theme.factor * 20;
-const Label$1 = styled__default.label`
-  cursor: pointer;
-  vertical-align: middle;
-  font-weight: bold;
-  font-size: ${smallText}px;
-  text-transform: uppercase;
-  display: inline-block;
-  transition: background-color 1s;
-  &.error {
-    background-color: ${errorColor};
-  }
-`;
-
-const Wrapper = styled__default.div`
-  height: ${minimumInputHeight}px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  color: ${labelColor};
-`;
-
-const tickWidth = props => props.theme.factor * 20 / 2 + 2;
-const Tick = styled__default.span`
-  width: ${tickWidth}px;
-  height: 6px;
-  position: absolute;
-  top: 6px;
-  left: 5px;
-  border: 3px solid ${setupReversal(labelColor, labelBackgroundColor)};
-  border-top: none;
-  border-right: none;
-  background: transparent;
-  opacity: 0;
-  transform: rotate(-45deg);
-`;
-const Nob = styled__default.span`
-  margin-right: ${props => props.theme.factor * 5}px;
-  display: inline-block;
-  position: relative;
-  width: ${size}px;
-  height: ${size}px;
-  cursor: pointer;
-  background: ${setupReversal(labelBackgroundColor, labelColor)};
-  &:hover > ${Tick} {
-    opacity: 0.3;
-  }
-`;
-const Checkbox = styled__default.input.attrs({ type: "checkbox" })`
-  &[type="checkbox"] {
-    visibility: hidden;
-    &:checked + ${Tick} {
-      opacity: 1;
-    }
-  }
-`;
-
-const RawCheckbox = props => {
-  return React__default.createElement(
-    Wrapper,
-    { onClick: evt => evt.stopPropagation() },
-    React__default.createElement(
-      Label$1,
-      null,
-      React__default.createElement(
-        Nob,
-        { reverse: props.reverse },
-        React__default.createElement(Checkbox, {
-          checked: !!props.value,
-          onChange: event => onChange$1(value => props.valueChanged(value), event, true)
-        }),
-        React__default.createElement(Tick, { reverse: props.reverse })
-      ),
-      props.label
-    )
-  );
-};
-var FurmlyCheckbox = inputFactory(RawCheckbox, true);
-
 var Overlay = styled__default.div.attrs({
   className: props => props.isOpen && "show"
 })`
@@ -706,6 +484,326 @@ var Portal$1 = styled.withTheme(Portal);
 
 var _extends$1 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+const Wrapper = styled__default.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+`;
+const Spinner = styled__default.svg`
+  height: 32px;
+  fill: ${props => props.color || labelBackgroundColor(props)};
+`;
+const G = styled__default.g`
+  animation: ${spin} 5s linear infinite;
+`;
+const Circle = styled__default.circle`
+  fill: none;
+  stroke: #000;
+  stroke-width: 16;
+  animation: ${loader} 2s linear infinite reverse,
+    ${spin} 8s steps(4, start) infinite reverse;
+`;
+const Indeterminate = props => React__default.createElement(
+  Wrapper,
+  null,
+  React__default.createElement(
+    Spinner,
+    _extends$1({ viewBox: "-200 -200 400 400" }, props),
+    React__default.createElement(
+      G,
+      null,
+      React__default.createElement(Circle, { r: "160" })
+    )
+  )
+);
+
+var FormDiv = styled__default.div`
+  padding: ${containerPadding}px;
+  background-color: ${formComponentBackgroundColor};
+`;
+
+const Label = styled__default.label`
+  background-color: ${setupReversal(labelBackgroundColor, labelColor)};
+  color: ${setupReversal(labelColor, labelBackgroundColor)};
+  padding: ${props => props.theme.factor * 5}px;
+  font-size: ${smallText}px;
+  text-transform: uppercase;
+  font-weight:bold;
+  display: inline-block;
+  transition: background-color 1s;
+  &.error {
+    background-color: ${errorColor};
+    color: ${errorForegroundColor};
+  }
+`;
+
+const FormLabelContainer = styled__default.div`
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  visibility: ${props => props.hide && "hidden" || "visible"};
+`;
+const FocusIndicator = styled__default.hr`
+  width: 100%;
+  transform: translateX(-101%);
+  position: absolute;
+  bottom: 0px;
+  border: none;
+  margin: 0px;
+  height: ${formLineWidth}px;
+  background-color: ${labelBackgroundColor};
+  transition-property: transform;
+  transition-duration: 0.5s;
+  transition-delay: 200ms;
+  ${FormDiv}:hover & {
+    transform: translateX(0);
+  }
+  ${Label}.error+& {
+    background-color: ${errorColor};
+  }
+`;
+var FormLabel = (props => React__default.createElement(
+  FormLabelContainer,
+  null,
+  React__default.createElement(Label, props),
+  React__default.createElement(FocusIndicator, null)
+));
+
+const Title = styled__default(Label)`
+  display: block;
+  position: absolute;
+  font-size: ${titleText};
+  transform: translateY(-100%);
+`;
+const ModalContainer = styled__default.div`
+  background-color: ${modalBackgroundColor};
+  height: 100%;
+  ${boxShadow};
+  min-height: ${minimumModalHeight};
+  min-width: ${minimumModalWidth};
+  ${media.xSmall`
+  min-width:100%;
+`};
+`;
+const Modal = props => {
+  const actions = props.actions || [{
+    content: "cancel",
+    onClick: () => props.done(false),
+    intent: INTENTS.DEFAULT
+  }, {
+    onClick: () => props.done(true),
+    content: "ok"
+  }];
+  return (
+    /*jshint ignore:start */
+
+    React__default.createElement(
+      Portal$1,
+      {
+        portalId: props.id,
+        actionButtons: actions,
+        isOpen: props.visibility
+      },
+      React__default.createElement(
+        ModalContainer,
+        null,
+        props.title && React__default.createElement(
+          Title,
+          null,
+          props.title
+        ),
+        props.busy && React__default.createElement(Indeterminate, null) || props.template || props.children
+      )
+    )
+
+    /*jshint ignore:end */
+
+  );
+};
+
+Modal.propTypes = {
+  visibility: PropTypes.bool,
+  done: PropTypes.func.isRequired,
+  title: PropTypes.string,
+  id: PropTypes.string,
+  template: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.element), PropTypes.object])
+};
+
+var ErrorText = styled__default.p`
+  color: ${errorColor};
+  font-size: ${smallestText}px;
+  margin: 1px 0px;
+  display: block;
+`;
+
+var Copy = styled__default.span`
+  color: ${props => props.theme.copyColor || "gray"};
+  font-size: ${smallestText}px;
+  display: block;
+`;
+
+var _this = undefined;
+
+const StyledInput = styled__default.input`
+  border: none;
+  display: block;
+  background-color: ${inputBackgroundColor};
+  color: ${inputColor};
+  min-height: ${minimumInputHeight}px;
+  padding: ${inputPadding};
+  width: 100%;
+  ${hover};
+  &:hover {
+    background-color: ${highLightColor};
+  }
+`;
+const FakeLabel = styled__default.div`
+  height: ${labelSize}px;
+  ${media.xSmall`height:0px;`};
+`;
+const onChangeFactory = (propName = "value") => {
+  return (valueChanged, evt, skipPreventDefault) => {
+    if (evt.preventDefault && !skipPreventDefault) {
+      evt.preventDefault();
+    }
+    valueChanged(evt.target[propName]);
+  };
+};
+const onChange = onChangeFactory();
+
+const inputFactory = (InnerInput, noLabel) => {
+  const Input = props => {
+    const { description, errors, label, reverse = false } = props;
+    return React__default.createElement(
+      FormDiv,
+      null,
+      !noLabel ? React__default.createElement(
+        FormLabel,
+        {
+          reverse: reverse,
+          className: errors && errors.length && "error" || ""
+        },
+        label
+      ) : React__default.createElement(FakeLabel, null),
+      React__default.createElement(InnerInput, props),
+      React__default.createElement(
+        Copy,
+        null,
+        description
+      ),
+      errors && errors.map(x => React__default.createElement(
+        ErrorText,
+        { key: x },
+        x
+      ))
+    );
+  };
+
+  return Input;
+};
+
+const Input = ({ type, value, valueChanged }) => {
+  return React__default.createElement(StyledInput, {
+    type: type,
+    value: value || "",
+    onChange: onChange.bind(_this, valueChanged)
+  });
+};
+
+Input.propTypes = {
+  description: PropTypes.string,
+  label: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.number]),
+  valueChanged: PropTypes.func.isRequired
+};
+
+var Input$1 = inputFactory(Input);
+
+const onChange$1 = onChangeFactory("checked");
+const size = props => props.theme.factor * 20;
+const Label$1 = styled__default.label`
+  cursor: pointer;
+  vertical-align: middle;
+  font-weight: bold;
+  font-size: ${smallText}px;
+  text-transform: uppercase;
+  display: inline-block;
+  transition: background-color 1s;
+  &.error {
+    background-color: ${errorColor};
+  }
+`;
+
+const Wrapper$1 = styled__default.div`
+  height: ${minimumInputHeight}px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: ${labelColor};
+`;
+
+const tickWidth = props => props.theme.factor * 20 / 2 + 2;
+const Tick = styled__default.span`
+  width: ${tickWidth}px;
+  height: 6px;
+  position: absolute;
+  top: 6px;
+  left: 5px;
+  border: 3px solid ${setupReversal(labelColor, labelBackgroundColor)};
+  border-top: none;
+  border-right: none;
+  background: transparent;
+  opacity: 0;
+  transform: rotate(-45deg);
+`;
+const Nob = styled__default.span`
+  margin-right: ${props => props.theme.factor * 5}px;
+  display: inline-block;
+  position: relative;
+  width: ${size}px;
+  height: ${size}px;
+  cursor: pointer;
+  background: ${setupReversal(labelBackgroundColor, labelColor)};
+  &:hover > ${Tick} {
+    opacity: 0.3;
+  }
+`;
+const Checkbox = styled__default.input.attrs({ type: "checkbox" })`
+  &[type="checkbox"] {
+    visibility: hidden;
+    &:checked + ${Tick} {
+      opacity: 1;
+    }
+  }
+`;
+
+const RawCheckbox = props => {
+  return React__default.createElement(
+    Wrapper$1,
+    { onClick: evt => evt.stopPropagation() },
+    React__default.createElement(
+      Label$1,
+      null,
+      React__default.createElement(
+        Nob,
+        { reverse: props.reverse },
+        React__default.createElement(Checkbox, {
+          checked: !!props.value,
+          onChange: event => onChange$1(value => props.valueChanged(value), event, true)
+        }),
+        React__default.createElement(Tick, { reverse: props.reverse })
+      ),
+      props.label
+    )
+  );
+};
+var FurmlyCheckbox = inputFactory(RawCheckbox, true);
+
+var _extends$2 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 const StyledCalendar = styled__default(Calendar).attrs({
   nextLabel: React__default.createElement(Icon$1, { icon: "angle-right" }),
   next2Label: React__default.createElement(Icon$1, { icon: "angle-double-right" }),
@@ -809,7 +907,7 @@ class DatePicker extends React__default.Component {
       valueString || isRange && "Please select valid dates in the range..." || "Please select a date"
     ), React__default.createElement(
       Portal$1,
-      _extends$1({
+      _extends$2({
         key: `portal-${this.props.name}`,
         isOpen: this.state.isOpen
       }, this.portalProps),
@@ -883,6 +981,7 @@ const Menu = styled__default.div`
 const RevealButton$1 = styled__default.button`
   display: block;
   border: none;
+  color:${inputColor};
   background-color: ${inputBackgroundColor};
   min-height: ${minimumInputHeight}px;
   width: 100%;
@@ -1011,7 +1110,7 @@ Select.propTypes = {
   ItemElement: PropTypes.element
 };
 
-var _extends$2 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _extends$3 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var withOutsideClickHandler = (WrappedComponent => {
   class clickHandler extends React__default.Component {
@@ -1043,7 +1142,7 @@ var withOutsideClickHandler = (WrappedComponent => {
       this.element = element;
     }
     render() {
-      return React__default.createElement(WrappedComponent, _extends$2({ innerRef: this.setWrapperRef }, this.props));
+      return React__default.createElement(WrappedComponent, _extends$3({ innerRef: this.setWrapperRef }, this.props));
     }
   }
   return hoistNonReactStatic(clickHandler, WrappedComponent);
@@ -1153,7 +1252,7 @@ const SubTitle = styled__default.p`
 const HeaderButton = styled__default(StyledIconButton)`
   margin: ${containerPadding}px;
 `;
-const Title = styled__default(SubTitle)`
+const Title$1 = styled__default(SubTitle)`
   padding: ${containerPadding}px;
   font-weight: bold;
   color: ${labelColor};
@@ -1167,7 +1266,7 @@ const GridHeader = props => {
     Container$2,
     null,
     React__default.createElement(
-      Title,
+      Title$1,
       null,
       React__default.createElement(Icon$1, { icon: "filter", color: labelColor, size: 16 }),
       "Filter"
@@ -1201,104 +1300,6 @@ GridLayout.propTypes = {
   list: PropTypes.element,
   commandView: PropTypes.element,
   commandViewResult: PropTypes.element
-};
-
-var _extends$3 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-const Wrapper$1 = styled__default.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-`;
-const Spinner = styled__default.svg`
-  height: 32px;
-  fill: ${props => props.color || labelBackgroundColor(props)};
-`;
-const G = styled__default.g`
-  animation: ${spin} 5s linear infinite;
-`;
-const Circle = styled__default.circle`
-  fill: none;
-  stroke: #000;
-  stroke-width: 16;
-  animation: ${loader} 2s linear infinite reverse,
-    ${spin} 8s steps(4, start) infinite reverse;
-`;
-const Indeterminate = props => React__default.createElement(
-  Wrapper$1,
-  null,
-  React__default.createElement(
-    Spinner,
-    _extends$3({ viewBox: "-200 -200 400 400" }, props),
-    React__default.createElement(
-      G,
-      null,
-      React__default.createElement(Circle, { r: "160" })
-    )
-  )
-);
-
-const Title$1 = styled__default(Label)`
-  display: block;
-  position: absolute;
-  font-size: ${titleText};
-  transform: translateY(-100%);
-`;
-const ModalContainer = styled__default.div`
-  background-color: ${modalBackgroundColor};
-  height: 100%;
-  ${boxShadow};
-  min-height: ${minimumModalHeight};
-  min-width: ${minimumModalWidth};
-  ${media.xSmall`
-  min-width:100%;
-`};
-`;
-const Modal = props => {
-  const actions = props.actions || [{
-    content: "cancel",
-    onClick: () => props.done(false),
-    intent: INTENTS.DEFAULT
-  }, {
-    onClick: () => props.done(true),
-    content: "ok"
-  }];
-  return (
-    /*jshint ignore:start */
-
-    React__default.createElement(
-      Portal$1,
-      {
-        portalId: props.id,
-        actionButtons: actions,
-        isOpen: props.visibility
-      },
-      React__default.createElement(
-        ModalContainer,
-        null,
-        props.title && React__default.createElement(
-          Title$1,
-          null,
-          props.title
-        ),
-        props.busy && React__default.createElement(Indeterminate, null) || props.template || props.children
-      )
-    )
-
-    /*jshint ignore:end */
-
-  );
-};
-
-Modal.propTypes = {
-  visibility: PropTypes.bool,
-  done: PropTypes.func.isRequired,
-  title: PropTypes.string,
-  id: PropTypes.string,
-  template: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.element), PropTypes.object])
 };
 
 const Button$1 = styled__default.button`
@@ -3072,7 +3073,8 @@ var configure = (config$$1 => {
 });
 
 exports.ThemeProvider = styled.ThemeProvider;
-exports.Button = Button;
+exports.Icon = Icon$1;
+exports.Modal = Modal;
 exports.Input = Input$1;
 exports.Checkbox = FurmlyCheckbox;
 exports.DatePicker = FurmlyDatePicker;
@@ -3085,4 +3087,6 @@ exports.injectFontsAndCSSBase = injectFontsAndCSSBase;
 exports.createMedia = createMedia;
 exports.media = media;
 exports.setup = configure;
+exports.IconButton = IconButton;
+exports.StyledIconButton = StyledIconButton;
 //# sourceMappingURL=bundle.js.map

@@ -11,7 +11,8 @@ import {
   formLineWidth,
   aboveOthers,
   inputBackgroundColor,
-  largerBoxShadow
+  largerBoxShadow,
+  inputColor
 } from "../common/variables";
 
 import { hover } from "../common/animations";
@@ -63,6 +64,7 @@ const Menu = styled.div`
 const RevealButton = styled.button`
   display: block;
   border: none;
+  color:${inputColor};
   background-color: ${inputBackgroundColor};
   min-height: ${minimumInputHeight}px;
   width: 100%;

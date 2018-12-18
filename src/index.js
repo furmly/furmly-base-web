@@ -1,5 +1,7 @@
 export { ThemeProvider } from "styled-components";
-export { default as Button } from "./components/common/components/Button";
+export * from "./components/common/components/Button";
+export { default as Icon } from "./components/common/components/Icon";
+export { default as Modal } from "./components/common/components/Modal";
 export { default as Input } from "./components/Input/input";
 export { default as Checkbox } from "./components/Input/checkbox";
 export { default as DatePicker } from "./components/Input/datepicker";
