@@ -63,6 +63,7 @@ const Button = styled.button`
 export default Button;
 const IconButtonWrapper = styled.button`
   border: none;
+  color: ${labelColor};
   background: none;
   cursor: pointer;
   svg {
@@ -71,7 +72,11 @@ const IconButtonWrapper = styled.button`
 `;
 export const IconButton = props => (
   <IconButtonWrapper onClick={props.onClick}>
-    <Icon size={props.iconSize} icon={props.icon} />
+    <Icon
+      size={props.iconSize}
+      icon={props.icon}
+      color={props.color || labelColor}
+    />
     {props.label}
   </IconButtonWrapper>
 );

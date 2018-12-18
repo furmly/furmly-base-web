@@ -30,6 +30,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  color: ${labelColor};
 `;
 
 const tickWidth = props => (props.theme.factor * 20) / 2 + 2;

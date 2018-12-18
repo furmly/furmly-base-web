@@ -5,14 +5,13 @@ import {
   minimumInputHeight,
   inputPadding,
   highLightColor,
-  boxShadow,
   dropDownMenuColor,
   labelBackgroundColor,
   borderColor,
-  labelColor,
   formLineWidth,
   aboveOthers,
-  inputBackgroundColor
+  inputBackgroundColor,
+  largerBoxShadow
 } from "../common/variables";
 
 import { hover } from "../common/animations";
@@ -43,7 +42,7 @@ const Menu = styled.div`
   visibility: hidden;
   opacity: 0;
   transform: translate(0, -50%);
-  ${boxShadow};
+  ${largerBoxShadow};
   &:after {
     content: "";
     position: absolute;
@@ -70,7 +69,6 @@ const RevealButton = styled.button`
   text-align: left;
   padding: ${inputPadding};
   &.show {
-    background-color: ${labelColor};
   }
   &.show:after {
     content: "";

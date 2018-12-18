@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { IconButton } from "../Button/Button";
+import { labelColor } from "../../variables";
 
 const NextButtonDefault = props => (
   <IconButton onClick={props.onClick} icon="chevron-right" />
@@ -9,7 +10,9 @@ const PrevButtonDefault = props => (
   <IconButton onClick={props.onClick} icon="chevron-left" />
 );
 const ContainerDefault = styled.div``;
-const FootnoteDefault = styled.small``;
+const FootnoteDefault = styled.small`
+  color: ${labelColor};
+`;
 const getPager = (
   NextButton = NextButtonDefault,
   PrevButton = PrevButtonDefault,

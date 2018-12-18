@@ -8,8 +8,7 @@
         "cwd":"babelrc",
         "alias": {
           "error_handler": "./src/errorhandler.js",
-          "client_config": "./.storybook/dynamo_client_config/config.js",
-          "call_api": "./.storybook/dynamo_client_config/call_api.js"
+          "client_config": "./.storybook/furmly_client_config/config.js"
         }
       }
     ]

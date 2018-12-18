@@ -5,6 +5,12 @@ export { default as Checkbox } from "./components/Input/checkbox";
 export { default as DatePicker } from "./components/Input/datepicker";
 export { default as Select } from "./components/select";
 export {
+  default as Container,
+  TwoColumn,
+  ThreeColumn,
+  Dynamic
+} from "./components/container";
+export {
   injectFontsAndCSSBase,
   createMedia,
   media

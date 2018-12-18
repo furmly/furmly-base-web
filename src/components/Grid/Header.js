@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { StyledIconButton } from "../common/components/Button";
-import { boxShadow, containerPadding } from "../common/variables";
+import { boxShadow, containerPadding, labelColor } from "../common/variables";
 import Icon from "../common/components/Icon";
 import SubTitle from "../common/components/SubTitle";
 
@@ -12,6 +12,7 @@ const HeaderButton = styled(StyledIconButton)`
 const Title = styled(SubTitle)`
   padding: ${containerPadding}px;
   font-weight: bold;
+  color: ${labelColor};
 `;
 const Container = styled.div`
   ${boxShadow};
@@ -21,7 +22,7 @@ const GridHeader = props => {
   return (
     <Container>
       <Title>
-        <Icon icon="filter" size={16} />
+        <Icon icon="filter" color={labelColor} size={16} />
         Filter
       </Title>
       {props.children}

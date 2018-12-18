@@ -8,8 +8,6 @@ import {
   replaceStack,
   alreadyVisible
 } from "furmly-client";
-//import Lato from "../../fonts/Lato-Light.ttf";
-//import Roboto from "../../fonts/Roboto-Thin.ttf";
 import {
   lineHeight,
   accentColor,
@@ -76,7 +74,9 @@ export const createMedia = (
 });
 export const media = createMedia();
 
-export const injectFontsAndCSSBase = () => injectGlobal`
+export const injectFontsAndCSSBase = (
+ resourceDir="./"
+) => injectGlobal`
 textarea, select, input, button { outline: none; }
 button {
   padding:0px;
@@ -86,11 +86,11 @@ button {
 }
 @font-face {
   font-family:'Lato';
-  src:url(./Lato-Light.ttf)
+  src:url(${resourceDir}Lato-Light.ttf)
 }
 @font-face {
   font-family:'Roboto';
-  src:url(./Roboto-Thin.ttf)
+  src:url(${resourceDir}Roboto-Thin.ttf)
 }
 
 body,button{

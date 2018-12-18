@@ -25,9 +25,9 @@ export const minimumModalWidth = props =>
   props.theme.minimumModalWidth || "40vw";
 export const highLightColor = props =>
   props.theme.highLightColor || "#0000001a";
-
+export const inputColor = props => props.theme.inputColor || "black";
 export const inputBackgroundColor = props =>
-  props.theme.inputBackgroundColor || "#ababab1a";
+  props.theme.inputBackgroundColor || "rgba(53, 53, 53, 0.08)";
 export const inputPadding = () => `0px 5px`;
 export const iconSize = props => props.size || props.theme.factor * 10;
 export const largeIconSize = props => props.size || props.theme.factor * 20;

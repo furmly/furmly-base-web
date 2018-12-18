@@ -6,7 +6,8 @@ import {
   inputPadding,
   highLightColor,
   labelSize,
-  inputBackgroundColor
+  inputBackgroundColor,
+  inputColor
 } from "../common/variables";
 import { hover } from "../common/animations";
 import FormDiv from "../common/components/FormDiv";
@@ -19,6 +20,7 @@ const StyledInput = styled.input`
   border: none;
   display: block;
   background-color: ${inputBackgroundColor};
+  color: ${inputColor};
   min-height: ${minimumInputHeight}px;
   padding: ${inputPadding};
   width: 100%;
@@ -43,12 +45,12 @@ export const onChange = onChangeFactory();
 
 export const inputFactory = (InnerInput, noLabel) => {
   const Input = props => {
-    const { description, errors, label } = props;
+    const { description, errors, label, reverse = false } = props;
     return (
       <FormDiv>
         {!noLabel ? (
           <FormLabel
-            reverse={true}
+            reverse={reverse}
             className={(errors && errors.length && "error") || ""}
           >
             {label}
