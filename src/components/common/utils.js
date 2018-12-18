@@ -74,9 +74,7 @@ export const createMedia = (
 });
 export const media = createMedia();
 
-export const injectFontsAndCSSBase = (
- resourceDir="./"
-) => injectGlobal`
+export const injectFontsAndCSSBase = (resourceDir = "./") => injectGlobal`
 textarea, select, input, button { outline: none; }
 button {
   padding:0px;
@@ -93,7 +91,7 @@ button {
   src:url(${resourceDir}Roboto-Thin.ttf)
 }
 
-body,button{
+body,button,input,textarea, {
   font-family:Lato;
   line-height:${lineHeight};
 }
