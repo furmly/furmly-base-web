@@ -39,8 +39,8 @@ const containerPadding = props => props.theme.factor * 10;
 const minimumModalHeight = props => props.theme.minimumModalHeight || "40vh";
 const minimumModalWidth = props => props.theme.minimumModalWidth || "40vw";
 const highLightColor = props => props.theme.highLightColor || "#0000001a";
-
-const inputBackgroundColor = props => props.theme.inputBackgroundColor || "#ababab1a";
+const inputColor = props => props.theme.inputColor || "black";
+const inputBackgroundColor = props => props.theme.inputBackgroundColor || "rgba(53, 53, 53, 0.08)";
 const inputPadding = () => `0px 5px`;
 const iconSize = props => props.size || props.theme.factor * 10;
 const buttonDefaults = "display: block;  border: none;";
@@ -105,7 +105,7 @@ const createMedia = (xSmall = 600, small = 600, medium = 768, large = 992, xlarg
 });
 const media = createMedia();
 
-const injectFontsAndCSSBase = () => styled.injectGlobal`
+const injectFontsAndCSSBase = (resourceDir = "./") => styled.injectGlobal`
 textarea, select, input, button { outline: none; }
 button {
   padding:0px;
@@ -115,11 +115,11 @@ button {
 }
 @font-face {
   font-family:'Lato';
-  src:url(./Lato-Light.ttf)
+  src:url(${resourceDir}Lato-Light.ttf)
 }
 @font-face {
   font-family:'Roboto';
-  src:url(./Roboto-Thin.ttf)
+  src:url(${resourceDir}Roboto-Thin.ttf)
 }
 
 body,button{
@@ -333,6 +333,7 @@ const Button = styled__default.button`
 `;
 const IconButtonWrapper = styled__default.button`
   border: none;
+  color: ${labelColor};
   background: none;
   cursor: pointer;
   svg {
@@ -342,7 +343,11 @@ const IconButtonWrapper = styled__default.button`
 const IconButton = props => React__default.createElement(
   IconButtonWrapper,
   { onClick: props.onClick },
-  React__default.createElement(Icon$1, { size: props.iconSize, icon: props.icon }),
+  React__default.createElement(Icon$1, {
+    size: props.iconSize,
+    icon: props.icon,
+    color: props.color || labelColor
+  }),
   props.label
 );
 
@@ -432,6 +437,7 @@ const StyledInput = styled__default.input`
   border: none;
   display: block;
   background-color: ${inputBackgroundColor};
+  color: ${inputColor};
   min-height: ${minimumInputHeight}px;
   padding: ${inputPadding};
   width: 100%;
@@ -456,14 +462,14 @@ const onChange = onChangeFactory();
 
 const inputFactory = (InnerInput, noLabel) => {
   const Input = props => {
-    const { description, errors, label } = props;
+    const { description, errors, label, reverse = false } = props;
     return React__default.createElement(
       FormDiv,
       null,
       !noLabel ? React__default.createElement(
         FormLabel,
         {
-          reverse: true,
+          reverse: reverse,
           className: errors && errors.length && "error" || ""
         },
         label
@@ -522,6 +528,7 @@ const Wrapper = styled__default.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  color: ${labelColor};
 `;
 
 const tickWidth = props => props.theme.factor * 20 / 2 + 2;
@@ -855,7 +862,7 @@ const Menu = styled__default.div`
   visibility: hidden;
   opacity: 0;
   transform: translate(0, -50%);
-  ${boxShadow};
+  ${largerBoxShadow};
   &:after {
     content: "";
     position: absolute;
@@ -882,7 +889,6 @@ const RevealButton$1 = styled__default.button`
   text-align: left;
   padding: ${inputPadding};
   &.show {
-    background-color: ${labelColor};
   }
   &.show:after {
     content: "";
@@ -1150,6 +1156,7 @@ const HeaderButton = styled__default(StyledIconButton)`
 const Title = styled__default(SubTitle)`
   padding: ${containerPadding}px;
   font-weight: bold;
+  color: ${labelColor};
 `;
 const Container$2 = styled__default.div`
   ${boxShadow};
@@ -1162,7 +1169,7 @@ const GridHeader = props => {
     React__default.createElement(
       Title,
       null,
-      React__default.createElement(Icon$1, { icon: "filter", size: 16 }),
+      React__default.createElement(Icon$1, { icon: "filter", color: labelColor, size: 16 }),
       "Filter"
     ),
     props.children,
@@ -1374,7 +1381,9 @@ const TableCell = styled__default.div`
 const NextButtonDefault = props => React__default.createElement(IconButton, { onClick: props.onClick, icon: "chevron-right" });
 const PrevButtonDefault = props => React__default.createElement(IconButton, { onClick: props.onClick, icon: "chevron-left" });
 const ContainerDefault = styled__default.div``;
-const FootnoteDefault = styled__default.small``;
+const FootnoteDefault = styled__default.small`
+  color: ${labelColor};
+`;
 const getPager = (NextButton = NextButtonDefault, PrevButton = PrevButtonDefault, Container = ContainerDefault, Footnote = FootnoteDefault) => {
   return ({ count, page, items, total, more, setCurrentItems }) => {
     if (!items || !items.length) return null;
@@ -1421,6 +1430,7 @@ const CommandsContainer = styled__default.div`
   position: absolute;
   left: 0;
   top: 0;
+  color:${labelColor}
 `;
 const NewButton = props => React__default.createElement(IconButton, _extends$4({ label: "Add" }, props));
 const Commands = props => {
@@ -1724,9 +1734,11 @@ Layout.propTypes = {
 const HeaderSubTitle = styled__default(SubTitle)`
   margin-top: 0px;
   padding: ${containerPadding}px;
+  color: ${labelColor};
 `;
 const HeaderLabel = styled__default(Label)`
   margin: 0px ${containerPadding}px;
+  color: ${labelColor};
 `;
 
 const Header = props => {
@@ -3065,6 +3077,10 @@ exports.Input = Input$1;
 exports.Checkbox = FurmlyCheckbox;
 exports.DatePicker = FurmlyDatePicker;
 exports.Select = Select$1;
+exports.Container = Container$1;
+exports.TwoColumn = TwoColumn;
+exports.ThreeColumn = ThreeColumn;
+exports.Dynamic = Dynamic;
 exports.injectFontsAndCSSBase = injectFontsAndCSSBase;
 exports.createMedia = createMedia;
 exports.media = media;
