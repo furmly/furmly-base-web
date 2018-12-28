@@ -14,6 +14,10 @@ export { default as Checkbox } from "./components/Input/checkbox";
 export { default as DatePicker } from "./components/Input/datepicker";
 export { default as Select } from "./components/select";
 export { default as List } from "./components/list";
+export { Label } from "./components/common/components/Label";
+export {
+  default as BusyIndicator
+} from "./components/common/components/ProgressBar";
 export {
   default as Container,
   TwoColumn,
