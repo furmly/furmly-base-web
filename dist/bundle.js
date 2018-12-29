@@ -2675,6 +2675,69 @@ function shallowEqual(objA, objB) {
   return true;
 }
 
+/** Detect free variable `global` from Node.js. */
+var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
+
+/** Detect free variable `self`. */
+var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
+
+/** Used as a reference to the global object. */
+var root = freeGlobal || freeSelf || Function('return this')();
+
+/** Built-in value references. */
+var Symbol = root.Symbol;
+
+/** Built-in value references. */
+var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
+
+/** Used for built-in method references. */
+
+/** Built-in value references. */
+var symToStringTag$1 = Symbol ? Symbol.toStringTag : undefined;
+
+/**
+ * Creates a unary function that invokes `func` with its argument transformed.
+ *
+ * @private
+ * @param {Function} func The function to wrap.
+ * @param {Function} transform The argument transform.
+ * @returns {Function} Returns the new function.
+ */
+
+/**
+ * Checks if `value` is object-like. A value is object-like if it's not `null`
+ * and has a `typeof` result of "object".
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+ * @example
+ *
+ * _.isObjectLike({});
+ * // => true
+ *
+ * _.isObjectLike([1, 2, 3]);
+ * // => true
+ *
+ * _.isObjectLike(_.noop);
+ * // => false
+ *
+ * _.isObjectLike(null);
+ * // => false
+ */
+
+/** Used for built-in method references. */
+var funcProto = Function.prototype;
+
+/** Used to resolve the decompiled source of functions. */
+var funcToString = funcProto.toString;
+
+/** Used to infer the `Object` constructor. */
+var objectCtorString = funcToString.call(Object);
+
 function symbolObservablePonyfill(root) {
 	var result;
 	var Symbol = root.Symbol;
@@ -2695,39 +2758,21 @@ function symbolObservablePonyfill(root) {
 
 /* global window */
 
-var root;
+var root$1;
 
 if (typeof self !== 'undefined') {
-  root = self;
+  root$1 = self;
 } else if (typeof window !== 'undefined') {
-  root = window;
+  root$1 = window;
 } else if (typeof global !== 'undefined') {
-  root = global;
+  root$1 = global;
 } else if (typeof module !== 'undefined') {
-  root = module;
+  root$1 = module;
 } else {
-  root = Function('return this')();
+  root$1 = Function('return this')();
 }
 
-var result = symbolObservablePonyfill(root);
-
-/**
- * These are private action types reserved by Redux.
- * For any unknown actions, you must return the current state.
- * If the current state is undefined, you must return the initial state.
- * Do not reference these action types directly in your code.
- */
-var randomString = function randomString() {
-  return Math.random().toString(36).substring(7).split('').join('.');
-};
-
-var ActionTypes = {
-  INIT: "@@redux/INIT" + randomString(),
-  REPLACE: "@@redux/REPLACE" + randomString(),
-  PROBE_UNKNOWN_ACTION: function PROBE_UNKNOWN_ACTION() {
-    return "@@redux/PROBE_UNKNOWN_ACTION" + randomString();
-  }
-};
+var result = symbolObservablePonyfill(root$1);
 
 /**
  * Prints a warning in the console if it exists.
@@ -2741,22 +2786,22 @@ function warning$1(message) {
     console.error(message);
   }
   /* eslint-enable no-console */
-
-
   try {
     // This error was thrown as a convenience so that if you enable
     // "break on all exceptions" in your console,
     // it would pause the execution at this line.
     throw new Error(message);
-  } catch (e) {} // eslint-disable-line no-empty
-
+    /* eslint-disable no-empty */
+  } catch (e) {}
+  /* eslint-enable no-empty */
 }
 
 function bindActionCreator(actionCreator, dispatch) {
   return function () {
-    return dispatch(actionCreator.apply(this, arguments));
+    return dispatch(actionCreator.apply(undefined, arguments));
   };
 }
+
 /**
  * Turns an object whose values are action creators, into an object with the
  * same keys, but with every function wrapped into a `dispatch` call so they
@@ -2778,41 +2823,46 @@ function bindActionCreator(actionCreator, dispatch) {
  * function as `actionCreators`, the return value will also be a single
  * function.
  */
-
-
 function bindActionCreators(actionCreators, dispatch) {
   if (typeof actionCreators === 'function') {
     return bindActionCreator(actionCreators, dispatch);
   }
 
   if (typeof actionCreators !== 'object' || actionCreators === null) {
-    throw new Error("bindActionCreators expected an object or a function, instead received " + (actionCreators === null ? 'null' : typeof actionCreators) + ". " + "Did you write \"import ActionCreators from\" instead of \"import * as ActionCreators from\"?");
+    throw new Error('bindActionCreators expected an object or a function, instead received ' + (actionCreators === null ? 'null' : typeof actionCreators) + '. ' + 'Did you write "import ActionCreators from" instead of "import * as ActionCreators from"?');
   }
 
   var keys = Object.keys(actionCreators);
   var boundActionCreators = {};
-
   for (var i = 0; i < keys.length; i++) {
     var key = keys[i];
     var actionCreator = actionCreators[key];
-
     if (typeof actionCreator === 'function') {
       boundActionCreators[key] = bindActionCreator(actionCreator, dispatch);
     }
   }
-
   return boundActionCreators;
 }
 
-/*
- * This is a dummy function to check if the function name has been altered by minification.
- * If the function has been minified and NODE_ENV !== 'production', warn the user.
+/**
+ * Composes single-argument functions from right to left. The rightmost
+ * function can take multiple arguments as it provides the signature for
+ * the resulting composite function.
+ *
+ * @param {...Function} funcs The functions to compose.
+ * @returns {Function} A function obtained by composing the argument functions
+ * from right to left. For example, compose(f, g, h) is identical to doing
+ * (...args) => f(g(h(...args))).
  */
 
+/*
+* This is a dummy function to check if the function name has been altered by minification.
+* If the function has been minified and NODE_ENV !== 'production', warn the user.
+*/
 function isCrushed() {}
 
 if (process.env.NODE_ENV !== 'production' && typeof isCrushed.name === 'string' && isCrushed.name !== 'isCrushed') {
-  warning$1('You are currently using minified code outside of NODE_ENV === "production". ' + 'This means that you are running a slower development build of Redux. ' + 'You can use loose-envify (https://github.com/zertosh/loose-envify) for browserify ' + 'or setting mode to production in webpack (https://webpack.js.org/concepts/mode/) ' + 'to ensure you have the correct code for your production build.');
+  warning$1('You are currently using minified code outside of NODE_ENV === \'production\'. ' + 'This means that you are running a slower development build of Redux. ' + 'You can use loose-envify (https://github.com/zertosh/loose-envify) for browserify ' + 'or DefinePlugin for webpack (http://stackoverflow.com/questions/30030031) ' + 'to ensure you have the correct code for your production build.');
 }
 
 /**
@@ -3290,7 +3340,7 @@ InnerComponentWrapper.propTypes = {
   inner: PropTypes.element.isRequired
 };
 
-var _extends$7 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _extends$8 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 const DISPLAY = "DISPLAY";
 const AVATAR = "AVATAR";
 const THUMBNAIL = "THUMBNAIL";
@@ -3335,7 +3385,7 @@ var Image = (props => {
   return React__default.createElement(
     FormDiv,
     null,
-    React__default.createElement(StyledImage, _extends$7({}, props, { src: i }))
+    React__default.createElement(StyledImage, _extends$8({}, props, { src: i }))
   );
 });
 
@@ -3362,11 +3412,11 @@ CustomLabel.propTypes = {
   description: PropTypes.string.isRequired
 };
 
-var configure = (config$$1 => {
+var configure = ((config$$1 = { providerConfig: [] }) => {
   const maps = controlMap__default();
   const container = new controlMap.Deferred("container");
   //create component locator
-  const componentLocator = maps.componentLocator(config$$1 && config$$1.interceptor);
+  const componentLocator = maps.componentLocator(config$$1.interceptor);
 
   maps.addCONTAINERRecipe([Dynamic, SubTitle, componentWrapper, componentLocator]);
 
@@ -3399,7 +3449,7 @@ var configure = (config$$1 => {
   maps.addLABELRecipe([CustomLabel]);
 
   // this creates a furmly page.
-  maps.createPage = (WrappedComponent, ...args) => maps.PROVIDER(Page(WrappedComponent, config$$1.loginUrl, config$$1.homeUrl).getComponent(), ...args).getComponent();
+  maps.createPage = (WrappedComponent, ...args) => maps._defaultMap.PROVIDER(Page(WrappedComponent, config$$1.loginUrl, config$$1.homeUrl).getComponent(), ...args).getComponent();
 
   if (config$$1.extend && typeof config$$1.extend == "function") return config$$1.extend(maps, maps._defaultMap);
 
@@ -3418,6 +3468,8 @@ exports.Checkbox = FurmlyCheckbox;
 exports.DatePicker = FurmlyDatePicker;
 exports.Select = Select$1;
 exports.List = ListImplementation;
+exports.Label = Label;
+exports.BusyIndicator = Indeterminate;
 exports.Container = Container$1;
 exports.TwoColumn = TwoColumn;
 exports.ThreeColumn = ThreeColumn;
