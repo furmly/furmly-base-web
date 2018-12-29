@@ -28,11 +28,11 @@ import FurmlyInput, {
 import Image from "./components/Image";
 import Label from "./components/Label";
 
-export default config => {
+export default (config = { providerConfig: [] }) => {
   const maps = controlMap();
   const container = new Deferred("container");
   //create component locator
-  const componentLocator = maps.componentLocator(config && config.interceptor);
+  const componentLocator = maps.componentLocator(config.interceptor);
 
   maps.addCONTAINERRecipe([
     Dynamic,
@@ -91,7 +91,7 @@ export default config => {
 
   // this creates a furmly page.
   maps.createPage = (WrappedComponent, ...args) =>
-    maps
+    maps._defaultMap
       .PROVIDER(
         Page(WrappedComponent, config.loginUrl, config.homeUrl).getComponent(),
         ...args
