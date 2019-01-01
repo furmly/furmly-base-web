@@ -71,7 +71,7 @@ const IconButtonWrapper = styled.button`
   }
 `;
 export const IconButton = props => (
-  <IconButtonWrapper onClick={props.onClick}>
+  <IconButtonWrapper onClick={props.onClick} className={props.className}>
     <Icon
       size={props.iconSize}
       icon={props.icon}

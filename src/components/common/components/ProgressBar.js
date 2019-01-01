@@ -25,14 +25,17 @@ const Circle = styled.circle`
   animation: ${loader} 2s linear infinite reverse,
     ${spin} 8s steps(4, start) infinite reverse;
 `;
-const Indeterminate = props => (
-  <Wrapper>
-    <Spinner viewBox="-200 -200 400 400" {...props}>
-      <G>
-        <Circle r="160" />
-      </G>
-    </Spinner>
-  </Wrapper>
-);
+const Indeterminate = props => {
+  const { className, ...rest } = props;
+  return (
+    <Wrapper className={className}>
+      <Spinner viewBox="-200 -200 400 400" {...rest}>
+        <G>
+          <Circle r="160" />
+        </G>
+      </Spinner>
+    </Wrapper>
+  );
+};
 
 export default Indeterminate;

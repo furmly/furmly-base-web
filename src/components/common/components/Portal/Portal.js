@@ -61,7 +61,7 @@ class Portal extends React.Component {
   componentDidUpdate() {
     ReactDOM.render(
       <ThemeProvider theme={this.props.theme}>
-        <Overlay isOpen={this.props.isOpen}>
+        <Overlay className={this.props.className} isOpen={this.props.isOpen}>
           <ContentContainer extend={this.props.extend}>
             {this.props.children}
             {this.props.actionButtons && (

@@ -44,6 +44,7 @@ const Modal = props => {
     /*jshint ignore:start */
 
     <Portal
+      className={props.className}
       portalId={props.id}
       actionButtons={actions}
       isOpen={props.visibility}

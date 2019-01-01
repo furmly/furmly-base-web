@@ -16,7 +16,7 @@ const IconContainer = styled.svg`
     "auto"};
 `;
 
-const Icon = ({ icon, size, color }) => {
+const Icon = ({ icon, size, color, className }) => {
   const iconInfo = icons[icon];
 
   if (!iconInfo) {
@@ -26,6 +26,7 @@ const Icon = ({ icon, size, color }) => {
   }
   return (
     <IconContainer
+      className={className}
       iconSize={size}
       viewBox={`0 0 ${iconInfo[0]} ${iconInfo[1]}`}
       iconColor={color}

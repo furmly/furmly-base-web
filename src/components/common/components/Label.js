@@ -17,7 +17,7 @@ export const Label = styled.label`
   padding: ${props => props.theme.factor * 5}px;
   font-size: ${smallText}px;
   text-transform: uppercase;
-  font-weight:bold;
+  font-weight: bold;
   display: inline-block;
   transition: background-color 1s;
   &.error {
@@ -51,9 +51,12 @@ const FocusIndicator = styled.hr`
     background-color: ${errorColor};
   }
 `;
-export default props => (
-  <FormLabelContainer>
-    <Label {...props} />
-    <FocusIndicator />
-  </FormLabelContainer>
-);
+export default props => {
+  const { className, ...rest } = props;
+  return (
+    <FormLabelContainer className={className}>
+      <Label {...rest} />
+      <FocusIndicator />
+    </FormLabelContainer>
+  );
+};

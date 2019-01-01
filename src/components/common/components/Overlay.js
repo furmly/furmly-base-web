@@ -1,6 +1,6 @@
 import styled from "styled-components";
 export default styled.div.attrs({
-  className: props => props.isOpen && "show"
+  className: props => (props.isOpen ? "show" : "")
 })`
   width: 100%;
   height: 100%;
@@ -8,7 +8,7 @@ export default styled.div.attrs({
   left: 0;
   top: 0;
   position: fixed;
-  background-color: rgba(0,0,0,0.49);
+  background-color: rgba(0, 0, 0, 0.49);
   display: flex;
   flex-direction: row;
   justify-content: center;

@@ -45,9 +45,9 @@ export const onChange = onChangeFactory();
 
 export const inputFactory = (InnerInput, noLabel) => {
   const Input = props => {
-    const { description, errors, label, reverse = false } = props;
+    const { description, errors, label, reverse = false, className } = props;
     return (
-      <FormDiv>
+      <FormDiv className={className}>
         {!noLabel ? (
           <FormLabel
             reverse={reverse}
