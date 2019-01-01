@@ -1,9 +1,11 @@
 import React from "react";
 import styled from "styled-components";
+import debug from "debug";
 import PropTypes from "prop-types";
 import { iconSize, elementPadding } from "../variables";
 import icons from "../../../icons";
 
+const log = debug("furmly-base:Icon");
 const IconContainer = styled.svg`
   width: ${props => props.iconSize || iconSize}px;
   height: ${props => props.iconSize || iconSize}px;
@@ -16,7 +18,12 @@ const IconContainer = styled.svg`
 
 const Icon = ({ icon, size, color }) => {
   const iconInfo = icons[icon];
-  if (!iconInfo) throw new Error(`Unknown Icon ${icon}`);
+
+  if (!iconInfo) {
+    log(`Unknown Icon ${icon}`);
+    log(`using default icon`);
+    iconInfo = icons.robot;
+  }
   return (
     <IconContainer
       iconSize={size}
