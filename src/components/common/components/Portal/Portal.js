@@ -32,7 +32,6 @@ class Portal extends React.Component {
   }
   render() {
     return ReactDOM.createPortal(
-
         <Overlay className={this.props.className} isOpen={this.props.isOpen}>
           <ContentContainer extend={this.props.extend}>
             {this.props.children}
@@ -54,7 +53,6 @@ class Portal extends React.Component {
         </Overlay>,
       this.portalElement
     );
-    // return null;
   }
   overlayClicked() {
     if (this.props.overlayClicked) {
@@ -71,7 +69,6 @@ class Portal extends React.Component {
       document.body.appendChild(p);
     }
     this.portalElement = p;
-    //this.componentDidUpdate();
   }
   componentWillUnmount() {
     this.portalElement.removeEventListener("click", this.overlayClicked);

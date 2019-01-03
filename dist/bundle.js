@@ -458,7 +458,6 @@ class Portal extends React__default.Component {
         )
       )
     ), this.portalElement);
-    // return null;
   }
   overlayClicked() {
     if (this.props.overlayClicked) {
@@ -475,7 +474,6 @@ class Portal extends React__default.Component {
       document.body.appendChild(p);
     }
     this.portalElement = p;
-    //this.componentDidUpdate();
   }
   componentWillUnmount() {
     this.portalElement.removeEventListener("click", this.overlayClicked);
