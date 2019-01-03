@@ -435,14 +435,37 @@ class Portal extends React__default.Component {
     this.overlayClicked = this.overlayClicked.bind(this);
   }
   render() {
-    return null;
+    return ReactDOM.createPortal(React__default.createElement(
+      Overlay,
+      { className: this.props.className, isOpen: this.props.isOpen },
+      React__default.createElement(
+        ContentContainer,
+        { extend: this.props.extend },
+        this.props.children,
+        this.props.actionButtons && React__default.createElement(
+          ActionContainer,
+          null,
+          this.props.actionButtons.map((x, index) => React__default.createElement(
+            Button,
+            {
+              onClick: x.onClick,
+              key: x.key || index,
+              intent: x.intent
+            },
+            x.icon && React__default.createElement(Icon, { icon: x.icon }),
+            x.content
+          ))
+        )
+      )
+    ), this.portalElement);
+    // return null;
   }
   overlayClicked() {
     if (this.props.overlayClicked) {
       this.props.overlayClicked();
     }
   }
-  componentDidMount() {
+  componentWillMount() {
     let id = this.props.portalId || this.id;
     let p = id && document.getElementById(id);
     if (!p) {
@@ -452,7 +475,7 @@ class Portal extends React__default.Component {
       document.body.appendChild(p);
     }
     this.portalElement = p;
-    this.componentDidUpdate();
+    //this.componentDidUpdate();
   }
   componentWillUnmount() {
     this.portalElement.removeEventListener("click", this.overlayClicked);
@@ -462,35 +485,7 @@ class Portal extends React__default.Component {
       if (e.message == "Failed to execute 'removeChild' on 'Node'") return;
     }
   }
-  componentDidUpdate() {
-    ReactDOM.render(React__default.createElement(
-      styled.ThemeProvider,
-      { theme: this.props.theme },
-      React__default.createElement(
-        Overlay,
-        { className: this.props.className, isOpen: this.props.isOpen },
-        React__default.createElement(
-          ContentContainer,
-          { extend: this.props.extend },
-          this.props.children,
-          this.props.actionButtons && React__default.createElement(
-            ActionContainer,
-            null,
-            this.props.actionButtons.map((x, index) => React__default.createElement(
-              Button,
-              {
-                onClick: x.onClick,
-                key: x.key || index,
-                intent: x.intent
-              },
-              x.icon && React__default.createElement(Icon, { icon: x.icon }),
-              x.content
-            ))
-          )
-        )
-      )
-    ), this.portalElement);
-  }
+  componentDidUpdate() {}
 }
 
 Portal.propTypes = {

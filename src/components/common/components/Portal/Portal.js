@@ -31,36 +31,8 @@ class Portal extends React.Component {
     this.overlayClicked = this.overlayClicked.bind(this);
   }
   render() {
-    return null;
-  }
-  overlayClicked() {
-    if (this.props.overlayClicked) {
-      this.props.overlayClicked();
-    }
-  }
-  componentDidMount() {
-    let id = this.props.portalId || this.id;
-    let p = id && document.getElementById(id);
-    if (!p) {
-      p = document.createElement("div");
-      p.addEventListener("click", this.clickOverlay);
-      p.id = id;
-      document.body.appendChild(p);
-    }
-    this.portalElement = p;
-    this.componentDidUpdate();
-  }
-  componentWillUnmount() {
-    this.portalElement.removeEventListener("click", this.overlayClicked);
-    try {
-      document.body.removeChild(this.portalElement);
-    } catch (e) {
-      if (e.message == "Failed to execute 'removeChild' on 'Node'") return;
-    }
-  }
-  componentDidUpdate() {
-    ReactDOM.render(
-      <ThemeProvider theme={this.props.theme}>
+    return ReactDOM.createPortal(
+
         <Overlay className={this.props.className} isOpen={this.props.isOpen}>
           <ContentContainer extend={this.props.extend}>
             {this.props.children}
@@ -79,11 +51,37 @@ class Portal extends React.Component {
               </ActionContainer>
             )}
           </ContentContainer>
-        </Overlay>
-      </ThemeProvider>,
+        </Overlay>,
       this.portalElement
     );
+    // return null;
   }
+  overlayClicked() {
+    if (this.props.overlayClicked) {
+      this.props.overlayClicked();
+    }
+  }
+  componentWillMount() {
+    let id = this.props.portalId || this.id;
+    let p = id && document.getElementById(id);
+    if (!p) {
+      p = document.createElement("div");
+      p.addEventListener("click", this.clickOverlay);
+      p.id = id;
+      document.body.appendChild(p);
+    }
+    this.portalElement = p;
+    //this.componentDidUpdate();
+  }
+  componentWillUnmount() {
+    this.portalElement.removeEventListener("click", this.overlayClicked);
+    try {
+      document.body.removeChild(this.portalElement);
+    } catch (e) {
+      if (e.message == "Failed to execute 'removeChild' on 'Node'") return;
+    }
+  }
+  componentDidUpdate() {}
 }
 
 Portal.propTypes = {
