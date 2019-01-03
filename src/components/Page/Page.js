@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { push, replace } from "react-router-redux";
+import { push, replace, } from "react-router-redux";
 import { addNavigationContext, removeNavigationContext } from "furmly-client";
 import qs from "query-string";
 import { navigationActions } from "../common/utils";

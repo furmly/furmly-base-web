@@ -89,6 +89,8 @@ export default (config = { providerConfig: [] }) => {
 
   maps.addLABELRecipe([Label]);
 
+  maps.addSELECTSETRecipe([layoutWrapper, Select, ProgressBar, container]);
+
   // this creates a furmly page.
   maps.createPage = (WrappedComponent, ...args) =>
     maps._defaultMap

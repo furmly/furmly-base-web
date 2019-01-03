@@ -3470,6 +3470,8 @@ var configure = ((config$$1 = { providerConfig: [] }) => {
 
   maps.addLABELRecipe([CustomLabel]);
 
+  maps.addSELECTSETRecipe([InnerComponentWrapper, Select$1, Indeterminate, container]);
+
   // this creates a furmly page.
   maps.createPage = (WrappedComponent, ...args) => maps._defaultMap.PROVIDER(Page(WrappedComponent, config$$1.loginUrl, config$$1.homeUrl).getComponent(), ...args).getComponent();
 
