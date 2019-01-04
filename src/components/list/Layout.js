@@ -12,7 +12,6 @@ import {
   containerPadding,
   errorColor
 } from "../common/variables";
-
 import StyledLabel from "../common/components/Label";
 
 const StyledFormDiv = styled.div`

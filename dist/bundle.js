@@ -407,7 +407,7 @@ var Overlay = styled__default.div.attrs({
   }
   & > * {
     max-width: 50vw;
-    max-height: 50vh;
+    max-height: 60vh;
   }
 `;
 
@@ -1369,6 +1369,7 @@ ListImplementation.propTypes = {
 };
 
 const StyledFormDiv = styled__default.div`
+  margin: ${containerPadding}px;
   min-height: ${props => props.theme.factor * 100}px;
   background-color: ${formComponentBackgroundColor};
   position: relative;
@@ -1464,7 +1465,10 @@ const ListLayout = props => {
       React__default.createElement(Bottom, null),
       React__default.createElement(Left, null)
     ),
-    props.children
+    props.children,
+    props.list,
+    props.addButton,
+    props.modal
   );
 };
 
@@ -3348,7 +3352,12 @@ StyledWarning.propTypes = {
 };
 
 const InnerComponentWrapper = props => {
-  return props.inner;
+  return React__default.createElement(
+    React__default.Fragment,
+    null,
+    props.inner,
+    props.extraElements
+  );
 };
 InnerComponentWrapper.propTypes = {
   inner: PropTypes.element.isRequired
@@ -3443,6 +3452,8 @@ var configure = ((config$$1 = { providerConfig: [] }) => {
   //create select.
   maps.addSELECTRecipe([Indeterminate, InnerComponentWrapper, Select$1]);
 
+  //create list.
+  maps.addLISTRecipe([ListLayout, ListButton, ListImplementation, Modal, ErrorText, Indeterminate, container]);
   //create grid
   maps.addGRIDRecipe([GridLayout, List$1, Modal, GridHeader, Indeterminate, CommandsView, navigationActions, ResultView, container]);
 

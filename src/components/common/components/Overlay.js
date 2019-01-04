@@ -21,6 +21,6 @@ export default styled.div.attrs({
   }
   & > * {
     max-width: 50vw;
-    max-height: 50vh;
+    max-height: 60vh;
   }
 `;
