@@ -9,12 +9,14 @@ import {
   labelSize,
   formComponentBackgroundColor,
   elementPadding,
+  containerPadding,
   errorColor
 } from "../common/variables";
 
 import StyledLabel from "../common/components/Label";
 
 const StyledFormDiv = styled.div`
+  margin: ${containerPadding}px;
   min-height: ${props => props.theme.factor * 100}px;
   background-color: ${formComponentBackgroundColor};
   position: relative;
@@ -106,6 +108,9 @@ const ListLayout = props => {
         <Left />
       </BorderAnimationWrapper>
       {props.children}
+      {props.list}
+      {props.addButton}
+      {props.modal}
     </StyledFormDiv>
   );
 };

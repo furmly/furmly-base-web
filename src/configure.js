@@ -17,10 +17,15 @@ import Page from "./components/Page";
 import View from "./components/View";
 import Select from "./components/select";
 import Warning from "./components/common/components/Warning";
+import ErrorText from "./components/common/components/ErrorText";
 import Modal from "./components/common/components/Modal";
 import ProgressBar from "./components/common/components/ProgressBar";
 import { navigationActions } from "./components/common/utils";
 import layoutWrapper from "./components/common/components/InnerComponentWrapper";
+import List, {
+  Layout as ListLayout,
+  Button as ListButton
+} from "./components/list";
 import FurmlyInput, {
   Checkbox as FurmlyCheckbox,
   DatePicker as FurmlyDatePicker
@@ -55,6 +60,16 @@ export default (config = { providerConfig: [] }) => {
   //create select.
   maps.addSELECTRecipe([ProgressBar, layoutWrapper, Select]);
 
+  //create list.
+  maps.addLISTRecipe([
+    ListLayout,
+    ListButton,
+    List,
+    Modal,
+    ErrorText,
+    ProgressBar,
+    container
+  ]);
   //create grid
   maps.addGRIDRecipe([
     GridLayout,
