@@ -427,7 +427,7 @@ const ContentContainer = styled__default.div`
   ${props => props.extend && props.extend(props)}
 `;
 
-class Portal extends React__default.Component {
+class Portal extends React__default.PureComponent {
   constructor(props) {
     super(props);
     this.id = "furmly-dialog";
@@ -465,7 +465,7 @@ class Portal extends React__default.Component {
     }
   }
   componentWillMount() {
-    let id = this.props.portalId || this.id;
+    let id = (this.props.portalId || this.id) + Math.random() * 100;
     let p = id && document.getElementById(id);
     if (!p) {
       p = document.createElement("div");
@@ -483,7 +483,6 @@ class Portal extends React__default.Component {
       if (e.message == "Failed to execute 'removeChild' on 'Node'") return;
     }
   }
-  componentDidUpdate() {}
 }
 
 Portal.propTypes = {

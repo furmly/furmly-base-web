@@ -23,7 +23,7 @@ const ContentContainer = styled.div`
   ${props => props.extend && props.extend(props)}
 `;
 
-class Portal extends React.Component {
+class Portal extends React.PureComponent {
   constructor(props) {
     super(props);
     this.id = "furmly-dialog";
@@ -32,25 +32,25 @@ class Portal extends React.Component {
   }
   render() {
     return ReactDOM.createPortal(
-        <Overlay className={this.props.className} isOpen={this.props.isOpen}>
-          <ContentContainer extend={this.props.extend}>
-            {this.props.children}
-            {this.props.actionButtons && (
-              <ActionContainer>
-                {this.props.actionButtons.map((x, index) => (
-                  <StyledButton
-                    onClick={x.onClick}
-                    key={x.key || index}
-                    intent={x.intent}
-                  >
-                    {x.icon && <Icon icon={x.icon} />}
-                    {x.content}
-                  </StyledButton>
-                ))}
-              </ActionContainer>
-            )}
-          </ContentContainer>
-        </Overlay>,
+      <Overlay className={this.props.className} isOpen={this.props.isOpen}>
+        <ContentContainer extend={this.props.extend}>
+          {this.props.children}
+          {this.props.actionButtons && (
+            <ActionContainer>
+              {this.props.actionButtons.map((x, index) => (
+                <StyledButton
+                  onClick={x.onClick}
+                  key={x.key || index}
+                  intent={x.intent}
+                >
+                  {x.icon && <Icon icon={x.icon} />}
+                  {x.content}
+                </StyledButton>
+              ))}
+            </ActionContainer>
+          )}
+        </ContentContainer>
+      </Overlay>,
       this.portalElement
     );
   }
@@ -60,7 +60,7 @@ class Portal extends React.Component {
     }
   }
   componentWillMount() {
-    let id = this.props.portalId || this.id;
+    let id = (this.props.portalId || this.id) + Math.random() * 100;
     let p = id && document.getElementById(id);
     if (!p) {
       p = document.createElement("div");
@@ -78,7 +78,6 @@ class Portal extends React.Component {
       if (e.message == "Failed to execute 'removeChild' on 'Node'") return;
     }
   }
-  componentDidUpdate() {}
 }
 
 Portal.propTypes = {
