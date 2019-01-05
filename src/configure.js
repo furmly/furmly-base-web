@@ -20,7 +20,7 @@ import Warning from "./components/common/components/Warning";
 import ErrorText from "./components/common/components/ErrorText";
 import Modal from "./components/common/components/Modal";
 import ProgressBar from "./components/common/components/ProgressBar";
-import { navigationActions } from "./components/common/utils";
+import { Navigator } from "./components/common/utils";
 import layoutWrapper from "./components/common/components/InnerComponentWrapper";
 import List, {
   Layout as ListLayout,
@@ -78,7 +78,6 @@ export default (config = { providerConfig: [] }) => {
     GridHeader,
     ProgressBar,
     GridCommandsView,
-    navigationActions,
     GridCommandResultView,
     container
   ]);
@@ -116,6 +115,7 @@ export default (config = { providerConfig: [] }) => {
             config.loginUrl,
             config.homeUrl
           ).getComponent(),
+          Navigator,
           context
         ),
         ...args

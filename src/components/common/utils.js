@@ -124,8 +124,8 @@ export const camelCaseToWord = string => {
 const navigationMap = {
   Furmly: { path: "/home/furmly/:id", routeParams: ["id"] }
 };
-const extractLocationAndParams = function({ params, key }, this.context) {
-  let loc = (this.context || navigationMap)[key];
+const extractLocationAndParams = function({ params, key }, context) {
+  let loc = (context || navigationMap)[key];
   if (!loc) throw new Error("unknown navigation");
   if (loc.routeParams) {
     loc.routeParams.forEach(x => {
