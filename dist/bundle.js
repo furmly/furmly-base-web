@@ -7,12 +7,12 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 var debug = _interopDefault(require('debug'));
 var ReactDOM = _interopDefault(require('react-dom'));
 var Calendar = _interopDefault(require('react-calendar/dist/entry.nostyle'));
+var controlMap = require('furmly-client');
+var controlMap__default = _interopDefault(controlMap);
 var hoistNonReactStatic = _interopDefault(require('hoist-non-react-statics'));
 var invariant = _interopDefault(require('invariant'));
 var reactIs = require('react-is');
 var reactRouterRedux = require('react-router-redux');
-var controlMap = require('furmly-client');
-var controlMap__default = _interopDefault(controlMap);
 var qs = _interopDefault(require('query-string'));
 var config = _interopDefault(require('client_config'));
 var React = require('react');
@@ -147,8 +147,8 @@ const camelCaseToWord = string => {
 const navigationMap = {
   Furmly: { path: "/home/furmly/:id", routeParams: ["id"] }
 };
-const extractLocationAndParams = function ({ params, key }, navigationContext) {
-  let loc = (navigationContext || navigationMap)[key];
+const extractLocationAndParams = function ({ params, key }, context) {
+  let loc = (context || navigationMap)[key];
   if (!loc) throw new Error("unknown navigation");
   if (loc.routeParams) {
     loc.routeParams.forEach(x => {
@@ -164,29 +164,34 @@ const extractLocationAndParams = function ({ params, key }, navigationContext) {
   }
   return path;
 };
-const navigationActions = {
-  setParams: function (args, navigationContext, navigation) {
-    let path = extractLocationAndParams(args, navigationContext);
-    return navigation.dispatch(controlMap.setParams(args)), navigation.dispatch(reactRouterRedux.push(path));
-  },
-  replaceStack: function (arr, navigationContext, navigation) {
-    let path = extractLocationAndParams(arr[arr.length - 1], navigationContext);
-    return navigation.dispatch(controlMap.replaceStack(arr)), navigation.dispatch(reactRouterRedux.replace(path));
-  },
-  navigate: function (args, navigationContext, navigation) {
-    let path = extractLocationAndParams(args, navigationContext);
-    return navigation.dispatch(controlMap.setParams(args)), navigation.dispatch(reactRouterRedux.push(path));
-  },
-  goBack: function (navigation, args) {
-    return navigation.dispatch(controlMap.goBack(args));
-  },
-  clear: function (navigation) {
-    return navigation.dispatch(controlMap.clearNavigationStack());
-  },
-  alreadyVisible: function (navigation, args) {
-    return navigation.dispatch(controlMap.alreadyVisible(args));
+
+class Navigator {
+  constructor(dispatch, context) {
+    this.dispatch = dispatch.bind(this);
+    this.context = context;
   }
-};
+  setParams(args) {
+    let path = extractLocationAndParams(args, this.context);
+    return dispatch(controlMap.setParams(args)), dispatch(reactRouterRedux.push(path));
+  }
+  replaceStack(arr) {
+    let path = extractLocationAndParams(arr[arr.length - 1], this.context);
+    return dispatch(controlMap.replaceStack(arr)), dispatch(reactRouterRedux.replace(path));
+  }
+  navigate(args) {
+    let path = extractLocationAndParams(args, this.context);
+    return dispatch(controlMap.setParams(args)), dispatch(reactRouterRedux.push(path));
+  }
+  goBack(args) {
+    return dispatch(controlMap.goBack(args));
+  }
+  clear() {
+    return dispatch(controlMap.clearNavigationStack());
+  }
+  alreadyVisible(args) {
+    return dispatch(controlMap.alreadyVisible(args));
+  }
+}
 
 const createImageSize = (propName, defaultDimensions = {}, defaultMediaQueries = "") => {
   return styled.css`
@@ -3225,20 +3230,8 @@ var connect = createConnect();
 
 function Page (NestedComponent, loginUrl = "/", homeUrl = "/home") {
   function mapDispatchToProps(dispatch) {
-    const navigation = { dispatch };
-    return {
-      dispatch,
-      addNavigationContext: args => dispatch(controlMap.addNavigationContext(args)),
-      removeNavigationContext: () => dispatch(controlMap.removeNavigationContext()),
-      visible: args => navigationActions.alreadyVisible(navigation, args),
-      replaceStack: arr => navigationActions.replaceStack(arr, NestedComponent.navigationMap, navigation),
-      navigate: args => navigationActions.navigate(args, NestedComponent.navigationContext, navigation),
-      setParams: args => navigationActions.setParams(args, NestedComponent.navigationMap, navigation),
-      clearStack: () => navigationActions.clear(navigation),
-      goBack: args => navigationActions.goBack(navigation, args)
-    };
+    return { dispatch };
   }
-
   function mapStateToProps(state) {
     return {
       stack: state.furmly.navigation.stack,
@@ -3261,15 +3254,15 @@ function Page (NestedComponent, loginUrl = "/", homeUrl = "/home") {
         if (this.noPlaceToGo()) {
           if (NestedComponent.shouldClearStackOnEmpty) {
             window.onpopstate = null;
-            this.props.clearStack();
+            this.props.furmlyNavigator.clearStack();
             return;
           }
         } else this.oneStepBack("push");
       };
-      this.props.addNavigationContext(NestedComponent.navigationContext);
+
       if (!this.props.stack.length && NestedComponent.pushVisible) {
         let segments = location.pathname.split("/");
-        this.props.visible({
+        this.props.furmlyNavigator.visible({
           key: "Furmly",
           params: Object.assign({ id: segments[segments.length - 1] }, qs.parse(location.search))
         });
@@ -3284,16 +3277,14 @@ function Page (NestedComponent, loginUrl = "/", homeUrl = "/home") {
         if (this.props.stack.length) {
           arr.unshift(this.props.stack[0]);
         }
-        return !shouldPush ? this.props.replaceStack(arr) : this.props.navigate(arr[0]);
+        return !shouldPush ? this.props.furmlyNavigator.replaceStack(arr) : this.props.furmlyNavigator.navigate(arr[0]);
       }
 
       return reactRouterRedux.push(`${homeUrl}/${item.value[0].toUpperCase() + item.value.substring(1)}`);
     }
-    componentWillUnmount() {
-      this.props.removeNavigationContext();
-    }
+    componentWillUnmount() {}
     backToLogin() {
-      this.props.clearStack();
+      this.props.furmlyNavigator.clearStack();
       this.props.dispatch(reactRouterRedux.replace(loginUrl));
     }
     goBack() {
@@ -3307,7 +3298,7 @@ function Page (NestedComponent, loginUrl = "/", homeUrl = "/home") {
       return this.props.stack.length == 0 || this.props.stack.length == 1;
     }
     oneStepBack() {
-      return this.props.goBack({
+      return this.props.furmlyNavigator.goBack({
         item: this.props.stack[this.props.stack.length - 1],
         references: this.props.references
       });
@@ -3324,7 +3315,7 @@ function Page (NestedComponent, loginUrl = "/", homeUrl = "/home") {
     }
   }
   return {
-    getComponent: () => connect(mapStateToProps, mapDispatchToProps)(Base),
+    getComponent: () => connect(mapStateToProps, null)(Base),
     Base,
     mapDispatchToProps,
     mapStateToProps
@@ -3455,7 +3446,7 @@ var configure = ((config$$1 = { providerConfig: [] }) => {
   //create list.
   maps.addLISTRecipe([ListLayout, ListButton, ListImplementation, Modal, ErrorText, Indeterminate, container]);
   //create grid
-  maps.addGRIDRecipe([GridLayout, List$1, Modal, GridHeader, Indeterminate, CommandsView, navigationActions, ResultView, container]);
+  maps.addGRIDRecipe([GridLayout, List$1, Modal, GridHeader, Indeterminate, CommandsView, ResultView, container]);
 
   maps.addSECTIONRecipe([Layout$1, Header, container]);
 
@@ -3475,8 +3466,8 @@ var configure = ((config$$1 = { providerConfig: [] }) => {
 
   maps.addSELECTSETRecipe([InnerComponentWrapper, Select$1, Indeterminate, container]);
 
-  // this creates a furmly page.
-  maps.createPage = (WrappedComponent, ...args) => maps._defaultMap.PROVIDER(Page(WrappedComponent, config$$1.loginUrl, config$$1.homeUrl).getComponent(), ...args).getComponent();
+  //Creates a furmly page.
+  maps.createPage = (WrappedComponent, context, ...args) => maps._defaultMap.PROVIDER(maps._defaultMap.withNavigationProvider(Page(WrappedComponent, config$$1.loginUrl, config$$1.homeUrl).getComponent(), Navigator, context), ...args).getComponent();
 
   if (config$$1.extend && typeof config$$1.extend == "function") return config$$1.extend(maps, maps._defaultMap);
 
