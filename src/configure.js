@@ -109,7 +109,7 @@ export default (config = { providerConfig: [] }) => {
   maps.createPage = (WrappedComponent, context, ...args) =>
     maps._defaultMap
       .PROVIDER(
-        maps._defaultMap.withNavigationProvider(
+        maps.withNavigationProvider(
           Page(
             WrappedComponent,
             config.loginUrl,
