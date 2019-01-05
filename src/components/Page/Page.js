@@ -1,41 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { push, replace, } from "react-router-redux";
-import { addNavigationContext, removeNavigationContext } from "furmly-client";
+import { push, replace } from "react-router-redux";
 import qs from "query-string";
-import { navigationActions } from "../common/utils";
 
 export default function(NestedComponent, loginUrl = "/", homeUrl = "/home") {
   function mapDispatchToProps(dispatch) {
-    const navigation = { dispatch };
-    return {
-      dispatch,
-      addNavigationContext: args => dispatch(addNavigationContext(args)),
-      removeNavigationContext: () => dispatch(removeNavigationContext()),
-      visible: args => navigationActions.alreadyVisible(navigation, args),
-      replaceStack: arr =>
-        navigationActions.replaceStack(
-          arr,
-          NestedComponent.navigationMap,
-          navigation
-        ),
-      navigate: args =>
-        navigationActions.navigate(
-          args,
-          NestedComponent.navigationContext,
-          navigation
-        ),
-      setParams: args =>
-        navigationActions.setParams(
-          args,
-          NestedComponent.navigationMap,
-          navigation
-        ),
-      clearStack: () => navigationActions.clear(navigation),
-      goBack: args => navigationActions.goBack(navigation, args)
-    };
+    return { dispatch };
   }
-  
   function mapStateToProps(state) {
     return {
       stack: state.furmly.navigation.stack,
@@ -58,15 +29,15 @@ export default function(NestedComponent, loginUrl = "/", homeUrl = "/home") {
         if (this.noPlaceToGo()) {
           if (NestedComponent.shouldClearStackOnEmpty) {
             window.onpopstate = null;
-            this.props.clearStack();
+            this.props.furmlyNavigator.clearStack();
             return;
           }
         } else this.oneStepBack("push");
       };
-      this.props.addNavigationContext(NestedComponent.navigationContext);
+
       if (!this.props.stack.length && NestedComponent.pushVisible) {
         let segments = location.pathname.split("/");
-        this.props.visible({
+        this.props.furmlyNavigator.visible({
           key: "Furmly",
           params: Object.assign(
             { id: segments[segments.length - 1] },
@@ -90,19 +61,17 @@ export default function(NestedComponent, loginUrl = "/", homeUrl = "/home") {
           arr.unshift(this.props.stack[0]);
         }
         return !shouldPush
-          ? this.props.replaceStack(arr)
-          : this.props.navigate(arr[0]);
+          ? this.props.furmlyNavigator.replaceStack(arr)
+          : this.props.furmlyNavigator.navigate(arr[0]);
       }
 
       return push(
         `${homeUrl}/${item.value[0].toUpperCase() + item.value.substring(1)}`
       );
     }
-    componentWillUnmount() {
-      this.props.removeNavigationContext();
-    }
+    componentWillUnmount() {}
     backToLogin() {
-      this.props.clearStack();
+      this.props.furmlyNavigator.clearStack();
       this.props.dispatch(replace(loginUrl));
     }
     goBack() {
@@ -116,7 +85,7 @@ export default function(NestedComponent, loginUrl = "/", homeUrl = "/home") {
       return this.props.stack.length == 0 || this.props.stack.length == 1;
     }
     oneStepBack() {
-      return this.props.goBack({
+      return this.props.furmlyNavigator.goBack({
         item: this.props.stack[this.props.stack.length - 1],
         references: this.props.references
       });
@@ -138,7 +107,7 @@ export default function(NestedComponent, loginUrl = "/", homeUrl = "/home") {
     getComponent: () =>
       connect(
         mapStateToProps,
-        mapDispatchToProps
+        null
       )(Base),
     Base,
     mapDispatchToProps,

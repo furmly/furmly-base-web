@@ -19,7 +19,7 @@
   "license": "ISC",
   "dependencies": {
     "debug": "^4.1.1",
-    "furmly-client": "git+https://github.com/chidionuekwusi/furmly-client.git",
+    "furmly-client": "git+https://github.com/chidionuekwusi/furmly-client.git#navigation-context",
     "prop-types": "^15.6.2",
     "query-string": "^6.2.0",
     "react": "^16.4.2",

@@ -124,8 +124,8 @@ export const camelCaseToWord = string => {
 const navigationMap = {
   Furmly: { path: "/home/furmly/:id", routeParams: ["id"] }
 };
-const extractLocationAndParams = function({ params, key }, navigationContext) {
-  let loc = (navigationContext || navigationMap)[key];
+const extractLocationAndParams = function({ params, key }, this.context) {
+  let loc = (this.context || navigationMap)[key];
   if (!loc) throw new Error("unknown navigation");
   if (loc.routeParams) {
     loc.routeParams.forEach(x => {
@@ -144,35 +144,34 @@ const extractLocationAndParams = function({ params, key }, navigationContext) {
   }
   return path;
 };
-export const navigationActions = {
-  setParams: function(args, navigationContext, navigation) {
-    let path = extractLocationAndParams(args, navigationContext);
-    return (
-      navigation.dispatch(setParams(args)), navigation.dispatch(push(path))
-    );
-  },
-  replaceStack: function(arr, navigationContext, navigation) {
-    let path = extractLocationAndParams(arr[arr.length - 1], navigationContext);
-    return (
-      navigation.dispatch(replaceStack(arr)), navigation.dispatch(replace(path))
-    );
-  },
-  navigate: function(args, navigationContext, navigation) {
-    let path = extractLocationAndParams(args, navigationContext);
-    return (
-      navigation.dispatch(setParams(args)), navigation.dispatch(push(path))
-    );
-  },
-  goBack: function(navigation, args) {
-    return navigation.dispatch(goBack(args));
-  },
-  clear: function(navigation) {
-    return navigation.dispatch(clearNavigationStack());
-  },
-  alreadyVisible: function(navigation, args) {
-    return navigation.dispatch(alreadyVisible(args));
+
+export class Navigator {
+  constructor(dispatch, context) {
+    this.dispatch = dispatch.bind(this);
+    this.context = context;
   }
-};
+  setParams(args) {
+    let path = extractLocationAndParams(args, this.context);
+    return dispatch(setParams(args)), dispatch(push(path));
+  }
+  replaceStack(arr) {
+    let path = extractLocationAndParams(arr[arr.length - 1], this.context);
+    return dispatch(replaceStack(arr)), dispatch(replace(path));
+  }
+  navigate(args) {
+    let path = extractLocationAndParams(args, this.context);
+    return dispatch(setParams(args)), dispatch(push(path));
+  }
+  goBack(args) {
+    return dispatch(goBack(args));
+  }
+  clear() {
+    return dispatch(clearNavigationStack());
+  }
+  alreadyVisible(args) {
+    return dispatch(alreadyVisible(args));
+  }
+}
 
 const createImageSize = (
   propName,

@@ -106,11 +106,18 @@ export default (config = { providerConfig: [] }) => {
 
   maps.addSELECTSETRecipe([layoutWrapper, Select, ProgressBar, container]);
 
-  // this creates a furmly page.
-  maps.createPage = (WrappedComponent, ...args) =>
+  //Creates a furmly page.
+  maps.createPage = (WrappedComponent, context, ...args) =>
     maps._defaultMap
       .PROVIDER(
-        Page(WrappedComponent, config.loginUrl, config.homeUrl).getComponent(),
+        maps._defaultMap.withNavigationProvider(
+          Page(
+            WrappedComponent,
+            config.loginUrl,
+            config.homeUrl
+          ).getComponent(),
+          context
+        ),
         ...args
       )
       .getComponent();
