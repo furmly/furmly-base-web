@@ -3467,7 +3467,7 @@ var configure = ((config$$1 = { providerConfig: [] }) => {
   maps.addSELECTSETRecipe([InnerComponentWrapper, Select$1, Indeterminate, container]);
 
   //Creates a furmly page.
-  maps.createPage = (WrappedComponent, context, ...args) => maps._defaultMap.PROVIDER(maps._defaultMap.withNavigationProvider(Page(WrappedComponent, config$$1.loginUrl, config$$1.homeUrl).getComponent(), Navigator, context), ...args).getComponent();
+  maps.createPage = (WrappedComponent, context, ...args) => maps._defaultMap.PROVIDER(maps.withNavigationProvider(Page(WrappedComponent, config$$1.loginUrl, config$$1.homeUrl).getComponent(), Navigator, context), ...args).getComponent();
 
   if (config$$1.extend && typeof config$$1.extend == "function") return config$$1.extend(maps, maps._defaultMap);
 
