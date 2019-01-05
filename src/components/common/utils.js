@@ -147,29 +147,29 @@ const extractLocationAndParams = function({ params, key }, context) {
 
 export class Navigator {
   constructor(dispatch, context) {
-    this.dispatch = dispatch.bind(this);
+    this.dispatch = dispatch;
     this.context = context;
   }
   setParams(args) {
     let path = extractLocationAndParams(args, this.context);
-    return dispatch(setParams(args)), dispatch(push(path));
+    return this.dispatch(setParams(args)), this.dispatch(push(path));
   }
   replaceStack(arr) {
     let path = extractLocationAndParams(arr[arr.length - 1], this.context);
-    return dispatch(replaceStack(arr)), dispatch(replace(path));
+    return this.dispatch(replaceStack(arr)), this.dispatch(replace(path));
   }
   navigate(args) {
     let path = extractLocationAndParams(args, this.context);
-    return dispatch(setParams(args)), dispatch(push(path));
+    return this.dispatch(setParams(args)), this.dispatch(push(path));
   }
   goBack(args) {
-    return dispatch(goBack(args));
+    return this.dispatch(goBack(args));
   }
   clear() {
-    return dispatch(clearNavigationStack());
+    return this.dispatch(clearNavigationStack());
   }
   alreadyVisible(args) {
-    return dispatch(alreadyVisible(args));
+    return this.dispatch(alreadyVisible(args));
   }
 }
 

@@ -167,29 +167,29 @@ const extractLocationAndParams = function ({ params, key }, context) {
 
 class Navigator {
   constructor(dispatch, context) {
-    this.dispatch = dispatch.bind(this);
+    this.dispatch = dispatch;
     this.context = context;
   }
   setParams(args) {
     let path = extractLocationAndParams(args, this.context);
-    return dispatch(controlMap.setParams(args)), dispatch(reactRouterRedux.push(path));
+    return this.dispatch(controlMap.setParams(args)), this.dispatch(reactRouterRedux.push(path));
   }
   replaceStack(arr) {
     let path = extractLocationAndParams(arr[arr.length - 1], this.context);
-    return dispatch(controlMap.replaceStack(arr)), dispatch(reactRouterRedux.replace(path));
+    return this.dispatch(controlMap.replaceStack(arr)), this.dispatch(reactRouterRedux.replace(path));
   }
   navigate(args) {
     let path = extractLocationAndParams(args, this.context);
-    return dispatch(controlMap.setParams(args)), dispatch(reactRouterRedux.push(path));
+    return this.dispatch(controlMap.setParams(args)), this.dispatch(reactRouterRedux.push(path));
   }
   goBack(args) {
-    return dispatch(controlMap.goBack(args));
+    return this.dispatch(controlMap.goBack(args));
   }
   clear() {
-    return dispatch(controlMap.clearNavigationStack());
+    return this.dispatch(controlMap.clearNavigationStack());
   }
   alreadyVisible(args) {
-    return dispatch(controlMap.alreadyVisible(args));
+    return this.dispatch(controlMap.alreadyVisible(args));
   }
 }
 
