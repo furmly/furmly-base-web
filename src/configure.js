@@ -123,7 +123,7 @@ export default (config = { providerConfig: [] }) => {
       .getComponent();
 
   if (config.extend && typeof config.extend == "function")
-    return config.extend(maps, maps._defaultMap);
+    return config.extend(maps, maps._defaultMap, Deferred);
 
   return maps.cook();
 };

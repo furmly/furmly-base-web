@@ -385,7 +385,7 @@ IconButton.propTypes = {
   icon: PropTypes.string.isRequired
 };
 
-var FormDiv = styled__default.div`
+var FormDiv$1 = styled__default.div`
   padding: ${containerPadding}px;
   background-color: ${formComponentBackgroundColor};
 `;
@@ -575,7 +575,7 @@ const FocusIndicator = styled__default.hr`
   transition-property: transform;
   transition-duration: 0.5s;
   transition-delay: 200ms;
-  ${FormDiv}:hover & {
+  ${FormDiv$1}:hover & {
     transform: translateX(0);
   }
   ${Label}.error+& {
@@ -704,7 +704,7 @@ const inputFactory = (InnerInput, noLabel) => {
   const Input = props => {
     const { description, errors, label, reverse = false, className } = props;
     return React__default.createElement(
-      FormDiv,
+      FormDiv$1,
       { className: className },
       !noLabel ? React__default.createElement(
         StyledLabel,
@@ -1983,7 +1983,11 @@ class List$1 extends React.Component {
       Wrapper$2,
       null,
       renderHeader(this.props),
-      table,
+      React__default.createElement(
+        FormDiv,
+        null,
+        table
+      ),
       renderFooter(this.props)
     );
   }
@@ -3397,7 +3401,7 @@ var Image = (props => {
   if (props.args.type == "URL" && isRelative(i)) i = `/_backend/_furmly${i}`;
   if (props.args.type == "REL") i = `${config.imageFolder}${i}`;
   return React__default.createElement(
-    FormDiv,
+    FormDiv$1,
     null,
     React__default.createElement(StyledImage, _extends$8({}, props, { src: i }))
   );
@@ -3469,7 +3473,7 @@ var configure = ((config$$1 = { providerConfig: [] }) => {
   //Creates a furmly page.
   maps.createPage = (WrappedComponent, context, ...args) => maps._defaultMap.PROVIDER(maps.withNavigationProvider(Page(WrappedComponent, config$$1.loginUrl, config$$1.homeUrl).getComponent(), Navigator, context), ...args).getComponent();
 
-  if (config$$1.extend && typeof config$$1.extend == "function") return config$$1.extend(maps, maps._defaultMap);
+  if (config$$1.extend && typeof config$$1.extend == "function") return config$$1.extend(maps, maps._defaultMap, controlMap.Deferred);
 
   return maps.cook();
 });
@@ -3478,7 +3482,7 @@ exports.ThemeProvider = styled.ThemeProvider;
 exports.Button = Button;
 exports.IconButton = IconButton;
 exports.StyledIconButton = StyledIconButton;
-exports.FormContainer = FormDiv;
+exports.FormContainer = FormDiv$1;
 exports.Icon = Icon$1;
 exports.Modal = Modal;
 exports.Input = Input$1;

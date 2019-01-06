@@ -199,7 +199,7 @@ class List extends Component {
     return (
       <Wrapper>
         {renderHeader(this.props)}
-        {table}
+        <FormDiv>{table}</FormDiv>
         {renderFooter(this.props)}
       </Wrapper>
     );
