@@ -385,7 +385,7 @@ IconButton.propTypes = {
   icon: PropTypes.string.isRequired
 };
 
-var FormDiv$1 = styled__default.div`
+var FormDiv = styled__default.div`
   padding: ${containerPadding}px;
   background-color: ${formComponentBackgroundColor};
 `;
@@ -575,7 +575,7 @@ const FocusIndicator = styled__default.hr`
   transition-property: transform;
   transition-duration: 0.5s;
   transition-delay: 200ms;
-  ${FormDiv$1}:hover & {
+  ${FormDiv}:hover & {
     transform: translateX(0);
   }
   ${Label}.error+& {
@@ -704,7 +704,7 @@ const inputFactory = (InnerInput, noLabel) => {
   const Input = props => {
     const { description, errors, label, reverse = false, className } = props;
     return React__default.createElement(
-      FormDiv$1,
+      FormDiv,
       { className: className },
       !noLabel ? React__default.createElement(
         StyledLabel,
@@ -3401,7 +3401,7 @@ var Image = (props => {
   if (props.args.type == "URL" && isRelative(i)) i = `/_backend/_furmly${i}`;
   if (props.args.type == "REL") i = `${config.imageFolder}${i}`;
   return React__default.createElement(
-    FormDiv$1,
+    FormDiv,
     null,
     React__default.createElement(StyledImage, _extends$8({}, props, { src: i }))
   );
@@ -3482,7 +3482,7 @@ exports.ThemeProvider = styled.ThemeProvider;
 exports.Button = Button;
 exports.IconButton = IconButton;
 exports.StyledIconButton = StyledIconButton;
-exports.FormContainer = FormDiv$1;
+exports.FormContainer = FormDiv;
 exports.Icon = Icon$1;
 exports.Modal = Modal;
 exports.Input = Input$1;
