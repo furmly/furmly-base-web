@@ -3327,11 +3327,35 @@ function Page (NestedComponent, loginUrl = "/", homeUrl = "/home") {
 }
 
 const Container$3 = styled__default.div``;
-const View = props => React__default.createElement(
-  Container$3,
-  null,
-  props.children
-);
+const ButtonContainer = styled__default.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-direction: row;
+`;
+const View = props => {
+  const uid = props.uid || "";
+  const className = props.className || "";
+  if (props.hideSubmit) return React__default.createElement(
+    Container$3,
+    { className: `view ${uid} ${className}` },
+    props.children
+  );
+  return React__default.createElement(
+    Container$3,
+    { className: `view with-button ${uid} ${className}` },
+    props.children,
+    React__default.createElement(
+      ButtonContainer,
+      null,
+      React__default.createElement(
+        Button,
+        null,
+        props.commandLabel
+      )
+    )
+  );
+};
 
 const Warning = styled__default.p`
   font-size: ${bodyText}px;
