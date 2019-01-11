@@ -3,6 +3,7 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Label } from "../common/components/Label";
 import { titleText, bodyText } from "../common/variables";
+import FormDiv from "../common/components/FormDiv";
 
 const AppLabel = styled(Label)`
   text-transform: none;
@@ -16,7 +17,11 @@ const AppLabel = styled(Label)`
   }}px;
 `;
 const CustomLabel = ({ description }) => {
-  return <AppLabel>{description}</AppLabel>;
+  return (
+    <FormDiv>
+      <AppLabel>{description}</AppLabel>
+    </FormDiv>
+  );
 };
 
 CustomLabel.propTypes = {

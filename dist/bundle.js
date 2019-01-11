@@ -108,7 +108,7 @@ const media = createMedia();
 
 const injectFontsAndCSSBase = (resourceDir = "./") => styled.injectGlobal`
 textarea, select, input, button { outline: none; }
-button {
+button,p {
   padding:0px;
 }
 * {
@@ -126,6 +126,26 @@ button {
 body,button,input,textarea {
   font-family:Lato;
   line-height:${lineHeight};
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: inherit; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.1); 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0,0,0,0.3);  
 }
 `;
 
@@ -395,8 +415,7 @@ var Overlay = styled__default.div.attrs({
 })`
   width: 100%;
   height: 100%;
-  visibility: hidden;
-  left: 0;
+  left: -100vw;
   top: 0;
   position: fixed;
   background-color: rgba(0, 0, 0, 0.49);
@@ -405,10 +424,15 @@ var Overlay = styled__default.div.attrs({
   justify-content: center;
   align-items: center;
   opacity: 0;
-  transition: opacity 0.8s;
-  &.show {
+  transition: opacity 0.5s, left 0s 0.5s;
+  & > div {
+    opacity: 0;
+  }
+  &.show,
+  &.show > div {
     opacity: 1;
-    visibility: visible;
+    left: 0;
+    transition: opacity 0.5s;
   }
   & > * {
     max-width: 50vw;
@@ -985,7 +1009,7 @@ const Menu = styled__default.div`
   width: 100%;
   visibility: hidden;
   opacity: 0;
-  transform: translate(0, -50%);
+  transform: translate(0, -5%);
   ${largerBoxShadow};
   &:after {
     content: "";
@@ -999,7 +1023,7 @@ const Menu = styled__default.div`
   &.show {
     visibility: visible;
     transform: translate(0, 0);
-    transition: opacity 0.3s, transform 0.2s ease-in-out;
+    transition: opacity 0.5s, transform 0.2s ease-in-out;
     opacity: 1;
   }
 `;
@@ -1044,13 +1068,32 @@ const Item = styled__default.span`
   }
 `;
 
-class Select extends React__default.Component {
+class Select extends React__default.PureComponent {
   constructor(props) {
     super(props);
-    this.state = { showMenu: [] };
+    this.state = { showMenu: [], displayLabel: null };
     this.toggleMenu = this.toggleMenu.bind(this);
     this.revealClicked = this.revealClicked.bind(this);
     this.setRef = this.setRef.bind(this);
+  }
+  componentWillMount() {
+    this.getDisplayLabel();
+  }
+  componentWillReceiveProps(next) {
+    if (next.value !== this.props.value) {
+      this.getDisplayLabel(next);
+    }
+  }
+  getDisplayLabel(props = this.props) {
+    if (props.value && props.items) {
+      const { keyProperty, displayProperty } = props;
+      for (let i = 0; i < props.items.length; i++) {
+        if (props.items[i][keyProperty] == props.value) {
+          this.setState({ displayLabel: props.items[i][displayProperty] });
+          break;
+        }
+      }
+    }
   }
   toggleMenu(cb) {
     let i = this.state.showMenu.slice();
@@ -1102,7 +1145,7 @@ class Select extends React__default.Component {
           onClick: this.revealClicked,
           disabled: disabled
         },
-        value || label || ""
+        this.state.displayLabel || label || ""
       ),
       React__default.createElement(
         Menu,
@@ -1110,7 +1153,7 @@ class Select extends React__default.Component {
         React__default.createElement(
           MenuContainer,
           null,
-          items.map(x => React__default.createElement(
+          (items || []).map(x => React__default.createElement(
             MenuItem,
             {
               onClick: () => this.toggleMenu(valueChanged(x[keyProperty])),
@@ -1201,7 +1244,8 @@ const ListItemWrapper = styled__default.div`
 const ListContentWrapper = styled__default.div`
   flex: 0.7;
   display: flex;
-  align-items: center;
+  flex-direction:column;
+  align-items: flex-start;
 `;
 const largeAvatarSize = props => props.theme.factor * 65;
 const mediumAvatarSize = props => props.theme.factor * 32;
@@ -1243,7 +1287,9 @@ ListItem.propTypes = {
 };
 
 var _this$1 = undefined;
-const BasicInfoLabel = styled__default.span``;
+const BasicInfoLabel = styled__default.span`
+  display: block;
+`;
 const ListDivider = styled__default.hr`
   height: ${props => formLineWidth(props) * 0.3}px;
   padding: 0;
@@ -1260,7 +1306,7 @@ const List = styled__default.div`
 `;
 
 const BasicInfo = ({ rowData, withoutLabel, dataTemplate }) => Object.keys(rowData).reduce((sum, x, index) => {
-  if (dataTemplate && !dataTemplate[x]) return sum;
+  if (dataTemplate && !dataTemplate[x] || typeof rowData[x] == "undefined") return sum;
 
   let displayText = rowData[x];
   let label = dataTemplate ? dataTemplate[x] : camelCaseToWord(x);
@@ -1643,7 +1689,7 @@ const GridLayout = props => {
   const { list, itemView, commandsView, commandViewResult, filter } = props;
   const elements = [filter, list, itemView, commandsView, commandViewResult];
   return React__default.createElement(
-    React__default.Fragment,
+    FormDiv,
     null,
     elements
   );
@@ -3444,9 +3490,13 @@ const AppLabel = styled__default(Label)`
 `;
 const CustomLabel = ({ description }) => {
   return React__default.createElement(
-    AppLabel,
+    FormDiv,
     null,
-    description
+    React__default.createElement(
+      AppLabel,
+      null,
+      description
+    )
   );
 };
 

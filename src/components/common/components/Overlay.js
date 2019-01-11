@@ -4,8 +4,7 @@ export default styled.div.attrs({
 })`
   width: 100%;
   height: 100%;
-  visibility: hidden;
-  left: 0;
+  left: -100vw;
   top: 0;
   position: fixed;
   background-color: rgba(0, 0, 0, 0.49);
@@ -14,10 +13,15 @@ export default styled.div.attrs({
   justify-content: center;
   align-items: center;
   opacity: 0;
-  transition: opacity 0.8s;
-  &.show {
+  transition: opacity 0.5s, left 0s 0.5s;
+  & > div {
+    opacity: 0;
+  }
+  &.show,
+  &.show > div {
     opacity: 1;
-    visibility: visible;
+    left: 0;
+    transition: opacity 0.5s;
   }
   & > * {
     max-width: 50vw;

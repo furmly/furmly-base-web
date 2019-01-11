@@ -76,7 +76,7 @@ export const media = createMedia();
 
 export const injectFontsAndCSSBase = (resourceDir = "./") => injectGlobal`
 textarea, select, input, button { outline: none; }
-button {
+button,p {
   padding:0px;
 }
 * {
@@ -94,6 +94,26 @@ button {
 body,button,input,textarea {
   font-family:Lato;
   line-height:${lineHeight};
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: inherit; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.1); 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0,0,0,0.3);  
 }
 `;
 

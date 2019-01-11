@@ -10,7 +10,9 @@ import {
   formLineWidth,
   labelBackgroundColor
 } from "../common/variables";
-const BasicInfoLabel = styled.span``;
+const BasicInfoLabel = styled.span`
+  display: block;
+`;
 const ListDivider = styled.hr`
   height: ${props => formLineWidth(props) * 0.3}px;
   padding: 0;
@@ -28,7 +30,8 @@ const List = styled.div`
 
 export const BasicInfo = ({ rowData, withoutLabel, dataTemplate }) =>
   Object.keys(rowData).reduce((sum, x, index) => {
-    if (dataTemplate && !dataTemplate[x]) return sum;
+    if ((dataTemplate && !dataTemplate[x]) || typeof rowData[x] == "undefined")
+      return sum;
 
     let displayText = rowData[x];
     let label = dataTemplate ? dataTemplate[x] : camelCaseToWord(x);

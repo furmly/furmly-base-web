@@ -42,7 +42,7 @@ const Menu = styled.div`
   width: 100%;
   visibility: hidden;
   opacity: 0;
-  transform: translate(0, -50%);
+  transform: translate(0, -5%);
   ${largerBoxShadow};
   &:after {
     content: "";
@@ -56,7 +56,7 @@ const Menu = styled.div`
   &.show {
     visibility: visible;
     transform: translate(0, 0);
-    transition: opacity 0.3s, transform 0.2s ease-in-out;
+    transition: opacity 0.5s, transform 0.2s ease-in-out;
     opacity: 1;
   }
 `;
@@ -101,13 +101,32 @@ const Item = styled.span`
   }
 `;
 
-class Select extends React.Component {
+class Select extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.state = { showMenu: [] };
+    this.state = { showMenu: [], displayLabel: null };
     this.toggleMenu = this.toggleMenu.bind(this);
     this.revealClicked = this.revealClicked.bind(this);
     this.setRef = this.setRef.bind(this);
+  }
+  componentWillMount() {
+    this.getDisplayLabel();
+  }
+  componentWillReceiveProps(next) {
+    if (next.value !== this.props.value) {
+      this.getDisplayLabel(next);
+    }
+  }
+  getDisplayLabel(props = this.props) {
+    if (props.value && props.items) {
+      const { keyProperty, displayProperty } = props;
+      for (let i = 0; i < props.items.length; i++) {
+        if (props.items[i][keyProperty] == props.value) {
+          this.setState({ displayLabel: props.items[i][displayProperty] });
+          break;
+        }
+      }
+    }
   }
   toggleMenu(cb) {
     let i = this.state.showMenu.slice();
@@ -159,11 +178,11 @@ class Select extends React.Component {
           onClick={this.revealClicked}
           disabled={disabled}
         >
-          {value || label || ""}
+          {this.state.displayLabel || label || ""}
         </RevealButton>
         <Menu className={showMenu}>
           <MenuContainer>
-            {items.map(x => (
+            {(items || []).map(x => (
               <MenuItem
                 onClick={() => this.toggleMenu(valueChanged(x[keyProperty]))}
                 key={x[keyProperty]}
