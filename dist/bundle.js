@@ -3378,6 +3378,7 @@ const ButtonContainer = styled__default.div`
   align-items: center;
   justify-content: flex-end;
   flex-direction: row;
+  padding: ${containerPadding}px;
 `;
 const View = props => {
   const uid = props.uid || "";
@@ -3396,7 +3397,7 @@ const View = props => {
       null,
       React__default.createElement(
         Button,
-        null,
+        { onClick: props.submit },
         props.commandLabel
       )
     )
