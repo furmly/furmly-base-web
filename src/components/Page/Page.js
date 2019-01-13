@@ -32,7 +32,7 @@ export default function(NestedComponent, loginUrl = "/", homeUrl = "/home") {
             this.props.furmlyNavigator.clearStack();
             return;
           }
-        } else this.oneStepBack("push");
+        } else this.oneStepBack();
       };
 
       if (!this.props.stack.length && NestedComponent.pushVisible) {
