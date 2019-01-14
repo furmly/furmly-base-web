@@ -17,7 +17,7 @@ const Label = styled.label`
   vertical-align: middle;
   font-weight: bold;
   font-size: ${smallText}px;
-  text-transform: uppercase;
+  // text-transform: uppercase;
   display: inline-block;
   transition: background-color 1s;
   &.error {

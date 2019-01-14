@@ -17,7 +17,7 @@ const IconContainer = styled.svg`
 `;
 
 const Icon = ({ icon, size, color, className }) => {
-  const iconInfo = icons[icon];
+  let iconInfo = icons[icon];
 
   if (!iconInfo) {
     log(`Unknown Icon ${icon}`);

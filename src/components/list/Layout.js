@@ -29,6 +29,7 @@ const BorderAnimationWrapper = styled.div`
   height: calc(100% - ${props => labelSize(props) - 2}px);
   width: 100%;
   overflow: hidden;
+  pointer-events: none;
 `;
 const transitionDuration = 0.25;
 

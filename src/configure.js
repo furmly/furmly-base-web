@@ -13,18 +13,17 @@ import Webview, { WebViewErrorText } from "./components/webView";
 import ActionViewLayout, { ActionViewFilter } from "./components/actionView";
 import SectionLayout, { Header as SectionHeader } from "./components/section";
 import { TextView as ProcessTextView } from "./components/Process";
-import Page from "./components/Page";
 import View from "./components/View";
 import Select from "./components/select";
 import Warning from "./components/common/components/Warning";
 import ErrorText from "./components/common/components/ErrorText";
 import Modal from "./components/common/components/Modal";
 import ProgressBar from "./components/common/components/ProgressBar";
-import { Navigator } from "./components/common/utils";
 import layoutWrapper from "./components/common/components/InnerComponentWrapper";
 import List, {
   Layout as ListLayout,
-  Button as ListButton
+  Button as ListButton,
+  ChipList
 } from "./components/list";
 import FurmlyInput, {
   Checkbox as FurmlyCheckbox,
@@ -105,22 +104,19 @@ export default (config = { providerConfig: [] }) => {
 
   maps.addSELECTSETRecipe([layoutWrapper, Select, ProgressBar, container]);
 
-  //Creates a furmly page.
-  maps.createPage = (WrappedComponent, context, ...args) =>
-    maps._defaultMap
-      .PROVIDER(
-        maps.withNavigationProvider(
-          Page(
-            WrappedComponent,
-            config.loginUrl,
-            config.homeUrl
-          ).getComponent(),
-          Navigator,
-          context
-        ),
-        ...args
-      )
-      .getComponent();
+  maps.addRecipe(
+    "CHIP_LIST",
+    [
+      ListLayout,
+      ListButton,
+      ChipList,
+      Modal,
+      ErrorText,
+      ProgressBar,
+      container
+    ],
+    maps.LIST
+  );
 
   if (config.extend && typeof config.extend == "function")
     return config.extend(maps, maps._defaultMap, Deferred);

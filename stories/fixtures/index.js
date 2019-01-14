@@ -105,6 +105,12 @@ export function getAddTemplate() {
                 label: "Entity Template",
                 elementType: "LIST",
                 args: {
+                  rowTemplate: JSON.stringify({
+                    name: "expression",
+                    config: {
+                      exp: "{propertyName}"
+                    }
+                  }),
                   options: "TAG",
                   behavior: {
                     furmly_ref: "entitiesItemTemplate"
@@ -429,7 +435,7 @@ export function getAddTemplate() {
                 },
                 description: "",
                 validators: [],
-                uid: null,
+                uid: "CHIP_LIST",
                 order: null,
                 component_uid: "6c6591db-662f-49f8-880d-b0fd921a326b",
                 asyncValidators: []

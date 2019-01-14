@@ -37,7 +37,7 @@ export const formComponentBackgroundColor = props =>
 export const modalBackgroundColor = props =>
   props.theme.modalBackgroundColor || "white";
 const dropShadowColor = "rgba(0,0,0,0.18)";
-export const boxShadow = `box-shadow:0px 0px 2px 0px ${dropShadowColor}`;
+export const boxShadow = `box-shadow:0px 0px 14px 0px ${dropShadowColor}`;
 export const largerBoxShadow = `box-shadow:0px 5px 4px -1px ${dropShadowColor}`;
 export const iconDropShadow = `filter: drop-shadow(0px 3px 1px ${dropShadowColor})`;
 export const formLineWidth = props => props.theme.factor * 2;

@@ -7,6 +7,7 @@ import {
   labelColor,
   elementPadding,
   iconDropShadow,
+  highLightColor,
   largerBoxShadow
 } from "../../variables";
 import { ripple } from "../../animations";
@@ -66,8 +67,13 @@ const IconButtonWrapper = styled.button`
   color: ${labelColor};
   background: none;
   cursor: pointer;
+  padding: 0 5px;
   svg {
     ${iconDropShadow};
+    margin: 0;
+  }
+  &:hover {
+    background-color: ${highLightColor};
   }
 `;
 export const IconButton = props => (

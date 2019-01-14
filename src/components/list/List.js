@@ -83,7 +83,7 @@ export const rowTemplates = {
     >
       <p>
         <span style={{ float: "left" }}>
-          <b>{"" + (index + 1)}.</b>
+          <b>{"" + (index + 1)}.</b> &nbsp;
           <span>{utils.formatExpression(dataTemplate.exp, rowData)}</span>
         </span>
       </p>

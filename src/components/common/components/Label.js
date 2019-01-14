@@ -16,7 +16,7 @@ export const Label = styled.label`
   color: ${setupReversal(labelColor, labelBackgroundColor)};
   padding: ${props => props.theme.factor * 5}px;
   font-size: ${smallText}px;
-  text-transform: uppercase;
+  // text-transform: uppercase;
   font-weight: bold;
   display: inline-block;
   transition: background-color 1s;
@@ -31,6 +31,9 @@ const FormLabelContainer = styled.div`
   position: relative;
   overflow: hidden;
   visibility: ${props => (props.hide && "hidden") || "visible"};
+  &.no-indicator {
+    overflow: visible;
+  }
 `;
 const FocusIndicator = styled.hr`
   width: 100%;
@@ -46,6 +49,9 @@ const FocusIndicator = styled.hr`
   transition-delay: 200ms;
   ${FormDiv}:hover & {
     transform: translateX(0);
+  }
+  ${FormLabelContainer}.no-indicator & {
+    visibility: collapse;
   }
   ${Label}.error+& {
     background-color: ${errorColor};

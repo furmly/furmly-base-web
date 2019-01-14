@@ -38,3 +38,4 @@ require("./webview");
 require("./html_view");
 require("./label");
 require("./image");
+require("./chips");
