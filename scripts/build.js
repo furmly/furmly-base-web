@@ -18,7 +18,8 @@ rollup({
       extends: babelrc
     }),
     copy({
-      "src/fonts/": "dist/"
+      "src/fonts/": "dist/",
+      "src/worker.js": "dist/worker.js"
     })
   ]
 })

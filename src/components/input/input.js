@@ -17,6 +17,7 @@ import ErrorText from "../common/components/ErrorText";
 import Copy from "../common/components/Copy";
 import { media } from "../common/utils";
 import Icon from "../common/components/Icon";
+import withWorker from "../common/components/withWorker";
 
 const ToolTipText = styled.span`
   padding: 8px;
@@ -40,7 +41,6 @@ const ToolTip = styled.div`
     opacity: 0;
     transition: opacity 1s;
   }
-
 
   &:hover ${ToolTipText} {
     visibility: visible;
@@ -77,23 +77,30 @@ export const onChange = onChangeFactory();
 
 export const inputFactory = (InnerInput, noLabel) => {
   const Input = props => {
-    const { description, errors, label, reverse = false, className } = props;
+    const {
+      description,
+      errors,
+      label,
+      reverse = false,
+      className,
+      labelClassName = ""
+    } = props;
     const labelClasses = [
       (errors && errors.length && "error") || "",
-      (description && "no-indicator") || " "
+      labelClassName
     ];
     return (
-      <FormDiv className={className} title={description}>
+      <FormDiv className={className}>
         {!noLabel ? (
           <FormLabel reverse={reverse} className={labelClasses.join(" ")}>
             {label}
             {description && (
-              <ToolTip>
+              <ToolTip title={description}>
                 &nbsp;
-                <Icon icon={"info-circle"} color={labelColor}  />
-                <ToolTipText>
+                <Icon icon={"info-circle"} color={labelColor} />
+                {/* <ToolTipText>
                   <Copy>{description}</Copy>
-                </ToolTipText>
+                </ToolTipText> */}
               </ToolTip>
             )}
           </FormLabel>
@@ -110,15 +117,107 @@ export const inputFactory = (InnerInput, noLabel) => {
   return Input;
 };
 
-export const Input = ({ type, value, valueChanged }) => {
-  return (
-    <StyledInput
-      type={type}
-      value={value || ""}
-      onChange={onChange.bind(this, valueChanged)}
-    />
-  );
-};
+class WorkerMode {
+  constructor(element) {
+    this.element = element;
+    this.worker = element.props.worker;
+    this.onmessage = this.onmessage.bind(this);
+  }
+  componentWillMount() {
+    this.worker.addEventListener("message", this.onmessage);
+    this.postMessage("init", {
+      component: "input",
+      body: {
+        idleTimeout: 300
+      }
+    });
+  }
+  componentWillUnmount() {
+    this.postMessage("destroy");
+    this.worker.removeEventListener("message", this.onmessage);
+  }
+  componentWillReceiveProps(next) {
+    if (next.worker !== this.element.props.worker) {
+      this.worker = next.worker;
+    }
+    if (next.value !== this.element.state.value) {
+      this.element.setState({ value: next.value || "" });
+    }
+    this.postMessage("reset");
+  }
+  postMessage(type, args) {
+    this.worker.postMessage({
+      type,
+      ...args,
+      id: this.element.props.component_uid
+    });
+  }
+  onmessage({ data: e }) {
+    if (e.type == "expired" && e.id == this.element.props.component_uid) {
+      this.element.props.valueChanged(this.element.state.value);
+    }
+  }
+
+  valueChanged(e) {
+    this.postMessage("busy");
+    this.element.setState({ value: e });
+  }
+  getValue() {
+    return this.element.state.value;
+  }
+  getProps() {
+    return {};
+  }
+}
+
+class NormalMode {
+  constructor(element) {
+    this.element = element;
+  }
+  componentWillMount() {}
+  componentWillUnmount() {}
+  componentWillReceiveProps() {}
+  valueChanged(e) {
+    this.element.props.valueChanged(e);
+  }
+  getValue() {
+    return this.element.props.value || "";
+  }
+  getProps() {
+    return {};
+  }
+}
+export class Input extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { value: "" };
+    this.valueChanged = this.valueChanged.bind(this);
+  }
+  componentWillMount() {
+    if (!this.props.worker) this.mode = new NormalMode(this);
+    else this.mode = new WorkerMode(this);
+    this.mode.componentWillMount();
+  }
+  componentWillUnmount() {
+    this.mode.componentWillUnmount();
+  }
+  componentWillReceiveProps(next) {
+    this.mode.componentWillReceiveProps(next);
+  }
+  valueChanged(e) {
+    this.mode.valueChanged(e);
+  }
+  render() {
+    const { type } = this.props;
+    const props = {
+      type: type,
+      value: this.mode.getValue(),
+      onChange: onChange.bind(this, this.valueChanged),
+      ...this.mode.getProps()
+    };
+    return React.createElement(StyledInput, props);
+  }
+}
 
 Input.propTypes = {
   description: PropTypes.string,
@@ -131,4 +230,4 @@ Input.propTypes = {
   valueChanged: PropTypes.func.isRequired
 };
 
-export default inputFactory(Input);
+export default inputFactory(withWorker(Input));

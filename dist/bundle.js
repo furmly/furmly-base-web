@@ -362,6 +362,46 @@ var FormDiv = styled__default.div`
   background-color: ${formComponentBackgroundColor};
 `;
 
+var _extends$1 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+const WorkerContext = React__default.createContext(null);
+
+class WorkerProvider extends React__default.PureComponent {
+  constructor(props) {
+    super(props);
+  }
+  componentWillMount() {
+    this.worker = new Worker(this.props.location || "worker.js");
+  }
+  componentWillUnmount() {
+    this.worker.terminate();
+  }
+  render() {
+    return React__default.createElement(
+      WorkerContext.Provider,
+      { value: this.worker },
+      this.props.children
+    );
+  }
+}
+
+WorkerProvider.propTypes = {
+  location: PropTypes.string
+};
+
+var withWorker = (WrappedComponent => {
+  class WorkerConsumer extends React__default.PureComponent {
+    render() {
+      return React__default.createElement(
+        WorkerContext.Consumer,
+        null,
+        worker => React__default.createElement(WrappedComponent, _extends$1({}, this.props, { worker: worker }))
+      );
+    }
+  }
+  return WorkerConsumer;
+});
+
 var Overlay = styled__default.div.attrs({
   className: props => props.isOpen ? "show" : ""
 })`
@@ -472,7 +512,7 @@ Portal.propTypes = {
 
 var Portal$1 = styled.withTheme(Portal);
 
-var _extends$1 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _extends$2 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _objectWithoutProperties$1(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
@@ -506,7 +546,7 @@ const Indeterminate = props => {
     { className: className },
     React__default.createElement(
       Spinner,
-      _extends$1({ viewBox: "-200 -200 400 400" }, rest),
+      _extends$2({ viewBox: "-200 -200 400 400" }, rest),
       React__default.createElement(
         G,
         null,
@@ -653,7 +693,7 @@ var Copy = styled__default.span`
   display: block;
 `;
 
-var _this = undefined;
+var _extends$3 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 const ToolTipText = styled__default.span`
   padding: 8px;
@@ -677,7 +717,6 @@ const ToolTip = styled__default.div`
     opacity: 0;
     transition: opacity 1s;
   }
-
 
   &:hover ${ToolTipText} {
     visibility: visible;
@@ -714,29 +753,27 @@ const onChange = onChangeFactory();
 
 const inputFactory = (InnerInput, noLabel) => {
   const Input = props => {
-    const { description, errors, label, reverse = false, className } = props;
-    const labelClasses = [errors && errors.length && "error" || "", description && "no-indicator" || " "];
+    const {
+      description,
+      errors,
+      label,
+      reverse = false,
+      className,
+      labelClassName = ""
+    } = props;
+    const labelClasses = [errors && errors.length && "error" || "", labelClassName];
     return React__default.createElement(
       FormDiv,
-      { className: className, title: description },
+      { className: className },
       !noLabel ? React__default.createElement(
         StyledLabel,
         { reverse: reverse, className: labelClasses.join(" ") },
         label,
         description && React__default.createElement(
           ToolTip,
-          null,
+          { title: description },
           "\xA0",
-          React__default.createElement(Icon$1, { icon: "info-circle", color: labelColor }),
-          React__default.createElement(
-            ToolTipText,
-            null,
-            React__default.createElement(
-              Copy,
-              null,
-              description
-            )
-          )
+          React__default.createElement(Icon$1, { icon: "info-circle", color: labelColor })
         )
       ) : React__default.createElement(FakeLabel, null),
       React__default.createElement(InnerInput, props),
@@ -751,13 +788,105 @@ const inputFactory = (InnerInput, noLabel) => {
   return Input;
 };
 
-const Input = ({ type, value, valueChanged }) => {
-  return React__default.createElement(StyledInput, {
-    type: type,
-    value: value || "",
-    onChange: onChange.bind(_this, valueChanged)
-  });
-};
+class WorkerMode {
+  constructor(element) {
+    this.element = element;
+    this.worker = element.props.worker;
+    this.onmessage = this.onmessage.bind(this);
+  }
+  componentWillMount() {
+    this.worker.addEventListener("message", this.onmessage);
+    this.postMessage("init", {
+      component: "input",
+      body: {
+        idleTimeout: 300
+      }
+    });
+  }
+  componentWillUnmount() {
+    this.postMessage("destroy");
+    this.worker.removeEventListener("message", this.onmessage);
+  }
+  componentWillReceiveProps(next) {
+    if (next.worker !== this.element.props.worker) {
+      this.worker = next.worker;
+    }
+    if (next.value !== this.element.state.value) {
+      this.element.setState({ value: next.value || "" });
+    }
+    this.postMessage("reset");
+  }
+  postMessage(type, args) {
+    this.worker.postMessage(_extends$3({
+      type
+    }, args, {
+      id: this.element.props.component_uid
+    }));
+  }
+  onmessage({ data: e }) {
+    if (e.type == "expired" && e.id == this.element.props.component_uid) {
+      this.element.props.valueChanged(this.element.state.value);
+    }
+  }
+
+  valueChanged(e) {
+    this.postMessage("busy");
+    this.element.setState({ value: e });
+  }
+  getValue() {
+    return this.element.state.value;
+  }
+  getProps() {
+    return {};
+  }
+}
+
+class NormalMode {
+  constructor(element) {
+    this.element = element;
+  }
+  componentWillMount() {}
+  componentWillUnmount() {}
+  componentWillReceiveProps() {}
+  valueChanged(e) {
+    this.element.props.valueChanged(e);
+  }
+  getValue() {
+    return this.element.props.value || "";
+  }
+  getProps() {
+    return {};
+  }
+}
+class Input extends React__default.Component {
+  constructor(props) {
+    super(props);
+    this.state = { value: "" };
+    this.valueChanged = this.valueChanged.bind(this);
+  }
+  componentWillMount() {
+    if (!this.props.worker) this.mode = new NormalMode(this);else this.mode = new WorkerMode(this);
+    this.mode.componentWillMount();
+  }
+  componentWillUnmount() {
+    this.mode.componentWillUnmount();
+  }
+  componentWillReceiveProps(next) {
+    this.mode.componentWillReceiveProps(next);
+  }
+  valueChanged(e) {
+    this.mode.valueChanged(e);
+  }
+  render() {
+    const { type } = this.props;
+    const props = _extends$3({
+      type: type,
+      value: this.mode.getValue(),
+      onChange: onChange.bind(this, this.valueChanged)
+    }, this.mode.getProps());
+    return React__default.createElement(StyledInput, props);
+  }
+}
 
 Input.propTypes = {
   description: PropTypes.string,
@@ -766,7 +895,7 @@ Input.propTypes = {
   valueChanged: PropTypes.func.isRequired
 };
 
-var Input$1 = inputFactory(Input);
+var Input$1 = inputFactory(withWorker(Input));
 
 const onChange$1 = onChangeFactory("checked");
 const size = props => props.theme.factor * 20;
@@ -848,7 +977,7 @@ const RawCheckbox = props => {
 };
 var FurmlyCheckbox = inputFactory(RawCheckbox, true);
 
-var _extends$2 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _extends$4 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 const StyledCalendar = styled__default(Calendar).attrs({
   nextLabel: React__default.createElement(Icon$1, { icon: "angle-right" }),
@@ -953,7 +1082,7 @@ class DatePicker extends React__default.Component {
       valueString || isRange && "Please select valid dates in the range..." || "Please select a date"
     ), React__default.createElement(
       Portal$1,
-      _extends$2({
+      _extends$4({
         key: `portal-${this.props.name}`,
         isOpen: this.state.isOpen
       }, this.portalProps),
@@ -1175,7 +1304,7 @@ Select.propTypes = {
   ItemElement: PropTypes.element
 };
 
-var _extends$3 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _extends$5 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var withOutsideClickHandler = (WrappedComponent => {
   class clickHandler extends React__default.Component {
@@ -1207,7 +1336,7 @@ var withOutsideClickHandler = (WrappedComponent => {
       this.element = element;
     }
     render() {
-      return React__default.createElement(WrappedComponent, _extends$3({ innerRef: this.setWrapperRef }, this.props));
+      return React__default.createElement(WrappedComponent, _extends$5({ innerRef: this.setWrapperRef }, this.props));
     }
   }
   return hoistNonReactStatic(clickHandler, WrappedComponent);
@@ -1282,7 +1411,7 @@ ListItem.propTypes = {
   disabled: PropTypes.bool
 };
 
-var _this$1 = undefined;
+var _this = undefined;
 const BasicInfoLabel = styled__default.span`
   display: block;
 `;
@@ -1378,7 +1507,7 @@ const rowTemplates = {
       avatar: image,
       onClick: itemClicked,
       disabled: disabled,
-      rightActions: [React__default.createElement(IconButton, { icon: "trash", onClick: itemRemoved.bind(_this$1, index) })]
+      rightActions: [React__default.createElement(IconButton, { icon: "trash", onClick: itemRemoved.bind(_this, index) })]
     },
     React__default.createElement(BasicInfo, rowData)
   )
@@ -1943,7 +2072,7 @@ const getPager = (NextButton = NextButtonDefault, PrevButton = PrevButtonDefault
   };
 };
 
-var _extends$4 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _extends$6 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 const CommandsContainer = styled__default.div`
   position: absolute;
@@ -1951,7 +2080,7 @@ const CommandsContainer = styled__default.div`
   top: 0;
   color:${labelColor}
 `;
-const NewButton = props => React__default.createElement(IconButton, _extends$4({ label: "Add" }, props));
+const NewButton = props => React__default.createElement(IconButton, _extends$6({ label: "Add" }, props));
 const Commands = props => {
   return React__default.createElement(
     CommandsContainer,
@@ -1977,7 +2106,7 @@ Commands.propTypes = {
   openCommandMenu: PropTypes.func.isRequired
 };
 
-var _extends$5 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _extends$7 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 const ListTable = styled__default(Table)`
   margin-top: 10px;
@@ -2118,7 +2247,7 @@ class List$2 extends React.Component {
           this.renderItem(item, this.props.templateConfig)
         ))
       ),
-      React__default.createElement(Pager, _extends$5({}, this.state, {
+      React__default.createElement(Pager, _extends$7({}, this.state, {
         items: this.props.items,
         total: this.props.total,
         more: this.props.more,
@@ -2370,7 +2499,7 @@ InnerComponentWrapper.propTypes = {
   inner: PropTypes.element.isRequired
 };
 
-var _extends$6 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _extends$8 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 const DISPLAY = "DISPLAY";
 const AVATAR = "AVATAR";
 const THUMBNAIL = "THUMBNAIL";
@@ -2415,7 +2544,7 @@ var Image = (props => {
   return React__default.createElement(
     FormDiv,
     null,
-    React__default.createElement(StyledImage, _extends$6({}, props, { src: i }))
+    React__default.createElement(StyledImage, _extends$8({}, props, { src: i }))
   );
 });
 
@@ -2465,27 +2594,38 @@ var configure = ((config$$1 = { providerConfig: [] }) => {
 
   //create list.
   maps.addLISTRecipe([ListLayout, ListButton, ListImplementation, Modal, ErrorText, Indeterminate, container]);
+
   //create grid
   maps.addGRIDRecipe([GridLayout, List$2, Modal, GridHeader, Indeterminate, CommandsView, ResultView, container]);
 
+  //create section
   maps.addSECTIONRecipe([Layout$1, Header, container]);
 
+  //create actionview
   maps.addACTIONVIEWRecipe([Layout, Indeterminate, Filter, container]);
 
+  //create webview
   maps.addWEBVIEWRecipe([Webview, WebViewErrorText]);
 
+  //create htmlview
   maps.addHTMLVIEWRecipe([Iframe]);
 
+  //create process
   maps.addPROCESSRecipe([Indeterminate, TextView, new controlMap.Deferred("view")]);
 
+  //create provider
   maps.addPROVIDERRecipe([new controlMap.Deferred("process"), ...config$$1.providerConfig]);
 
+  //create image
   maps.addIMAGERecipe([Image]);
 
+  //create label
   maps.addLABELRecipe([CustomLabel]);
 
+  //create selectset
   maps.addSELECTSETRecipe([InnerComponentWrapper, Select$1, Indeterminate, container]);
 
+  //create chip_list
   maps.addRecipe("CHIP_LIST", [ListLayout, ListButton, ListImplementation$1, Modal, ErrorText, Indeterminate, container], maps.LIST);
 
   if (config$$1.extend && typeof config$$1.extend == "function") return config$$1.extend(maps, maps._defaultMap, controlMap.Deferred);
@@ -2499,6 +2639,7 @@ exports.IconButton = IconButton;
 exports.StyledIconButton = StyledIconButton;
 exports.FormContainer = FormDiv;
 exports.Icon = Icon$1;
+exports.WorkerProvider = WorkerProvider;
 exports.Modal = Modal;
 exports.Input = Input$1;
 exports.Checkbox = FurmlyCheckbox;

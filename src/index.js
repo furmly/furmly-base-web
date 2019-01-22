@@ -8,6 +8,7 @@ export {
   default as FormContainer
 } from "./components/common/components/FormDiv";
 export { default as Icon } from "./components/common/components/Icon";
+export { WorkerProvider } from "./components/common/components/withWorker";
 export { default as Modal } from "./components/common/components/Modal";
 export { default as Input } from "./components/Input/input";
 export { default as Checkbox } from "./components/Input/checkbox";

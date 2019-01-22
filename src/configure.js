@@ -32,7 +32,7 @@ import FurmlyInput, {
 import Image from "./components/Image";
 import Label from "./components/Label";
 
-export default (config = { providerConfig: [] }) => {
+export default (config = { providerConfig:[] }) => {
   const maps = controlMap();
   const container = new Deferred("container");
   //create component locator
@@ -69,6 +69,7 @@ export default (config = { providerConfig: [] }) => {
     ProgressBar,
     container
   ]);
+
   //create grid
   maps.addGRIDRecipe([
     GridLayout,
@@ -81,8 +82,10 @@ export default (config = { providerConfig: [] }) => {
     container
   ]);
 
+  //create section
   maps.addSECTIONRecipe([SectionLayout, SectionHeader, container]);
 
+  //create actionview
   maps.addACTIONVIEWRecipe([
     ActionViewLayout,
     ProgressBar,
@@ -90,20 +93,28 @@ export default (config = { providerConfig: [] }) => {
     container
   ]);
 
+  //create webview
   maps.addWEBVIEWRecipe([Webview, WebViewErrorText]);
 
+  //create htmlview
   maps.addHTMLVIEWRecipe([HTMLView]);
 
+  //create process
   maps.addPROCESSRecipe([ProgressBar, ProcessTextView, new Deferred("view")]);
 
+  //create provider
   maps.addPROVIDERRecipe([new Deferred("process"), ...config.providerConfig]);
 
+  //create image
   maps.addIMAGERecipe([Image]);
 
+  //create label
   maps.addLABELRecipe([Label]);
 
+  //create selectset
   maps.addSELECTSETRecipe([layoutWrapper, Select, ProgressBar, container]);
 
+  //create chip_list
   maps.addRecipe(
     "CHIP_LIST",
     [
