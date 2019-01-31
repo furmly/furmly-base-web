@@ -126,6 +126,8 @@ class Select extends React.PureComponent {
           break;
         }
       }
+    } else {
+      this.setState({ displayLabel: null });
     }
   }
   toggleMenu(cb) {
@@ -163,7 +165,6 @@ class Select extends React.PureComponent {
       disabled,
       displayProperty,
       valueChanged,
-      value,
       keyProperty,
       label,
       items,

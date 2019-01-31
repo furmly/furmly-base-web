@@ -125,31 +125,50 @@ class WorkerMode {
   }
   componentWillMount() {
     this.worker.addEventListener("message", this.onmessage);
-    this.postMessage("init", {
-      component: "input",
-      body: {
-        idleTimeout: 300
-      }
-    });
+    this.init();
   }
   componentWillUnmount() {
     this.postMessage("destroy");
     this.worker.removeEventListener("message", this.onmessage);
   }
   componentWillReceiveProps(next) {
+    this.postMessage("reset");
+    if (next.name == "description") {
+      debugger;
+      console.log("stop");
+    }
     if (next.worker !== this.element.props.worker) {
       this.worker = next.worker;
     }
-    if (next.value !== this.element.state.value) {
-      this.element.setState({ value: next.value || "" });
+    if (next.component_uid !== this.element.props.component_uid) {
+      return this.init(next);
     }
-    this.postMessage("reset");
+    if (next.value !== this.element.state.value) {
+      this.updateValue(next);
+    }
   }
-  postMessage(type, args) {
+  updateValue(props = this.element.props) {
+    this.element.setState({ value: props.value || "" });
+  }
+  init(props = this.element.props) {
+    this.postMessage(
+      "init",
+      {
+        component: "input",
+        body: {
+          idleTimeout: 300
+        }
+      },
+      props
+    );
+    this.updateValue(props);
+  }
+
+  postMessage(type, args, props = this.element.props) {
     this.worker.postMessage({
       type,
       ...args,
-      id: this.element.props.component_uid
+      id: props.component_uid
     });
   }
   onmessage({ data: e }) {
@@ -204,6 +223,7 @@ export class Input extends React.Component {
   componentWillReceiveProps(next) {
     this.mode.componentWillReceiveProps(next);
   }
+
   valueChanged(e) {
     this.mode.valueChanged(e);
   }

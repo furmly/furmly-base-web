@@ -796,31 +796,46 @@ class WorkerMode {
   }
   componentWillMount() {
     this.worker.addEventListener("message", this.onmessage);
-    this.postMessage("init", {
-      component: "input",
-      body: {
-        idleTimeout: 300
-      }
-    });
+    this.init();
   }
   componentWillUnmount() {
     this.postMessage("destroy");
     this.worker.removeEventListener("message", this.onmessage);
   }
   componentWillReceiveProps(next) {
+    this.postMessage("reset");
+    if (next.name == "description") {
+      debugger;
+      console.log("stop");
+    }
     if (next.worker !== this.element.props.worker) {
       this.worker = next.worker;
     }
-    if (next.value !== this.element.state.value) {
-      this.element.setState({ value: next.value || "" });
+    if (next.component_uid !== this.element.props.component_uid) {
+      return this.init(next);
     }
-    this.postMessage("reset");
+    if (next.value !== this.element.state.value) {
+      this.updateValue(next);
+    }
   }
-  postMessage(type, args) {
+  updateValue(props = this.element.props) {
+    this.element.setState({ value: props.value || "" });
+  }
+  init(props = this.element.props) {
+    this.postMessage("init", {
+      component: "input",
+      body: {
+        idleTimeout: 300
+      }
+    }, props);
+    this.updateValue(props);
+  }
+
+  postMessage(type, args, props = this.element.props) {
     this.worker.postMessage(_extends$3({
       type
     }, args, {
-      id: this.element.props.component_uid
+      id: props.component_uid
     }));
   }
   onmessage({ data: e }) {
@@ -874,6 +889,7 @@ class Input extends React__default.Component {
   componentWillReceiveProps(next) {
     this.mode.componentWillReceiveProps(next);
   }
+
   valueChanged(e) {
     this.mode.valueChanged(e);
   }
@@ -1218,6 +1234,8 @@ class Select extends React__default.PureComponent {
           break;
         }
       }
+    } else {
+      this.setState({ displayLabel: null });
     }
   }
   toggleMenu(cb) {
@@ -1252,7 +1270,6 @@ class Select extends React__default.PureComponent {
       disabled,
       displayProperty,
       valueChanged,
-      value,
       keyProperty,
       label,
       items,
@@ -2415,12 +2432,25 @@ Header.propTypes = {
   description: PropTypes.string
 };
 
+const Line$1 = styled__default.div`
+  position: absolute;
+  height: 0.8px;
+  width: 100%;
+  bottom: 0;
+  background-color: ${labelBackgroundColor};
+`;
+const Frame = styled__default.div`
+  position: relative;
+  width: 100%;
+  padding-bottom: ${containerPadding}px;
+`;
 const Layout$1 = props => {
   return React__default.createElement(
-    React__default.Fragment,
+    Frame,
     null,
     props.header,
-    props.content
+    props.content,
+    React__default.createElement(Line$1, null)
   );
 };
 
