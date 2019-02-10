@@ -25,6 +25,9 @@ const Row = styled.div`
 `;
 
 const TableRow = styled(Row)`
+  &:nth-child(even) {
+    background-color: ${highLightColor};
+  }
   &:hover {
     background-color: ${highLightColor};
     cursor: pointer;

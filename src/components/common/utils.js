@@ -3,7 +3,8 @@ import {
   lineHeight,
   accentColor,
   labelBackgroundColor,
-  labelColor
+  labelColor,
+  primaryButtonForegroundColor
 } from "./variables";
 
 export const INTENTS = {
@@ -13,7 +14,10 @@ export const INTENTS = {
 export const getColorFromIntent = name => {
   switch (name) {
     case INTENTS.ACCENT:
-      return { backgoundColor: accentColor, foregroundColor: labelColor };
+      return {
+        backgoundColor: accentColor,
+        foregroundColor: primaryButtonForegroundColor
+      };
     case INTENTS.DEFAULT:
       return {
         backgoundColor: labelBackgroundColor,
@@ -131,7 +135,6 @@ export const camelCaseToWord = string => {
     return str.toUpperCase();
   });
 };
-
 
 const createImageSize = (
   propName,

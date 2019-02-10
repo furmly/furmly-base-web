@@ -5,7 +5,7 @@ import FormDiv from "../common/components/FormDiv";
 const GridLayout = props => {
   const { list, itemView, commandsView, commandViewResult, filter } = props;
   const elements = [filter, list, itemView, commandsView, commandViewResult];
-  return <FormDiv>{elements}</FormDiv>;
+  return <React.Fragment>{elements}</React.Fragment>;
 };
 
 GridLayout.propTypes = {

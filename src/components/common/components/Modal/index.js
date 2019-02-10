@@ -9,7 +9,8 @@ import {
   largerBoxShadow,
   minimumModalHeight,
   minimumModalWidth,
-  modalBackgroundColor
+  modalBackgroundColor,
+  dividerColor
 } from "../../variables";
 import { INTENTS, media } from "../../utils";
 
@@ -24,8 +25,10 @@ const ModalContainer = styled.div`
   background-color: ${modalBackgroundColor};
   height: 100%;
   min-width: ${minimumModalWidth};
+  border-bottom: ${dividerColor} solid 1px;
   ${media.xSmall`
   min-width:100%;
+
 `};
 `;
 const Modal = props => {

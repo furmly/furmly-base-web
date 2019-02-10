@@ -35,6 +35,7 @@ const minimumInputHeight = props => props.large && props.theme.factor * 10 + 50 
 const containerPadding = props => props.theme.factor * 10;
 const minimumModalHeight = props => props.theme.minimumModalHeight || "40vh";
 const minimumModalWidth = props => props.theme.minimumModalWidth || "40vw";
+const dividerColor = props => props.theme.dividerColor || "black";
 const highLightColor = props => props.theme.highLightColor || "rgba(0,0,0,0.1)";
 const inputColor = props => props.theme.inputColor || "black";
 const inputBackgroundColor = props => props.theme.inputBackgroundColor || "rgba(53, 53, 53, 0.08)";
@@ -43,6 +44,7 @@ const iconSize = props => props.size || props.theme.factor * 10;
 const buttonDefaults = "display: block;  border: none;";
 const formComponentBackgroundColor = props => props.theme.formComponentBackgroundColor || "rgba(0,0,0,0.01)";
 const modalBackgroundColor = props => props.theme.modalBackgroundColor || "white";
+const primaryButtonForegroundColor = props => props.theme.primaryButtonForegroundColor || "black";
 const dropShadowColor = "rgba(0,0,0,0.18)";
 const boxShadow = `box-shadow:0px 0px 14px 0px ${dropShadowColor}`;
 const largerBoxShadow = `box-shadow:0px 5px 4px -1px ${dropShadowColor}`;
@@ -57,7 +59,10 @@ const INTENTS = {
 const getColorFromIntent = name => {
   switch (name) {
     case INTENTS.ACCENT:
-      return { backgoundColor: accentColor, foregroundColor: labelColor };
+      return {
+        backgoundColor: accentColor,
+        foregroundColor: primaryButtonForegroundColor
+      };
     case INTENTS.DEFAULT:
       return {
         backgoundColor: labelBackgroundColor,
@@ -152,6 +157,14 @@ const getSlice = (page, count) => {
     start,
     end
   };
+};
+
+const convertToString = obj => {
+  if (obj && typeof obj == "object") return Object.keys(obj).reduce((sum, x) => {
+    return sum += " " + x + " " + obj[x] + "\n";
+  }, "");
+
+  return obj;
 };
 const camelCaseToWord = string => {
   if (!string) return;
@@ -512,10 +525,6 @@ Portal.propTypes = {
 
 var Portal$1 = styled.withTheme(Portal);
 
-var _extends$2 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-function _objectWithoutProperties$1(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-
 const Wrapper = styled__default.div`
   display: flex;
   flex-direction: row;
@@ -538,23 +547,11 @@ const Circle = styled__default.circle`
   animation: ${loader} 2s linear infinite reverse,
     ${spin} 8s steps(4, start) infinite reverse;
 `;
-const Indeterminate = props => {
-  const { className } = props,
-        rest = _objectWithoutProperties$1(props, ["className"]);
-  return React__default.createElement(
-    Wrapper,
-    { className: className },
-    React__default.createElement(
-      Spinner,
-      _extends$2({ viewBox: "-200 -200 400 400" }, rest),
-      React__default.createElement(
-        G,
-        null,
-        React__default.createElement(Circle, { r: "160" })
-      )
-    )
-  );
-};
+const Blank = styled__default.div`
+  background-color: rbga(0.5, 0.5, 0.5, 0.2);
+  width: 100%;
+  height: 100%;
+`;
 
 function _objectWithoutProperties$2(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
@@ -626,8 +623,10 @@ const ModalContainer = styled__default.div`
   background-color: ${modalBackgroundColor};
   height: 100%;
   min-width: ${minimumModalWidth};
+  border-bottom: ${dividerColor} solid 1px;
   ${media.xSmall`
   min-width:100%;
+
 `};
 `;
 const Modal = props => {
@@ -663,7 +662,7 @@ const Modal = props => {
           null,
           props.title
         ),
-        props.busy && React__default.createElement(Indeterminate, null) || props.template || props.children
+        props.busy && React__default.createElement(Blank, null) || props.template || props.children
       )
     )
 
@@ -803,11 +802,6 @@ class WorkerMode {
     this.worker.removeEventListener("message", this.onmessage);
   }
   componentWillReceiveProps(next) {
-    this.postMessage("reset");
-    if (next.name == "description") {
-      debugger;
-      console.log("stop");
-    }
     if (next.worker !== this.element.props.worker) {
       this.worker = next.worker;
     }
@@ -817,6 +811,7 @@ class WorkerMode {
     if (next.value !== this.element.state.value) {
       this.updateValue(next);
     }
+    this.postMessage("reset");
   }
   updateValue(props = this.element.props) {
     this.element.setState({ value: props.value || "" });
@@ -1178,6 +1173,7 @@ const RevealButton$1 = styled__default.button`
   width: 100%;
   text-align: left;
   padding: ${inputPadding};
+  padding-right: 20px;
   &.show {
   }
   &.show:after {
@@ -1229,9 +1225,11 @@ class Select extends React__default.PureComponent {
     if (props.value && props.items) {
       const { keyProperty, displayProperty } = props;
       for (let i = 0; i < props.items.length; i++) {
-        if (props.items[i][keyProperty] == props.value) {
-          this.setState({ displayLabel: props.items[i][displayProperty] });
-          break;
+        for (let z = 0; z <= keyProperty.length - 1; z++) {
+          if (props.items[i][keyProperty[z]] == props.value) {
+            this.setState({ displayLabel: props.items[i][displayProperty] });
+            return;
+          }
         }
       }
     } else {
@@ -1262,6 +1260,13 @@ class Select extends React__default.PureComponent {
       showMenu: []
     });
   }
+  fetchKey(item) {
+    const { keyProperty } = this.props;
+    for (let i = 0; i <= keyProperty.length - 1; i++) {
+      if (item[keyProperty[i]]) return item[keyProperty[i]];
+    }
+    return item[keyProperty[0]];
+  }
   setRef(node) {
     this.ref = node;
   }
@@ -1270,7 +1275,6 @@ class Select extends React__default.PureComponent {
       disabled,
       displayProperty,
       valueChanged,
-      keyProperty,
       label,
       items,
       ItemElement
@@ -1295,15 +1299,18 @@ class Select extends React__default.PureComponent {
         React__default.createElement(
           MenuContainer,
           null,
-          (items || []).map(x => React__default.createElement(
-            MenuItem,
-            {
-              onClick: () => this.toggleMenu(valueChanged(x[keyProperty])),
-              key: x[keyProperty],
-              data: x
-            },
-            x[displayProperty]
-          ))
+          (items || []).map(x => {
+            const key = this.fetchKey(x);
+            return React__default.createElement(
+              MenuItem,
+              {
+                onClick: () => this.toggleMenu(valueChanged(key)),
+                key: key,
+                data: x
+              },
+              x[displayProperty]
+            );
+          })
         )
       )
     );
@@ -1315,7 +1322,7 @@ Select.propTypes = {
   displayProperty: PropTypes.string,
   valueChanged: PropTypes.func,
   value: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
-  keyProperty: PropTypes.string.isRequired,
+  keyProperty: PropTypes.array.isRequired,
   label: PropTypes.string,
   items: PropTypes.array.isRequired,
   ItemElement: PropTypes.element
@@ -1923,6 +1930,7 @@ const Title$1 = styled__default(SubTitle)`
 `;
 const Container$3 = styled__default.div`
   ${boxShadow};
+  border-bottom: rgba(0, 0, 0, 0.18) solid 1px
 `;
 const GridHeader = props => {
   if (!React__default.isValidElement(props.children)) return null;
@@ -1952,7 +1960,7 @@ const GridLayout = props => {
   const { list, itemView, commandsView, commandViewResult, filter } = props;
   const elements = [filter, list, itemView, commandsView, commandViewResult];
   return React__default.createElement(
-    FormDiv,
+    React__default.Fragment,
     null,
     elements
   );
@@ -1987,11 +1995,11 @@ const CommandsView = props => {
       done: props.close,
       actions: [{ content: "cancel", onClick: () => props.close(), accent: true }]
     },
-    props.commands.map(x => React__default.createElement(
+    props.commands && props.commands.map(x => React__default.createElement(
       Button$1,
       { key: x.commandText, onClick: () => props.execCommand(x) },
       x.commandText
-    ))
+    )) || null
   );
 };
 
@@ -2020,6 +2028,9 @@ const Row = styled__default.div`
 `;
 
 const TableRow = styled__default(Row)`
+  &:nth-child(even) {
+    background-color: ${highLightColor};
+  }
   &:hover {
     background-color: ${highLightColor};
     cursor: pointer;
@@ -2620,19 +2631,19 @@ var configure = ((config$$1 = { providerConfig: [] }) => {
   maps.addINPUTRecipe([InnerComponentWrapper, Input$1, FurmlyDatePicker, FurmlyCheckbox]);
 
   //create select.
-  maps.addSELECTRecipe([Indeterminate, InnerComponentWrapper, Select$1]);
+  maps.addSELECTRecipe([Blank, InnerComponentWrapper, Select$1]);
 
   //create list.
-  maps.addLISTRecipe([ListLayout, ListButton, ListImplementation, Modal, ErrorText, Indeterminate, container]);
+  maps.addLISTRecipe([ListLayout, ListButton, ListImplementation, Modal, ErrorText, Blank, container]);
 
   //create grid
-  maps.addGRIDRecipe([GridLayout, List$2, Modal, GridHeader, Indeterminate, CommandsView, ResultView, container]);
+  maps.addGRIDRecipe([GridLayout, List$2, Modal, GridHeader, Blank, CommandsView, ResultView, container]);
 
   //create section
   maps.addSECTIONRecipe([Layout$1, Header, container]);
 
   //create actionview
-  maps.addACTIONVIEWRecipe([Layout, Indeterminate, Filter, container]);
+  maps.addACTIONVIEWRecipe([Layout, Blank, Filter, container]);
 
   //create webview
   maps.addWEBVIEWRecipe([Webview, WebViewErrorText]);
@@ -2641,7 +2652,7 @@ var configure = ((config$$1 = { providerConfig: [] }) => {
   maps.addHTMLVIEWRecipe([Iframe]);
 
   //create process
-  maps.addPROCESSRecipe([Indeterminate, TextView, new controlMap.Deferred("view")]);
+  maps.addPROCESSRecipe([Blank, TextView, new controlMap.Deferred("view")]);
 
   //create provider
   maps.addPROVIDERRecipe([new controlMap.Deferred("process"), ...config$$1.providerConfig]);
@@ -2653,10 +2664,10 @@ var configure = ((config$$1 = { providerConfig: [] }) => {
   maps.addLABELRecipe([CustomLabel]);
 
   //create selectset
-  maps.addSELECTSETRecipe([InnerComponentWrapper, Select$1, Indeterminate, container]);
+  maps.addSELECTSETRecipe([InnerComponentWrapper, Select$1, Blank, container]);
 
   //create chip_list
-  maps.addRecipe("CHIP_LIST", [ListLayout, ListButton, ListImplementation$1, Modal, ErrorText, Indeterminate, container], maps.LIST);
+  maps.addRecipe("CHIP_LIST", [ListLayout, ListButton, ListImplementation$1, Modal, ErrorText, Blank, container], maps.LIST);
 
   if (config$$1.extend && typeof config$$1.extend == "function") return config$$1.extend(maps, maps._defaultMap, controlMap.Deferred);
 
@@ -2677,7 +2688,7 @@ exports.DatePicker = FurmlyDatePicker;
 exports.Select = Select$1;
 exports.List = ListImplementation;
 exports.Label = Label;
-exports.BusyIndicator = Indeterminate;
+exports.BusyIndicator = Blank;
 exports.Container = Container$2;
 exports.TwoColumn = TwoColumn;
 exports.ThreeColumn = ThreeColumn;

@@ -25,11 +25,13 @@ const CommandsView = props => {
         { content: "cancel", onClick: () => props.close(), accent: true }
       ]}
     >
-      {props.commands.map(x => (
-        <Button key={x.commandText} onClick={() => props.execCommand(x)}>
-          {x.commandText}
-        </Button>
-      ))}
+      {(props.commands &&
+        props.commands.map(x => (
+          <Button key={x.commandText} onClick={() => props.execCommand(x)}>
+            {x.commandText}
+          </Button>
+        ))) ||
+        null}
     </Modal>
   );
 };

@@ -23,6 +23,7 @@ export const minimumModalHeight = props =>
   props.theme.minimumModalHeight || "40vh";
 export const minimumModalWidth = props =>
   props.theme.minimumModalWidth || "40vw";
+export const dividerColor = props => props.theme.dividerColor || "black";
 export const highLightColor = props =>
   props.theme.highLightColor || "rgba(0,0,0,0.1)";
 export const inputColor = props => props.theme.inputColor || "black";
@@ -36,6 +37,8 @@ export const formComponentBackgroundColor = props =>
   props.theme.formComponentBackgroundColor || "rgba(0,0,0,0.01)";
 export const modalBackgroundColor = props =>
   props.theme.modalBackgroundColor || "white";
+export const primaryButtonForegroundColor = props =>
+  props.theme.primaryButtonForegroundColor || "black";
 const dropShadowColor = "rgba(0,0,0,0.18)";
 export const boxShadow = `box-shadow:0px 0px 14px 0px ${dropShadowColor}`;
 export const largerBoxShadow = `box-shadow:0px 5px 4px -1px ${dropShadowColor}`;

@@ -16,6 +16,7 @@ const Title = styled(SubTitle)`
 `;
 const Container = styled.div`
   ${boxShadow};
+  border-bottom: rgba(0, 0, 0, 0.18) solid 1px
 `;
 const GridHeader = props => {
   if (!React.isValidElement(props.children)) return null;

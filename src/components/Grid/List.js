@@ -7,7 +7,7 @@ import {
   TableRow
 } from "../common/components/Table";
 import { smallestText, minimumInputHeight } from "../common/variables";
-import { getSlice } from "../common/utils";
+import { getSlice, convertToString } from "../common/utils";
 import getPager from "../common/components/Pager";
 import { RawCheckbox as Checkbox } from "../Input/checkbox";
 import Commands from "./Commands";

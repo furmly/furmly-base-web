@@ -37,5 +37,10 @@ const Indeterminate = props => {
     </Wrapper>
   );
 };
+const Blank = styled.div`
+  background-color: rbga(0.5, 0.5, 0.5, 0.2);
+  width: 100%;
+  height: 100%;
+`;
 
-export default Indeterminate;
+export default Blank;

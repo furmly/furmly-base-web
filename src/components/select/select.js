@@ -70,6 +70,7 @@ const RevealButton = styled.button`
   width: 100%;
   text-align: left;
   padding: ${inputPadding};
+  padding-right: 20px;
   &.show {
   }
   &.show:after {
@@ -121,9 +122,11 @@ class Select extends React.PureComponent {
     if (props.value && props.items) {
       const { keyProperty, displayProperty } = props;
       for (let i = 0; i < props.items.length; i++) {
-        if (props.items[i][keyProperty] == props.value) {
-          this.setState({ displayLabel: props.items[i][displayProperty] });
-          break;
+        for (let z = 0; z <= keyProperty.length - 1; z++) {
+          if (props.items[i][keyProperty[z]] == props.value) {
+            this.setState({ displayLabel: props.items[i][displayProperty] });
+            return;
+          }
         }
       }
     } else {
@@ -157,6 +160,13 @@ class Select extends React.PureComponent {
         showMenu: []
       });
   }
+  fetchKey(item) {
+    const { keyProperty } = this.props;
+    for (let i = 0; i <= keyProperty.length - 1; i++) {
+      if (item[keyProperty[i]]) return item[keyProperty[i]];
+    }
+    return item[keyProperty[0]];
+  }
   setRef(node) {
     this.ref = node;
   }
@@ -165,7 +175,6 @@ class Select extends React.PureComponent {
       disabled,
       displayProperty,
       valueChanged,
-      keyProperty,
       label,
       items,
       ItemElement
@@ -183,15 +192,18 @@ class Select extends React.PureComponent {
         </RevealButton>
         <Menu className={showMenu}>
           <MenuContainer>
-            {(items || []).map(x => (
-              <MenuItem
-                onClick={() => this.toggleMenu(valueChanged(x[keyProperty]))}
-                key={x[keyProperty]}
-                data={x}
-              >
-                {x[displayProperty]}
-              </MenuItem>
-            ))}
+            {(items || []).map(x => {
+              const key = this.fetchKey(x);
+              return (
+                <MenuItem
+                  onClick={() => this.toggleMenu(valueChanged(key))}
+                  key={key}
+                  data={x}
+                >
+                  {x[displayProperty]}
+                </MenuItem>
+              );
+            })}
           </MenuContainer>
         </Menu>
       </Container>
@@ -204,7 +216,7 @@ Select.propTypes = {
   displayProperty: PropTypes.string,
   valueChanged: PropTypes.func,
   value: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
-  keyProperty: PropTypes.string.isRequired,
+  keyProperty: PropTypes.array.isRequired,
   label: PropTypes.string,
   items: PropTypes.array.isRequired,
   ItemElement: PropTypes.element

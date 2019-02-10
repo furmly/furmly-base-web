@@ -132,11 +132,6 @@ class WorkerMode {
     this.worker.removeEventListener("message", this.onmessage);
   }
   componentWillReceiveProps(next) {
-    this.postMessage("reset");
-    if (next.name == "description") {
-      debugger;
-      console.log("stop");
-    }
     if (next.worker !== this.element.props.worker) {
       this.worker = next.worker;
     }
@@ -146,6 +141,7 @@ class WorkerMode {
     if (next.value !== this.element.state.value) {
       this.updateValue(next);
     }
+    this.postMessage("reset");
   }
   updateValue(props = this.element.props) {
     this.element.setState({ value: props.value || "" });
