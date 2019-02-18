@@ -16,7 +16,7 @@ const List = styled.div`
 const ListImplementation = props => {
   const {
     rowTemplate: { config: { exp } } = {
-      config: { exp: "You forgot to set row expression" }
+      config: { exp: "{name}{title}{description}{displayLabel}{_id_display}" }
     },
     disabled,
     rowClicked,
@@ -24,8 +24,7 @@ const ListImplementation = props => {
   } = props;
   let elements = props.items
     ? props.items.map((x, index) => {
-        let rowData = Object.assign({}, x);
-
+        const rowData = x;
         return (
           <Chip
             key={index}

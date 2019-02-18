@@ -14,7 +14,7 @@ import { hover } from "../common/animations";
 import FormDiv from "../common/components/FormDiv";
 import FormLabel from "../common/components/Label";
 import ErrorText from "../common/components/ErrorText";
-import Copy from "../common/components/Copy";
+// import Copy from "../common/components/Copy";
 import { media } from "../common/utils";
 import Icon from "../common/components/Icon";
 import withWorker from "../common/components/withWorker";
@@ -221,7 +221,8 @@ export class Input extends React.Component {
   }
 
   valueChanged(e) {
-    this.mode.valueChanged(e);
+    const v = this.props.type == "number" ? parseInt(e || "0") : e;
+    this.mode.valueChanged(v);
   }
   render() {
     const { type } = this.props;

@@ -5,11 +5,7 @@ import PropTypes from "prop-types";
 import ListItem from "./ListItem";
 import { IconButton } from "../common/components/Button";
 import { camelCaseToWord } from "../common/utils";
-import {
-  inputColor,
-  formLineWidth,
-  labelBackgroundColor
-} from "../common/variables";
+import { formLineWidth, labelBackgroundColor } from "../common/variables";
 const BasicInfoLabel = styled.span`
   display: block;
 `;
@@ -73,7 +69,15 @@ export const rowTemplates = {
   ),
   expression: (
     rowData,
-    { itemClicked, itemRemoved, dataTemplate, index, disabled }
+    {
+      itemClicked,
+      itemRemoved,
+      dataTemplate = {
+        exp: "{name}{title}{description}{displayLabel}{_id_display}"
+      },
+      index,
+      disabled
+    }
   ) => (
     <ListItem
       key={index}
@@ -110,7 +114,7 @@ const ListImplementation = props => {
     elements = props.items
       ? props.items.reduce((sum, x, index) => {
           if (index > 0) sum.push(<ListDivider key={index + "_divider"} />);
-          let rowData = Object.assign({}, x);
+          const rowData = x;
           return (
             sum.push(
               rowTemplate(rowData, {

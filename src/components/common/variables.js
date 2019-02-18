@@ -5,6 +5,9 @@ export const smallestText = props => props.theme.factor * 12;
 export const bodyText = props => props.theme.factor * 16;
 export const titleText = props => props.theme.factor * 18;
 export const labelBackgroundColor = props => props.theme.labelBackgroundColor;
+export const secondaryBackgroundColor = props =>
+  props.theme.secondaryBackgroundColor || "black";
+export const secondaryColor = props => props.theme.secondaryColor || "white";
 export const accentColor = props => props.theme.accentColor || "#783196";
 export const labelColor = props => props.theme.labelColor;
 export const errorColor = props => props.theme.errorColor || "red";

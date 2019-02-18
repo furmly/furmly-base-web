@@ -1,7 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { labelBackgroundColor, labelColor, iconDropShadow } from "../variables";
+import {
+  secondaryBackgroundColor,
+  secondaryColor,
+  iconDropShadow
+} from "../variables";
 import { IconButton } from "./Button";
 
 const Wrapper = styled.div`
@@ -15,9 +19,9 @@ const Wrapper = styled.div`
   }
 `;
 const Container = styled.div`
-  background-color: ${labelBackgroundColor};
-  // border-radius: 16px;
-  color: ${labelColor};
+  background-color: ${secondaryBackgroundColor};
+  border-radius: 16px;
+  color: ${secondaryColor};
   display: flex;
   flex-direction: row;
   padding: 8px;
@@ -37,7 +41,10 @@ const ButtonContainer = styled.div`
   display: flex;
   justify-content: flex-end;
   & > button {
-    //border-radius: 16px;
+    svg {
+      fill: ${secondaryColor};
+    }
+    border-radius: 16px;
   }
   & > button:hover svg {
     fill: red;

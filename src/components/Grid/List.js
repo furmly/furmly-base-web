@@ -52,6 +52,7 @@ class List extends Component {
   }
   componentDidMount() {
     this._mounted = true;
+    if (!this.props.items && this.props.autoFetch) this.props.more();
   }
   componentWillUnmount() {
     this._mounted = false;
@@ -178,24 +179,21 @@ class List extends Component {
         </React.Fragment>
       ) : (
         (this.props.items && (
-          <NotFoundText styleName={"list-text"}>
-            We couldnt find anything.
-          </NotFoundText>
+          <ListTable>
+            <Commands
+              canShowCommands={this.hasSelectedProps}
+              canAddOrEdit={this.props.canAddOrEdit}
+              openCommandMenu={this.props.openCommandMenu}
+              showItemView={this.props.showItemView}
+              commands={commands}
+            />
+            <NotFoundText styleName={"list-text"}>
+              We couldnt find anything.
+            </NotFoundText>
+          </ListTable>
         )) ||
         null
       );
-    if (!table && !this.props.items) {
-      setTimeout(() => {
-        if (this._mounted && this.props.autoFetch) this.props.more();
-      }, 0);
-
-      return (
-        <Wrapper>
-          {renderHeader(this.props)}
-          {renderFooter(this.props)}
-        </Wrapper>
-      );
-    }
 
     return (
       <Wrapper>

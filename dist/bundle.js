@@ -23,6 +23,8 @@ const smallestText = props => props.theme.factor * 12;
 const bodyText = props => props.theme.factor * 16;
 const titleText = props => props.theme.factor * 18;
 const labelBackgroundColor = props => props.theme.labelBackgroundColor;
+const secondaryBackgroundColor = props => props.theme.secondaryBackgroundColor || "black";
+const secondaryColor = props => props.theme.secondaryColor || "white";
 const accentColor = props => props.theme.accentColor || "#783196";
 const labelColor = props => props.theme.labelColor;
 const errorColor = props => props.theme.errorColor || "red";
@@ -432,12 +434,14 @@ var Overlay = styled__default.div.attrs({
   transition: opacity 0.5s, left 0s 0.5s;
   & > div {
     opacity: 0;
+    display:none;
   }
   &.show,
   &.show > div {
     opacity: 1;
     left: 0;
     transition: opacity 0.5s;
+    display:flex;
   }
   & > * {
     max-width: 50vw;
@@ -686,12 +690,6 @@ var ErrorText = styled__default.p`
   display: block;
 `;
 
-var Copy = styled__default.span`
-  color: ${props => props.theme.copyColor || "gray"};
-  font-size: ${smallestText}px;
-  display: block;
-`;
-
 var _extends$3 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 const ToolTipText = styled__default.span`
@@ -886,7 +884,8 @@ class Input extends React__default.Component {
   }
 
   valueChanged(e) {
-    this.mode.valueChanged(e);
+    const v = this.props.type == "number" ? parseInt(e || "0") : e;
+    this.mode.valueChanged(v);
   }
   render() {
     const { type } = this.props;
@@ -1495,7 +1494,15 @@ const rowTemplates = {
       index: index
     })
   ),
-  expression: (rowData, { itemClicked, itemRemoved, dataTemplate, index, disabled }) => React__default.createElement(
+  expression: (rowData, {
+    itemClicked,
+    itemRemoved,
+    dataTemplate = {
+      exp: "{name}{title}{description}{displayLabel}{_id_display}"
+    },
+    index,
+    disabled
+  }) => React__default.createElement(
     ListItem,
     {
       key: index,
@@ -1541,7 +1548,7 @@ const ListImplementation = props => {
   let rowTemplate = rowTemplates[props.rowTemplate && props.rowTemplate.name || "basic"],
       elements = props.items ? props.items.reduce((sum, x, index) => {
     if (index > 0) sum.push(React__default.createElement(ListDivider, { key: index + "_divider" }));
-    let rowData = Object.assign({}, x);
+    const rowData = x;
     return sum.push(rowTemplate(rowData, {
       withoutLabel: false,
       index,
@@ -1568,6 +1575,12 @@ ListImplementation.propTypes = {
   disabled: PropTypes.bool,
   rowRemoved: PropTypes.func.isRequired
 };
+
+var Copy = styled__default.span`
+  color: ${props => props.theme.copyColor || "gray"};
+  font-size: ${smallestText}px;
+  display: block;
+`;
 
 const StyledFormDiv = styled__default.div`
   margin: ${containerPadding}px;
@@ -1713,14 +1726,14 @@ const Wrapper$2 = styled__default.div`
   }
 `;
 const Container$1 = styled__default.div`
-  background-color: ${labelBackgroundColor};
-  // border-radius: 16px;
-  color: ${labelColor};
+  background-color: ${secondaryBackgroundColor};
+  border-radius: 16px;
+  color: ${secondaryColor};
   display: flex;
   flex-direction: row;
   padding: 8px;
 `;
-const Text = styled__default.span`
+const Text$1 = styled__default.span`
   flex: 1;
   display: display;
   min-width: 50px;
@@ -1735,7 +1748,10 @@ const ButtonContainer = styled__default.div`
   display: flex;
   justify-content: flex-end;
   & > button {
-    //border-radius: 16px;
+    svg {
+      fill: ${secondaryColor};
+    }
+    border-radius: 16px;
   }
   & > button:hover svg {
     fill: red;
@@ -1751,7 +1767,7 @@ const Chip = props => {
       Container$1,
       null,
       React__default.createElement(
-        Text,
+        Text$1,
         null,
         props.text
       ),
@@ -1786,15 +1802,14 @@ const List$1 = styled__default.div`
 const ListImplementation$1 = props => {
   const {
     rowTemplate: { config: { exp } } = {
-      config: { exp: "You forgot to set row expression" }
+      config: { exp: "{name}{title}{description}{displayLabel}{_id_display}" }
     },
     disabled,
     rowClicked,
     rowRemoved
   } = props;
   let elements = props.items ? props.items.map((x, index) => {
-    let rowData = Object.assign({}, x);
-
+    const rowData = x;
     return React__default.createElement(Chip, {
       key: index,
       onClick: !disabled ? e => rowClicked(index) : undefined,
@@ -2175,6 +2190,7 @@ class List$2 extends React.Component {
   }
   componentDidMount() {
     this._mounted = true;
+    if (!this.props.items && this.props.autoFetch) this.props.more();
   }
   componentWillUnmount() {
     this._mounted = false;
@@ -2282,22 +2298,21 @@ class List$2 extends React.Component {
         setCurrentItems: this.setCurrentItems
       }))
     ) : this.props.items && React__default.createElement(
-      NotFoundText,
-      { styleName: "list-text" },
-      "We couldnt find anything."
+      ListTable,
+      null,
+      React__default.createElement(Commands, {
+        canShowCommands: this.hasSelectedProps,
+        canAddOrEdit: this.props.canAddOrEdit,
+        openCommandMenu: this.props.openCommandMenu,
+        showItemView: this.props.showItemView,
+        commands: commands
+      }),
+      React__default.createElement(
+        NotFoundText,
+        { styleName: "list-text" },
+        "We couldnt find anything."
+      )
     ) || null;
-    if (!table && !this.props.items) {
-      setTimeout(() => {
-        if (this._mounted && this.props.autoFetch) this.props.more();
-      }, 0);
-
-      return React__default.createElement(
-        Wrapper$3,
-        null,
-        renderHeader(this.props),
-        renderFooter(this.props)
-      );
-    }
 
     return React__default.createElement(
       Wrapper$3,
@@ -2470,10 +2485,10 @@ Layout$1.propTypes = {
   header: PropTypes.element
 };
 
-const Text$1 = styled__default.p``;
+const Text$2 = styled__default.p``;
 const TextView = props => {
   return React__default.createElement(
-    Text$1,
+    Text$2,
     null,
     props.text
   );
@@ -2505,7 +2520,7 @@ const View = props => {
     props.children,
     React__default.createElement(
       ButtonContainer$1,
-      null,
+      { className: "button-container" },
       React__default.createElement(
         Button,
         { onClick: props.submit },
@@ -2616,6 +2631,211 @@ CustomLabel.propTypes = {
   description: PropTypes.string.isRequired
 };
 
+var _extends$9 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+// More info on all the options is below in the README...just some common use cases shown here
+const convertToBrowserFilter = function (filter) {
+  if (filter) return filter.split("|").map(x => `.${x}`).join(",");
+  return filter;
+};
+
+const isAdvancedUpload = function () {
+  var div = document.createElement("div");
+  return ("draggable" in div || "ondragstart" in div && "ondrop" in div) && "FormData" in window && "FileReader" in window;
+}();
+
+const imageTypes = /(png|jpeg|jpg)/i,
+      xlsxTypes = /xlsx|xlx/i;
+
+const UploadContainer = styled__default.div`
+  border: 1px dashed ${labelBackgroundColor};
+  height: ${minimumInputHeight}px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: ${inputPadding};
+`;
+
+const Input$2 = styled__default.input`
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+`;
+const UploadPreviewContainer = styled__default.div`
+  display: flex;
+  background-color: ${dropDownMenuColor};
+  ${boxShadow};
+`;
+const UploadButton = styled__default(IconButton).attrs({
+  icon: "file-upload"
+})`
+  // align-self: flex-start;
+  position: relative;
+`;
+const ClosePreviewButton = styled__default(IconButton).attrs({ icon: "close" })`
+  align-self: flex-end;
+`;
+const StyledImagePreview = styled__default.img``;
+
+class FileUpload extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showPreview: false
+    };
+    this.dropped = this.dropped.bind(this);
+    this.openFileSelector = this.openFileSelector.bind(this);
+    this.togglePreview = this.togglePreview.bind(this);
+  }
+  static supports(fileType) {
+    return !!FileUpload.getPreview(fileType);
+  }
+  static getPreview(fileType) {
+    for (var i = 0; i < Previews.length; i++) {
+      if (Previews[i].id.test(fileType)) return Previews[i];
+    }
+  }
+  static getPreviewQuery(fileType) {
+    let preview = FileUpload.getPreview(fileType);
+    return preview ? preview.query : "";
+  }
+  openFileSelector(e) {
+    if (e && e.target && e.target.files && e.target.files.length) {
+      this.props.upload(e.target.files[0]);
+    }
+  }
+  togglePreview() {
+    this.setState({ showPreview: !this.state.showPreview });
+  }
+  dropped(e) {
+    e.preventDefault();
+    this.props.upload(e.dataTransfer.files[0]);
+  }
+  render() {
+    let Preview = this.props.previewType,
+        preview;
+    if (this.props.preview) {
+      preview = React__default.createElement(Preview, { data: this.props.preview });
+    }
+    return React__default.createElement(
+      UploadContainer,
+      { onDrop: this.dropped },
+      React__default.createElement(UploadButton, { disabled: !!this.props.disabled, icon: "file-upload" }),
+      React__default.createElement(
+        "b",
+        null,
+        this.props.title
+      ),
+      isAdvancedUpload && React__default.createElement(
+        "small",
+        null,
+        "\xA0\xA0\xA0",
+        "Drag and drop or select files"
+      ),
+      React__default.createElement(Input$2, {
+        onChange: this.openFileSelector,
+        accept: convertToBrowserFilter(this.props.allowed),
+        type: "file",
+        id: this.props.component_uid,
+        key: this.props.component_uid,
+        disabled: !!this.props.disabled
+      }),
+      React__default.createElement(IconButton, { onClick: this.togglePreview, icon: "eye" }),
+      React__default.createElement(
+        Overlay,
+        { isOpen: this.state.showPreview },
+        React__default.createElement(ClosePreviewButton, { onClick: this.togglePreview }),
+        React__default.createElement(
+          UploadPreviewContainer,
+          null,
+          preview
+        )
+      )
+    );
+  }
+}
+
+FileUpload.propTypes = {
+  component_uid: PropTypes.string.isRequired,
+  disabled: PropTypes.bool,
+  title: PropTypes.string,
+  preview: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  allowed: PropTypes.string,
+  previewType: PropTypes.any,
+  upload: PropTypes.func.isRequired
+};
+
+const ImagePreview = props => React__default.createElement(StyledImagePreview, { src: props.data.uri });
+ImagePreview.propTypes = {
+  data: PropTypes.object.isRequired
+};
+ImagePreview.id = imageTypes;
+ImagePreview.query = "?format=base64";
+
+const XlsxPager = getPager(); // generate pager with default components.
+class XlsxPreview extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { count: 5, page: 1 };
+    this.setCurrentItems = this.setCurrentItems.bind(this);
+  }
+  setCurrentItems(page) {
+    this.setState({ page });
+  }
+  render() {
+    const headers = this.props.data.length ? Object.keys(this.props.data[0]).map((x, index) => React__default.createElement(
+      TableCell,
+      { key: "_head" + index },
+      x
+    )) : [];
+    const { start, end } = getSlice(this.state.page, this.state.count);
+    const items = this.props.data && this.props.data.slice(start, end) || [];
+    return [React__default.createElement(
+      Table,
+      null,
+      React__default.createElement(
+        TableHead,
+        null,
+        headers
+      ),
+      items.map((item, idx) => React__default.createElement(
+        TableRow,
+        { key: idx },
+        Object.keys(item).map((x, ind) => React__default.createElement(
+          TableCell,
+          { key: x + ind },
+          convertToString(item[x])
+        ))
+      ))
+    ), React__default.createElement(XlsxPager, _extends$9({}, this.state, {
+      items: this.props.data,
+      total: this.props.data.length,
+      setCurrentItems: this.setCurrentItems
+    }))];
+  }
+}
+XlsxPreview.id = xlsxTypes;
+XlsxPreview.propTypes = {
+  data: PropTypes.array
+};
+
+const Previews = [ImagePreview, XlsxPreview];
+const UnsupportedText = props => {
+  return React__default.createElement(
+    Text,
+    null,
+    props.message
+  );
+};
+UnsupportedText.propTypes = {
+  message: PropTypes.string.isRequired
+};
+
 var configure = ((config$$1 = { providerConfig: [] }) => {
   const maps = controlMap__default();
   const container = new controlMap.Deferred("container");
@@ -2662,6 +2882,9 @@ var configure = ((config$$1 = { providerConfig: [] }) => {
 
   //create label
   maps.addLABELRecipe([CustomLabel]);
+
+  //create fileupload
+  maps.addFILEUPLOADRecipe([FileUpload, Blank, props => props.children, [XlsxPreview, ImagePreview]]);
 
   //create selectset
   maps.addSELECTSETRecipe([InnerComponentWrapper, Select$1, Blank, container]);

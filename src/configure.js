@@ -31,8 +31,12 @@ import FurmlyInput, {
 } from "./components/Input";
 import Image from "./components/Image";
 import Label from "./components/Label";
+import FileUpload, {
+  XlsxPreview,
+  ImagePreview
+} from "./components/file_upload/file_upload";
 
-export default (config = { providerConfig:[] }) => {
+export default (config = { providerConfig: [] }) => {
   const maps = controlMap();
   const container = new Deferred("container");
   //create component locator
@@ -110,6 +114,14 @@ export default (config = { providerConfig:[] }) => {
 
   //create label
   maps.addLABELRecipe([Label]);
+
+  //create fileupload
+  maps.addFILEUPLOADRecipe([
+    FileUpload,
+    ProgressBar,
+    props => props.children,
+    [XlsxPreview, ImagePreview]
+  ]);
 
   //create selectset
   maps.addSELECTSETRecipe([layoutWrapper, Select, ProgressBar, container]);

@@ -22,7 +22,7 @@ const View = props => {
   return (
     <Container className={`view with-button ${uid} ${className}`}>
       {props.children}
-      <ButtonContainer>
+      <ButtonContainer className={"button-container"}>
         <Button onClick={props.submit}>{props.commandLabel}</Button>
       </ButtonContainer>
     </Container>

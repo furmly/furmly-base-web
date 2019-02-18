@@ -12,12 +12,14 @@ import {
 } from "../common/variables";
 
 import { IconButton } from "../common/components/Button/Button";
+
 import {
   Table,
   TableCell,
   TableHead,
   TableRow
 } from "../common/components/Table";
+import Overlay from "../common/components/Overlay";
 
 // More info on all the options is below in the README...just some common use cases shown here
 const convertToBrowserFilter = function(filter) {
@@ -47,6 +49,7 @@ const UploadContainer = styled.div`
   position: relative;
   display: flex;
   align-items: center;
+  justify-content: center;
   padding: ${inputPadding};
 `;
 
@@ -60,35 +63,30 @@ const Input = styled.input`
   cursor: pointer;
 `;
 const UploadPreviewContainer = styled.div`
-  display: inline-block;
-  background-color: red;
-  & > :first-child {
-    visibility: hidden;
-    position: absolute;
-    top: calc(100% + 2px);
-    left: 0px;
-    width: 100%;
-    background-color: ${dropDownMenuColor};
-    ${boxShadow};
-  }
-  ${Input}:hover + & > :first-child,
-  & > :first-child:hover {
-    visibility: visible;
-  }
+  display: flex;
+  background-color: ${dropDownMenuColor};
+  ${boxShadow};
 `;
 const UploadButton = styled(IconButton).attrs({
   icon: "file-upload"
 })`
-  align-self: flex-start;
+  // align-self: flex-start;
   position: relative;
+`;
+const ClosePreviewButton = styled(IconButton).attrs({ icon: "close" })`
+  align-self: flex-end;
 `;
 const StyledImagePreview = styled.img``;
 
 export class FileUpload extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      showPreview: false
+    };
     this.dropped = this.dropped.bind(this);
     this.openFileSelector = this.openFileSelector.bind(this);
+    this.togglePreview = this.togglePreview.bind(this);
   }
   static supports(fileType) {
     return !!FileUpload.getPreview(fileType);
@@ -106,6 +104,9 @@ export class FileUpload extends Component {
     if (e && e.target && e.target.files && e.target.files.length) {
       this.props.upload(e.target.files[0]);
     }
+  }
+  togglePreview() {
+    this.setState({ showPreview: !this.state.showPreview });
   }
   dropped(e) {
     e.preventDefault();
@@ -136,9 +137,14 @@ export class FileUpload extends Component {
           key={this.props.component_uid}
           disabled={!!this.props.disabled}
         />
-        <UploadPreviewContainer>
+        <IconButton onClick={this.togglePreview} icon={"eye"} />
+        <Overlay isOpen={this.state.showPreview}>
+          <ClosePreviewButton onClick={this.togglePreview} />
+          <UploadPreviewContainer>{preview}</UploadPreviewContainer>
+        </Overlay>
+        {/* <UploadPreviewContainer>
           <div>{preview}</div>
-        </UploadPreviewContainer>
+        </UploadPreviewContainer> */}
       </UploadContainer>
     );
   }
