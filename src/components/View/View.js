@@ -1,8 +1,10 @@
 import React from "react";
 import styled from "styled-components";
+import { Spring, animated } from "react-spring/renderprops";
 import Button from "../common/components/Button";
 import { containerPadding } from "../common/variables";
-const Container = styled.div``;
+
+const Container = styled(animated.div)``;
 const ButtonContainer = styled.div`
   display: flex;
   align-items: center;
@@ -13,19 +15,25 @@ const ButtonContainer = styled.div`
 const View = props => {
   const uid = props.uid || "";
   const className = props.className || "";
-  if (props.hideSubmit)
-    return (
-      <Container className={`view ${uid} ${className}`}>
-        {props.children}
-      </Container>
-    );
   return (
-    <Container className={`view with-button ${uid} ${className}`}>
-      {props.children}
-      <ButtonContainer className={"button-container"}>
-        <Button onClick={props.submit}>{props.commandLabel}</Button>
-      </ButtonContainer>
-    </Container>
+    <Spring from={{ opacity: 0 }} to={{ opacity: 1 }}>
+      {style => (
+        <Container
+          style={style}
+          className={`view ${
+            props.hideSubmit ? "" : "with-button"
+          } ${uid} ${className}`}
+        >
+          {props.children}
+          {(!props.hideSubmit && (
+            <ButtonContainer className={"button-container"}>
+              <Button onClick={props.submit}>{props.commandLabel}</Button>
+            </ButtonContainer>
+          )) ||
+            null}
+        </Container>
+      )}
+    </Spring>
   );
 };
 export default View;

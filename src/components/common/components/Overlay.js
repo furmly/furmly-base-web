@@ -1,10 +1,11 @@
+import React from "react";
 import styled from "styled-components";
-export default styled.div.attrs({
-  className: props => (props.isOpen ? "show" : "")
-})`
+import { Spring, animated } from "react-spring/renderprops";
+
+const AnimatedOverlay = styled(animated.div)`
+  z-index: 1;
   width: 100%;
   height: 100%;
-  left: -100vw;
   top: 0;
   position: fixed;
   background-color: rgba(0, 0, 0, 0.49);
@@ -13,18 +14,25 @@ export default styled.div.attrs({
   justify-content: center;
   align-items: center;
   opacity: 0;
-  transition: opacity 0.5s, left 0s 0.5s;
-  & > div {
-    opacity: 0;
-  }
-  &.show,
-  &.show > div {
-    opacity: 1;
-    left: 0;
-    transition: opacity 0.5s;
-  }
   & > * {
     max-width: 50vw;
     max-height: 60vh;
   }
 `;
+
+const Overlay = props => (
+  <Spring
+    native
+    from={{ left: "-100vw", opacity: 0 }}
+    to={{ opacity: props.isOpen ? 1 : 0 }}
+  >
+    {style => (
+      <AnimatedOverlay
+        style={{ ...style, left: props.isOpen ? "0" : "-100vw" }}
+      >
+        {props.isOpen ? props.children : null}
+      </AnimatedOverlay>
+    )}
+  </Spring>
+);
+export default Overlay;

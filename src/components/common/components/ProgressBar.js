@@ -1,19 +1,21 @@
 import React from "react";
 import styled from "styled-components";
-import { labelBackgroundColor } from "../variables";
+import { Spring, animated } from "react-spring/renderprops";
+import { inputColor } from "../variables";
 import { spin, loader } from "../animations";
 
-const Wrapper = styled.div`
+const Wrapper = styled(animated.div)`
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 100%;
+  background-color: red;
 `;
 const Spinner = styled.svg`
   height: 32px;
-  fill: ${props => props.color || labelBackgroundColor(props)};
+  fill: ${props => props.color || inputColor(props)};
 `;
 const G = styled.g`
   animation: ${spin} 5s linear infinite;
@@ -28,19 +30,12 @@ const Circle = styled.circle`
 const Indeterminate = props => {
   const { className, ...rest } = props;
   return (
-    <Wrapper className={className}>
-      <Spinner viewBox="-200 -200 400 400" {...rest}>
-        <G>
-          <Circle r="160" />
-        </G>
-      </Spinner>
-    </Wrapper>
+    <Spring
+      from={{ transform: "translateY(10px)" }}
+      to={{ transform: "translateY(0px)" }}
+    >
+      {style => <Wrapper style={style}>Loading...</Wrapper>}
+    </Spring>
   );
 };
-const Blank = styled.div`
-  background-color: rbga(0.5, 0.5, 0.5, 0.2);
-  width: 100%;
-  height: 100%;
-`;
-
-export default Blank;
+export default Indeterminate;

@@ -20,6 +20,7 @@ import {
   TableRow
 } from "../common/components/Table";
 import Overlay from "../common/components/Overlay";
+import FormDiv from "../common/components/FormDiv";
 
 // More info on all the options is below in the README...just some common use cases shown here
 const convertToBrowserFilter = function(filter) {
@@ -63,20 +64,30 @@ const Input = styled.input`
   cursor: pointer;
 `;
 const UploadPreviewContainer = styled.div`
+  z-index: 100;
+  position: relative;
+  flex: 1;
   display: flex;
-  background-color: ${dropDownMenuColor};
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  // background-color: ${dropDownMenuColor};
   ${boxShadow};
 `;
 const UploadButton = styled(IconButton).attrs({
   icon: "file-upload"
 })`
-  // align-self: flex-start;
   position: relative;
 `;
-const ClosePreviewButton = styled(IconButton).attrs({ icon: "close" })`
+const ClosePreviewButton = styled(IconButton).attrs({ icon: "window-close" })`
   align-self: flex-end;
+  position: absolute;
+  top: -20px;
+  right: 0;
 `;
-const StyledImagePreview = styled.img``;
+const StyledImagePreview = styled.img`
+  max-height: 80vh;
+`;
 
 export class FileUpload extends Component {
   constructor(props) {
@@ -119,33 +130,34 @@ export class FileUpload extends Component {
       preview = <Preview data={this.props.preview} />;
     }
     return (
-      <UploadContainer onDrop={this.dropped}>
-        <UploadButton disabled={!!this.props.disabled} icon="file-upload" />
-        <b>{this.props.title}</b>
-        {isAdvancedUpload && (
-          <small>
-            &nbsp;&nbsp;&nbsp;
-            {"Drag and drop or select files"}
-          </small>
-        )}
+      <FormDiv>
+        <UploadContainer onDrop={this.dropped}>
+          <UploadButton disabled={!!this.props.disabled} icon="file-upload" />
+          <b>{this.props.title}</b>
+          {isAdvancedUpload && (
+            <small>
+              &nbsp;&nbsp;&nbsp;
+              {"Drag and drop or select files"}
+            </small>
+          )}
 
-        <Input
-          onChange={this.openFileSelector}
-          accept={convertToBrowserFilter(this.props.allowed)}
-          type="file"
-          id={this.props.component_uid}
-          key={this.props.component_uid}
-          disabled={!!this.props.disabled}
-        />
-        <IconButton onClick={this.togglePreview} icon={"eye"} />
-        <Overlay isOpen={this.state.showPreview}>
-          <ClosePreviewButton onClick={this.togglePreview} />
-          <UploadPreviewContainer>{preview}</UploadPreviewContainer>
-        </Overlay>
-        {/* <UploadPreviewContainer>
-          <div>{preview}</div>
-        </UploadPreviewContainer> */}
-      </UploadContainer>
+          <Input
+            onChange={this.openFileSelector}
+            accept={convertToBrowserFilter(this.props.allowed)}
+            type="file"
+            id={this.props.component_uid}
+            key={this.props.component_uid}
+            disabled={!!this.props.disabled}
+          />
+          <IconButton onClick={this.togglePreview} icon={"eye"} />
+          <Overlay isOpen={this.state.showPreview}>
+            <UploadPreviewContainer>
+              <ClosePreviewButton onClick={this.togglePreview} />
+              {preview}
+            </UploadPreviewContainer>
+          </Overlay>
+        </UploadContainer>
+      </FormDiv>
     );
   }
 }
