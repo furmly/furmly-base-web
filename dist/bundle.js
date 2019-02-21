@@ -5,9 +5,9 @@ Object.defineProperty(exports, '__esModule', { value: true });
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
 var debug = _interopDefault(require('debug'));
-var ReactDOM = _interopDefault(require('react-dom'));
 var Calendar = _interopDefault(require('react-calendar/dist/entry.nostyle'));
 var hoistNonReactStatic = _interopDefault(require('hoist-non-react-statics'));
+var ReactDOM = _interopDefault(require('react-dom'));
 var controlMap = require('furmly-client');
 var controlMap__default = _interopDefault(controlMap);
 var config = _interopDefault(require('client_config'));
@@ -109,7 +109,7 @@ const createMedia = (xSmall = 600, small = 600, medium = 768, large = 992, xlarg
 });
 const media = createMedia();
 
-const injectFontsAndCSSBase = (resourceDir = "./") => styled.injectGlobal`
+const injectFontsAndCSSBase = (resourceDir = "./", extendScrollBar = "", extendScrollBarHover = "") => styled.injectGlobal`
 textarea, select, input, button { outline: none; }
 button,p {
   padding:0px;
@@ -143,12 +143,14 @@ body,button,input,textarea {
  
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: rgba(0,0,0,0.1); 
+  background: rgba(0,0,0,0.1);
+  ${extendScrollBar}
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0,0,0,0.3);  
+  background: rgba(0,0,0,0.3); 
+  ${extendScrollBarHover} 
 }
 `;
 
@@ -219,7 +221,32 @@ const ripple = styled.keyframes`
   100% {
     opacity: 0;
     transform: scale(40, 40);
-  }`;
+	}`;
+const flow = styled.keyframes`
+0% {
+	transform: scaleX(0);
+	opacity: 1;
+}
+20% {
+	transform: scaleX(0.5);
+	opacity: 1;
+}
+100% {
+	opacity: 0;
+	transform: scaleX(1);
+}
+`;
+const blinking = styled.keyframes`
+0% {
+	opacity:1;
+}
+50% {
+	opacity:0;
+}
+100% {
+	opacity:1;
+}
+`;
 
 const loader = styled.keyframes`
 	0% {
@@ -2474,6 +2501,7 @@ const Overlay = props => React__default.createElement(
   style => React__default.createElement(
     AnimatedOverlay,
     {
+      className: props.className,
       style: _extends$3({}, style, { left: props.isOpen ? "0" : "-100vw" })
     },
     props.isOpen ? props.children : null
@@ -2560,48 +2588,44 @@ Portal.propTypes = {
 
 var Portal$1 = styled.withTheme(Portal);
 
-function _objectWithoutProperties$1(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+var Copy = styled__default.span`
+  color: ${props => props.theme.copyColor || "gray"};
+  font-size: ${smallestText}px;
+  display: block;
+`;
 
-const Wrapper = styled__default(extendedAnimated.div)`
+const Wrapper = styled__default.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 100%;
-  background-color: red;
+  background-color: #fdfeff54;
+  .spinner {
+    animation: ${spin} 0.9s linear infinite;
+    margin-right: 10px;
+  }
 `;
-const Spinner = styled__default.svg`
-  height: 32px;
-  fill: ${props => props.color || inputColor(props)};
-`;
-const G = styled__default.g`
-  animation: ${spin} 5s linear infinite;
-`;
-const Circle = styled__default.circle`
-  fill: none;
-  stroke: #000;
-  stroke-width: 16;
-  animation: ${loader} 2s linear infinite reverse,
-    ${spin} 8s steps(4, start) infinite reverse;
-`;
-const Indeterminate = props => {
-  const rest = _objectWithoutProperties$1(props, ["className"]);
+
+const FullPage = () => {
   return React__default.createElement(
-    Spring,
-    {
-      from: { transform: "translateY(10px)" },
-      to: { transform: "translateY(0px)" }
-    },
-    style => React__default.createElement(
-      Wrapper,
-      { style: style },
+    Wrapper,
+    null,
+    React__default.createElement(
+      "span",
+      { className: "spinner" },
+      "\u26EC"
+    ),
+    React__default.createElement(
+      Copy,
+      null,
       "Loading..."
     )
   );
 };
 
-function _objectWithoutProperties$2(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+function _objectWithoutProperties$1(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
 const Label = styled__default.label`
   background-color: ${setupReversal(labelBackgroundColor, labelColor)};
@@ -2651,7 +2675,7 @@ const FocusIndicator = styled__default.hr`
 `;
 var StyledLabel = (props => {
   const { className } = props,
-        rest = _objectWithoutProperties$2(props, ["className"]);
+        rest = _objectWithoutProperties$1(props, ["className"]);
   return React__default.createElement(
     FormLabelContainer,
     { className: className },
@@ -2710,7 +2734,7 @@ const Modal = props => {
           null,
           props.title
         ),
-        props.busy && React__default.createElement(Indeterminate, null) || props.template || props.children
+        props.busy && React__default.createElement(FullPage, null) || props.template || props.children
       )
     )
 
@@ -3415,6 +3439,7 @@ const ListItemWrapper = styled__default.div`
   color: ${inputColor};
   display: flex;
   flex-direction: row;
+  justify-content: center;
   width: 100%;
   min-height: ${minimumInputHeight}px;
   padding: ${inputPadding};
@@ -3436,7 +3461,7 @@ const ListItemWrapper = styled__default.div`
 const ListContentWrapper = styled__default.div`
   flex: 0.7;
   display: flex;
-  flex-direction:column;
+  flex-direction: column;
   align-items: flex-start;
 `;
 const largeAvatarSize = props => props.theme.factor * 65;
@@ -3620,79 +3645,16 @@ ListImplementation.propTypes = {
   rowRemoved: PropTypes.func.isRequired
 };
 
-var Copy = styled__default.span`
-  color: ${props => props.theme.copyColor || "gray"};
-  font-size: ${smallestText}px;
-  display: block;
-`;
-
 const StyledFormDiv = styled__default.div`
   margin: ${containerPadding}px;
-  min-height: ${props => props.theme.factor * 100}px;
-  background-color: ${formComponentBackgroundColor};
   position: relative;
+`;
+const ListContainer = styled__default.div`
+  background-color: ${inputBackgroundColor};
+  min-height: ${props => props.theme.factor * 100}px;
 `;
 const StyledCopy = styled__default(Copy)`
   padding: ${elementPadding}px;
-`;
-const BorderAnimationWrapper = styled__default.div`
-  position: absolute;
-  top: ${props => labelSize(props) - 2}px;
-  height: calc(100% - ${props => labelSize(props) - 2}px);
-  width: 100%;
-  overflow: hidden;
-  pointer-events: none;
-`;
-const transitionDuration = 0.25;
-
-const getTransition = function (delay, transform, reverse) {
-  return styled.css`
-    transition-delay: ${reverse}s;
-    transition-property: transform;
-    transition-duration: ${transitionDuration}s;
-    transition-function: ease-in;
-    ${StyledFormDiv}:hover & {
-      transform: ${transform + "(0)"};
-      transition: transform ${transitionDuration}s ease-in ${delay}s;
-    }
-  `;
-};
-const Line = styled__default.div`
-  position: absolute;
-  height: ${formLineWidth}px;
-  background-color: ${labelBackgroundColor};
-  ${StyledFormDiv}.error & {
-    background-color: ${errorColor};
-  }
-`;
-const Top = styled__default(Line)`
-  width: 100%;
-  top: 0;
-  transform: translateX(-100%);
-  ${getTransition(0, "translateX", 3 * transitionDuration)};
-`;
-const Right = styled__default(Line)`
-  height: 100%;
-  width: ${formLineWidth}px;
-  top: 0px;
-  right: 0;
-  transform: translateY(-100%);
-  ${getTransition(1 * transitionDuration, "translateY", 2 * transitionDuration)};
-`;
-const Bottom = styled__default(Line)`
-  width: 100%;
-  bottom: 0px;
-  transform: translateX(100%);
-  ${getTransition(2 * transitionDuration, "translateX", 1 * transitionDuration)};
-`;
-
-const Left = styled__default(Line)`
-  height: 100%;
-  top: 0;
-  left: 0;
-  width: ${formLineWidth}px;
-  transform: translateY(100%);
-  ${getTransition(3 * transitionDuration, "translateY", 0)};
 `;
 
 const ListLayout = props => {
@@ -3707,25 +3669,21 @@ const ListLayout = props => {
       props.value
     ),
     React__default.createElement(
-      StyledCopy,
+      ListContainer,
       null,
-      props.description,
-      errors && errors.map(x => React__default.createElement(
-        ErrorText,
-        { key: x },
-        x
-      ))
+      React__default.createElement(
+        StyledCopy,
+        null,
+        props.description,
+        errors && errors.map(x => React__default.createElement(
+          ErrorText,
+          { key: x },
+          x
+        ))
+      ),
+      props.children,
+      props.list
     ),
-    React__default.createElement(
-      BorderAnimationWrapper,
-      null,
-      React__default.createElement(Top, null),
-      React__default.createElement(Right, null),
-      React__default.createElement(Bottom, null),
-      React__default.createElement(Left, null)
-    ),
-    props.children,
-    props.list,
     props.addButton,
     props.modal
   );
@@ -3879,6 +3837,96 @@ ListImplementation$1.propTypes = {
   disabled: PropTypes.bool,
   rowRemoved: PropTypes.func.isRequired
 };
+
+const DURATION = {
+  SHORT: 300000,
+  LONG: 6000,
+  INFINITE: 0
+};
+var toast = (({ rootTargetId, theme } = { rootTargetId: "furmly-toast" }) => {
+  let modalRoot = document.getElementById(rootTargetId);
+  if (!modalRoot) {
+    modalRoot = document.createElement("div");
+    modalRoot.id = rootTargetId;
+    document.body.append(modalRoot);
+  }
+  const AnimatedDiv = styled__default(extendedAnimated.div)`
+    min-width: 200px;
+    min-height: 100px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: ${elementPadding}px;
+    background-image: linear-gradient(to left, #3584b1, #47afeb 95%);
+    color: ${inputColor};
+    box-shadow:5px 5px 4px 0px ${dropShadowColor};
+  `;
+  const ToastContainer = styled__default.div`
+    pointer-events: none;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  `;
+
+  const hooks = {};
+  class Toast extends React__default.Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+        messages: []
+      };
+      this.close = this.close.bind(this);
+      hooks.show = (message, duration = DURATION.SHORT) => {
+        let handle;
+        this.setState({
+          messages: [...this.state.messages, message]
+        });
+        if (duration) {
+          handle = setTimeout(this.close.bind(this, message), duration);
+        }
+        return () => {
+          if (handle) clearTimeout(handle);
+          this.close(message);
+        };
+      };
+    }
+    close(message) {
+      const messages = this.state.messages.slice();
+      messages.splice(messages.findIndex(x => x === message), 1);
+      this.setState({
+        messages
+      });
+    }
+    render() {
+      return React__default.createElement(
+        ToastContainer,
+        null,
+        React__default.createElement(
+          Transition,
+          {
+            native: true,
+            items: this.state.messages,
+            from: { opacity: 0, transform: "translateX(100%)" },
+            enter: { opacity: 1, transform: "translateX(10px)" },
+            leave: { opacity: 0, transform: "translateX(100%)" }
+          },
+          x => style => React__default.createElement(
+            AnimatedDiv,
+            { className: "toast", style: style },
+            x
+          )
+        )
+      );
+    }
+  }
+  ReactDOM.render(React__default.createElement(
+    styled.ThemeProvider,
+    { theme: theme || {} },
+    React__default.createElement(Toast, null)
+  ), modalRoot);
+  return hooks;
+});
 
 const Container$2 = styled__default.div`
   display: flex;
@@ -4502,7 +4550,7 @@ Header.propTypes = {
   description: PropTypes.string
 };
 
-const Line$1 = styled__default.div`
+const Line = styled__default.div`
   position: absolute;
   height: 0.8px;
   width: 100%;
@@ -4520,7 +4568,7 @@ const Layout$1 = props => {
     null,
     props.header,
     props.content,
-    React__default.createElement(Line$1, null)
+    React__default.createElement(Line, null)
   );
 };
 
@@ -4530,6 +4578,7 @@ Layout$1.propTypes = {
 };
 
 const Text$2 = styled__default.p``;
+const AnimatedContainer = styled__default(extendedAnimated.div)``;
 const TextView = props => {
   return React__default.createElement(
     Text$2,
@@ -4542,7 +4591,29 @@ TextView.propTypes = {
   text: PropTypes.string
 };
 
-const Container$4 = styled__default.div``;
+const Layout$2 = props => {
+  const name = props.getCurrentComponentName();
+  return React__default.createElement(
+    Transition,
+    {
+      items: props.componentNames,
+      native: true,
+      from: { transform: "translate3d(0,-25px,0)", opacity: 0 },
+      enter: { transform: "translate3d(0,0,0)", opacity: 1 },
+      leave: { opacity: 0 }
+    },
+    com => com == name && (style => React__default.createElement(
+      AnimatedContainer,
+      { style: style },
+      props.getCurrentComponent(name)
+    ))
+  );
+};
+
+const Container$4 = styled__default.div`
+  display: flex;
+  flex-direction: column;
+`;
 const ButtonContainer$1 = styled__default.div`
   display: flex;
   align-items: center;
@@ -4906,19 +4977,19 @@ var configure = ((config$$1 = { providerConfig: [] }) => {
   maps.addINPUTRecipe([InnerComponentWrapper, Input$1, FurmlyDatePicker, FurmlyCheckbox]);
 
   //create select.
-  maps.addSELECTRecipe([Indeterminate, InnerComponentWrapper, Select$1]);
+  maps.addSELECTRecipe([FullPage, InnerComponentWrapper, Select$1]);
 
   //create list.
-  maps.addLISTRecipe([ListLayout, ListButton, ListImplementation, Modal, ErrorText, Indeterminate, container]);
+  maps.addLISTRecipe([ListLayout, ListButton, ListImplementation, Modal, ErrorText, FullPage, container]);
 
   //create grid
-  maps.addGRIDRecipe([GridLayout, List$2, Modal, GridHeader, Indeterminate, CommandsView, ResultView, container]);
+  maps.addGRIDRecipe([GridLayout, List$2, Modal, GridHeader, FullPage, CommandsView, ResultView, container]);
 
   //create section
   maps.addSECTIONRecipe([Layout$1, Header, container]);
 
   //create actionview
-  maps.addACTIONVIEWRecipe([Layout, Indeterminate, Filter, container]);
+  maps.addACTIONVIEWRecipe([Layout, FullPage, Filter, container]);
 
   //create webview
   maps.addWEBVIEWRecipe([Webview, WebViewErrorText]);
@@ -4927,7 +4998,7 @@ var configure = ((config$$1 = { providerConfig: [] }) => {
   maps.addHTMLVIEWRecipe([Iframe]);
 
   //create process
-  maps.addPROCESSRecipe([Indeterminate, TextView, new controlMap.Deferred("view")]);
+  maps.addPROCESSRecipe([FullPage, TextView, new controlMap.Deferred("view"), Layout$2]);
 
   //create provider
   maps.addPROVIDERRecipe([new controlMap.Deferred("process"), ...config$$1.providerConfig]);
@@ -4939,13 +5010,13 @@ var configure = ((config$$1 = { providerConfig: [] }) => {
   maps.addLABELRecipe([CustomLabel]);
 
   //create fileupload
-  maps.addFILEUPLOADRecipe([FileUpload, Indeterminate, props => props.children, [XlsxPreview, ImagePreview]]);
+  maps.addFILEUPLOADRecipe([FileUpload, FullPage, props => props.children, [XlsxPreview, ImagePreview]]);
 
   //create selectset
-  maps.addSELECTSETRecipe([InnerComponentWrapper, Select$1, Indeterminate, container]);
+  maps.addSELECTSETRecipe([InnerComponentWrapper, Select$1, FullPage, container]);
 
   //create chip_list
-  maps.addRecipe("CHIP_LIST", [ListLayout, ListButton, ListImplementation$1, Modal, ErrorText, Indeterminate, container], maps.LIST);
+  maps.addRecipe("CHIP_LIST", [ListLayout, ListButton, ListImplementation$1, Modal, ErrorText, FullPage, container], maps.LIST);
 
   if (config$$1.extend && typeof config$$1.extend == "function") return config$$1.extend(maps, maps._defaultMap, controlMap.Deferred);
 
@@ -4965,8 +5036,9 @@ exports.Checkbox = FurmlyCheckbox;
 exports.DatePicker = FurmlyDatePicker;
 exports.Select = Select$1;
 exports.List = ListImplementation;
+exports.createToast = toast;
 exports.Label = Label;
-exports.BusyIndicator = Indeterminate;
+exports.BusyIndicator = FullPage;
 exports.Container = Container$2;
 exports.TwoColumn = TwoColumn;
 exports.ThreeColumn = ThreeColumn;

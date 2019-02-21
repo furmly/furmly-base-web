@@ -28,6 +28,7 @@ const Overlay = props => (
   >
     {style => (
       <AnimatedOverlay
+        className={props.className}
         style={{ ...style, left: props.isOpen ? "0" : "-100vw" }}
       >
         {props.isOpen ? props.children : null}

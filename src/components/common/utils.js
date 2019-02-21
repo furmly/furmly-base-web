@@ -69,7 +69,11 @@ export const createMedia = (
 });
 export const media = createMedia();
 
-export const injectFontsAndCSSBase = (resourceDir = "./") => injectGlobal`
+export const injectFontsAndCSSBase = (
+  resourceDir = "./",
+  extendScrollBar = "",
+  extendScrollBarHover = ""
+) => injectGlobal`
 textarea, select, input, button { outline: none; }
 button,p {
   padding:0px;
@@ -103,12 +107,14 @@ body,button,input,textarea {
  
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: rgba(0,0,0,0.1); 
+  background: rgba(0,0,0,0.1);
+  ${extendScrollBar}
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0,0,0,0.3);  
+  background: rgba(0,0,0,0.3); 
+  ${extendScrollBarHover} 
 }
 `;
 

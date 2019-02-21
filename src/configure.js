@@ -12,7 +12,7 @@ import HTMLView from "./components/htmlView";
 import Webview, { WebViewErrorText } from "./components/webView";
 import ActionViewLayout, { ActionViewFilter } from "./components/actionView";
 import SectionLayout, { Header as SectionHeader } from "./components/section";
-import { TextView as ProcessTextView } from "./components/Process";
+import { TextView as ProcessTextView, Layout } from "./components/Process";
 import View from "./components/View";
 import Select from "./components/select";
 import Warning from "./components/common/components/Warning";
@@ -104,7 +104,12 @@ export default (config = { providerConfig: [] }) => {
   maps.addHTMLVIEWRecipe([HTMLView]);
 
   //create process
-  maps.addPROCESSRecipe([ProgressBar, ProcessTextView, new Deferred("view")]);
+  maps.addPROCESSRecipe([
+    ProgressBar,
+    ProcessTextView,
+    new Deferred("view"),
+    Layout
+  ]);
 
   //create provider
   maps.addPROVIDERRecipe([new Deferred("process"), ...config.providerConfig]);

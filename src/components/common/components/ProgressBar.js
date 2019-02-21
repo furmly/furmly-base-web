@@ -1,41 +1,30 @@
 import React from "react";
 import styled from "styled-components";
-import { Spring, animated } from "react-spring/renderprops";
-import { inputColor } from "../variables";
-import { spin, loader } from "../animations";
+import { spin, flow } from "../animations";
+import Copy from "./Copy";
 
-const Wrapper = styled(animated.div)`
+
+const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 100%;
-  background-color: red;
+  background-color: #fdfeff54;
+  .spinner {
+    animation: ${spin} 0.9s linear infinite;
+    margin-right: 10px;
+  }
 `;
-const Spinner = styled.svg`
-  height: 32px;
-  fill: ${props => props.color || inputColor(props)};
-`;
-const G = styled.g`
-  animation: ${spin} 5s linear infinite;
-`;
-const Circle = styled.circle`
-  fill: none;
-  stroke: #000;
-  stroke-width: 16;
-  animation: ${loader} 2s linear infinite reverse,
-    ${spin} 8s steps(4, start) infinite reverse;
-`;
-const Indeterminate = props => {
-  const { className, ...rest } = props;
+
+const FullPage = () => {
   return (
-    <Spring
-      from={{ transform: "translateY(10px)" }}
-      to={{ transform: "translateY(0px)" }}
-    >
-      {style => <Wrapper style={style}>Loading...</Wrapper>}
-    </Spring>
+    <Wrapper>
+      <span className="spinner">⛬</span>
+      <Copy>Loading...</Copy>
+    </Wrapper>
   );
 };
-export default Indeterminate;
+
+export default FullPage;

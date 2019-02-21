@@ -13,6 +13,7 @@ const ListItemWrapper = styled.div`
   color: ${inputColor};
   display: flex;
   flex-direction: row;
+  justify-content: center;
   width: 100%;
   min-height: ${minimumInputHeight}px;
   padding: ${inputPadding};
@@ -34,7 +35,7 @@ const ListItemWrapper = styled.div`
 const ListContentWrapper = styled.div`
   flex: 0.7;
   display: flex;
-  flex-direction:column;
+  flex-direction: column;
   align-items: flex-start;
 `;
 const largeAvatarSize = props => props.theme.factor * 65;

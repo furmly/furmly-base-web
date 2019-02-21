@@ -12,7 +12,32 @@ export const ripple = keyframes`
   100% {
     opacity: 0;
     transform: scale(40, 40);
-  }`;
+	}`;
+export const flow = keyframes`
+0% {
+	transform: scaleX(0);
+	opacity: 1;
+}
+20% {
+	transform: scaleX(0.5);
+	opacity: 1;
+}
+100% {
+	opacity: 0;
+	transform: scaleX(1);
+}
+`;
+export const blinking = keyframes`
+0% {
+	opacity:1;
+}
+50% {
+	opacity:0;
+}
+100% {
+	opacity:1;
+}
+`;
 
 export const loader = keyframes`
 	0% {
