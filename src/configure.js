@@ -23,6 +23,7 @@ import layoutWrapper from "./components/common/components/InnerComponentWrapper"
 import List, {
   Layout as ListLayout,
   Button as ListButton,
+  Confirmation,
   ChipList
 } from "./components/list";
 import FurmlyInput, {
@@ -71,6 +72,7 @@ export default (config = { providerConfig: [] }) => {
     Modal,
     ErrorText,
     ProgressBar,
+    Confirmation,
     container
   ]);
 
@@ -141,6 +143,7 @@ export default (config = { providerConfig: [] }) => {
       Modal,
       ErrorText,
       ProgressBar,
+      Confirmation,
       container
     ],
     maps.LIST

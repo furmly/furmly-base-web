@@ -116,6 +116,10 @@ body,button,input,textarea {
   background: rgba(0,0,0,0.3); 
   ${extendScrollBarHover} 
 }
+.confirmation-dialog.confirmation-dialog > div {
+  height: auto;
+  min-height: auto;
+}
 `;
 
 export const getSlice = (page, count) => {

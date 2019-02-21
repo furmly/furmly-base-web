@@ -82,7 +82,9 @@ export const rowTemplates = {
     <ListItem
       key={index}
       onClick={itemClicked}
-      rightActions={[<IconButton icon="trash" onClick={itemRemoved} />]}
+      rightActions={[
+        <IconButton icon="trash" key={"trash"} onClick={itemRemoved} />
+      ]}
       disabled={disabled}
     >
       <p>

@@ -152,6 +152,10 @@ body,button,input,textarea {
   background: rgba(0,0,0,0.3); 
   ${extendScrollBarHover} 
 }
+.confirmation-dialog.confirmation-dialog > div {
+  height: auto;
+  min-height: auto;
+}
 `;
 
 const getSlice = (page, count) => {
@@ -284,9 +288,10 @@ const IconContainer = styled__default.svg`
   height: ${props => props.iconSize || iconSize}px;
   margin-right: ${elementPadding}px;
   fill: ${props => typeof props.iconColor == "function" && props.iconColor(props) || props.iconColor || "auto"};
+  ${props => props.onClick && "cursor:pointer;"}
 `;
 
-const Icon$1 = ({ icon, size, color, className }) => {
+const Icon$1 = ({ icon, size, color, className, onClick }) => {
   let iconInfo = icons[icon];
 
   if (!iconInfo) {
@@ -300,7 +305,8 @@ const Icon$1 = ({ icon, size, color, className }) => {
       className: className,
       iconSize: size,
       viewBox: `0 0 ${iconInfo[0]} ${iconInfo[1]}`,
-      iconColor: color
+      iconColor: color,
+      onClick: onClick
     },
     React__default.createElement("path", { d: iconInfo[4] })
   );
@@ -2625,70 +2631,12 @@ const FullPage = () => {
   );
 };
 
-function _objectWithoutProperties$1(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-
-const Label = styled__default.label`
+const Title = styled__default.label`
   background-color: ${setupReversal(labelBackgroundColor, labelColor)};
   color: ${setupReversal(labelColor, labelBackgroundColor)};
-  padding: ${props => props.theme.factor * 5}px;
-  font-size: ${smallText}px;
-  // text-transform: uppercase;
-  font-weight: bold;
-  display: inline-block;
-  transition: background-color 1s;
-  &.error {
-    background-color: ${errorColor};
-    color: ${errorForegroundColor};
-  }
-`;
-
-const FormLabelContainer = styled__default.div`
-  width: 100%;
-  position: relative;
-  overflow: hidden;
-  visibility: ${props => props.hide && "hidden" || "visible"};
-  &.no-indicator {
-    overflow: visible;
-  }
-`;
-const FocusIndicator = styled__default.hr`
-  width: 100%;
-  transform: translateX(-101%);
-  position: absolute;
-  bottom: 0px;
-  border: none;
-  margin: 0px;
-  height: ${formLineWidth}px;
-  background-color: ${labelBackgroundColor};
-  transition-property: transform;
-  transition-duration: 0.5s;
-  transition-delay: 200ms;
-  ${FormDiv}:hover & {
-    transform: translateX(0);
-  }
-  ${FormLabelContainer}.no-indicator & {
-    visibility: collapse;
-  }
-  ${Label}.error+& {
-    background-color: ${errorColor};
-  }
-`;
-var StyledLabel = (props => {
-  const { className } = props,
-        rest = _objectWithoutProperties$1(props, ["className"]);
-  return React__default.createElement(
-    FormLabelContainer,
-    { className: className },
-    React__default.createElement(Label, rest),
-    React__default.createElement(FocusIndicator, null)
-  );
-});
-
-const Title = styled__default(Label)`
   display: block;
-  position: absolute;
-  font-size: ${titleText};
-  transform: translateY(-100%);
+  font-size: ${titleText}px;
+  margin-left: ${elementPadding}px;
 `;
 const ModalContainer = styled__default.div`
   overflow-y: auto;
@@ -2750,6 +2698,65 @@ Modal.propTypes = {
   id: PropTypes.string,
   template: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.element), PropTypes.object])
 };
+
+function _objectWithoutProperties$1(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+const Label = styled__default.label`
+  background-color: ${setupReversal(labelBackgroundColor, labelColor)};
+  color: ${setupReversal(labelColor, labelBackgroundColor)};
+  padding: ${props => props.theme.factor * 5}px;
+  font-size: ${smallText}px;
+  font-weight: bold;
+  display: inline-block;
+  transition: background-color 1s;
+  &.error {
+    background-color: ${errorColor};
+    color: ${errorForegroundColor};
+    transition: background-color 1s;
+  }
+`;
+
+const FormLabelContainer = styled__default.div`
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  visibility: ${props => props.hide && "hidden" || "visible"};
+  &.no-indicator {
+    overflow: visible;
+  }
+`;
+const FocusIndicator = styled__default.hr`
+  width: 100%;
+  transform: translateX(-101%);
+  position: absolute;
+  bottom: 0px;
+  border: none;
+  margin: 0px;
+  height: ${formLineWidth}px;
+  background-color: ${labelBackgroundColor};
+  transition-property: transform;
+  transition-duration: 0.5s;
+  transition-delay: 200ms;
+  ${FormDiv}:hover & {
+    transform: translateX(0);
+  }
+  ${FormLabelContainer}.no-indicator & {
+    visibility: collapse;
+  }
+  ${Label}.error+& {
+    background-color: ${errorColor};
+  }
+`;
+var StyledLabel = (props => {
+  const { className } = props,
+        rest = _objectWithoutProperties$1(props, ["className"]);
+  return React__default.createElement(
+    FormLabelContainer,
+    { className: className },
+    React__default.createElement(Label, rest),
+    React__default.createElement(FocusIndicator, null)
+  );
+});
 
 var ErrorText = styled__default.p`
   color: ${errorColor};
@@ -3104,15 +3111,15 @@ const RevealButton = styled__default.button`
   padding: ${inputPadding};
   width: 100%;
   text-align: left;
-  background-color: transparent;
+  background-color: ${inputBackgroundColor};
+  color: ${inputColor};
   ${hover};
   &:hover {
     background-color: ${highLightColor};
-    // color: ${labelColor};
     cursor: pointer;
   }
-  &:hover svg {
-    // fill: ${labelColor};
+  & svg {
+    fill: ${inputColor};
   }
 `;
 
@@ -3463,6 +3470,7 @@ const ListContentWrapper = styled__default.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  justify-content: center;
 `;
 const largeAvatarSize = props => props.theme.factor * 65;
 const mediumAvatarSize = props => props.theme.factor * 32;
@@ -3576,7 +3584,7 @@ const rowTemplates = {
     {
       key: index,
       onClick: itemClicked,
-      rightActions: [React__default.createElement(IconButton, { icon: "trash", onClick: itemRemoved })],
+      rightActions: [React__default.createElement(IconButton, { icon: "trash", key: "trash", onClick: itemRemoved })],
       disabled: disabled
     },
     React__default.createElement(
@@ -3685,7 +3693,8 @@ const ListLayout = props => {
       props.list
     ),
     props.addButton,
-    props.modal
+    props.modal,
+    props.confirmationModal
   );
 };
 
@@ -3838,9 +3847,39 @@ ListImplementation$1.propTypes = {
   rowRemoved: PropTypes.func.isRequired
 };
 
+const Content = styled__default.h5`
+  padding: ${elementPadding}px;
+`;
+const ConfirmationDialog = props => {
+  return React__default.createElement(
+    Modal,
+    {
+      className: "confirmation-dialog",
+      title: "Confirm",
+      visibility: props.visibility,
+      done: args => {
+        if (args) return props.onConfirm();
+        props.onCancel();
+      }
+    },
+    React__default.createElement(
+      Content,
+      null,
+      props.content
+    )
+  );
+};
+
+ConfirmationDialog.propTypes = {
+  visibility: PropTypes.bool,
+  content: PropTypes.any.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  onConfirm: PropTypes.func.isRequired
+};
+
 const DURATION = {
-  SHORT: 300000,
-  LONG: 6000,
+  SHORT: 4000,
+  LONG: 10000,
   INFINITE: 0
 };
 var toast = (({ rootTargetId, theme } = { rootTargetId: "furmly-toast" }) => {
@@ -3850,23 +3889,23 @@ var toast = (({ rootTargetId, theme } = { rootTargetId: "furmly-toast" }) => {
     modalRoot.id = rootTargetId;
     document.body.append(modalRoot);
   }
+  const foreground = props => props.theme.toastColor || inputColor(props);
   const AnimatedDiv = styled__default(extendedAnimated.div)`
     min-width: 200px;
-    min-height: 100px;
+    min-height: 50px;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    padding: ${elementPadding}px;
-    background-image: linear-gradient(to left, #3584b1, #47afeb 95%);
-    color: ${inputColor};
-    box-shadow:5px 5px 4px 0px ${dropShadowColor};
+    padding: ${elementPadding}px 16px;
+    background: ${props => props.theme.toastBackgroundColor || secondaryBackgroundColor(props)};
+    color: ${foreground};
+    box-shadow: 1px 0px 20px 2px ${dropShadowColor};
   `;
   const ToastContainer = styled__default.div`
-    pointer-events: none;
     position: absolute;
-    bottom: 0;
-    right: 0;
+    bottom: 10px;
+    right: 10px;
   `;
 
   const hooks = {};
@@ -3908,13 +3947,18 @@ var toast = (({ rootTargetId, theme } = { rootTargetId: "furmly-toast" }) => {
             native: true,
             items: this.state.messages,
             from: { opacity: 0, transform: "translateX(100%)" },
-            enter: { opacity: 1, transform: "translateX(10px)" },
+            enter: { opacity: 1, transform: "translateX(0)" },
             leave: { opacity: 0, transform: "translateX(100%)" }
           },
           x => style => React__default.createElement(
             AnimatedDiv,
             { className: "toast", style: style },
-            x
+            x,
+            React__default.createElement(Icon$1, {
+              icon: "times",
+              color: foreground,
+              onClick: () => this.close(x)
+            })
           )
         )
       );
@@ -4018,7 +4062,7 @@ var componentWrapper = ((name, uid = "", key, element) => {
     return element;
   }
   return React__default.createElement("div", {
-    className: `${name.toLowerCase()} ${uid && uid.toLowerCase() || ""}`,
+    className: `${name.toLowerCase()} furmly-control ${uid && uid.toLowerCase() || ""}`,
     key
   }, element);
 });
@@ -4980,7 +5024,7 @@ var configure = ((config$$1 = { providerConfig: [] }) => {
   maps.addSELECTRecipe([FullPage, InnerComponentWrapper, Select$1]);
 
   //create list.
-  maps.addLISTRecipe([ListLayout, ListButton, ListImplementation, Modal, ErrorText, FullPage, container]);
+  maps.addLISTRecipe([ListLayout, ListButton, ListImplementation, Modal, ErrorText, FullPage, ConfirmationDialog, container]);
 
   //create grid
   maps.addGRIDRecipe([GridLayout, List$2, Modal, GridHeader, FullPage, CommandsView, ResultView, container]);
@@ -5016,7 +5060,7 @@ var configure = ((config$$1 = { providerConfig: [] }) => {
   maps.addSELECTSETRecipe([InnerComponentWrapper, Select$1, FullPage, container]);
 
   //create chip_list
-  maps.addRecipe("CHIP_LIST", [ListLayout, ListButton, ListImplementation$1, Modal, ErrorText, FullPage, container], maps.LIST);
+  maps.addRecipe("CHIP_LIST", [ListLayout, ListButton, ListImplementation$1, Modal, ErrorText, FullPage, ConfirmationDialog, container], maps.LIST);
 
   if (config$$1.extend && typeof config$$1.extend == "function") return config$$1.extend(maps, maps._defaultMap, controlMap.Deferred);
 
@@ -5036,6 +5080,7 @@ exports.Checkbox = FurmlyCheckbox;
 exports.DatePicker = FurmlyDatePicker;
 exports.Select = Select$1;
 exports.List = ListImplementation;
+exports.ConfirmationDialog = ConfirmationDialog;
 exports.createToast = toast;
 exports.Label = Label;
 exports.BusyIndicator = FullPage;

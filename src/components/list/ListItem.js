@@ -37,6 +37,7 @@ const ListContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  justify-content: center;
 `;
 const largeAvatarSize = props => props.theme.factor * 65;
 const mediumAvatarSize = props => props.theme.factor * 32;

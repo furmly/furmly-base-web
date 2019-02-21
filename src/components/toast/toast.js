@@ -3,16 +3,15 @@ import ReactDOM from "react-dom";
 import styled, { ThemeProvider } from "styled-components";
 import { Transition, animated } from "react-spring/renderprops";
 import {
-  largerBoxShadow,
-  modalBackgroundColor,
   inputColor,
   elementPadding,
   dropShadowColor,
   secondaryBackgroundColor
 } from "../common/variables";
+import Icon from "../common/components/Icon";
 export const DURATION = {
-  SHORT: 300000,
-  LONG: 6000,
+  SHORT: 4000,
+  LONG: 10000,
   INFINITE: 0
 };
 export default ({ rootTargetId, theme } = { rootTargetId: "furmly-toast" }) => {
@@ -22,23 +21,24 @@ export default ({ rootTargetId, theme } = { rootTargetId: "furmly-toast" }) => {
     modalRoot.id = rootTargetId;
     document.body.append(modalRoot);
   }
+  const foreground = props => props.theme.toastColor || inputColor(props);
   const AnimatedDiv = styled(animated.div)`
     min-width: 200px;
-    min-height: 100px;
+    min-height: 50px;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    padding: ${elementPadding}px;
-    background-image: linear-gradient(to left, #3584b1, #47afeb 95%);
-    color: ${inputColor};
-    box-shadow:5px 5px 4px 0px ${dropShadowColor};
+    padding: ${elementPadding}px 16px;
+    background: ${props =>
+      props.theme.toastBackgroundColor || secondaryBackgroundColor(props)};
+    color: ${foreground};
+    box-shadow: 1px 0px 20px 2px ${dropShadowColor};
   `;
   const ToastContainer = styled.div`
-    pointer-events: none;
     position: absolute;
-    bottom: 0;
-    right: 0;
+    bottom: 10px;
+    right: 10px;
   `;
 
   const hooks = {};
@@ -77,12 +77,17 @@ export default ({ rootTargetId, theme } = { rootTargetId: "furmly-toast" }) => {
             native
             items={this.state.messages}
             from={{ opacity: 0, transform: "translateX(100%)" }}
-            enter={{ opacity: 1, transform: "translateX(10px)" }}
+            enter={{ opacity: 1, transform: "translateX(0)" }}
             leave={{ opacity: 0, transform: "translateX(100%)" }}
           >
             {x => style => (
               <AnimatedDiv className={"toast"} style={style}>
                 {x}
+                <Icon
+                  icon={"times"}
+                  color={foreground}
+                  onClick={() => this.close(x)}
+                />
               </AnimatedDiv>
             )}
           </Transition>

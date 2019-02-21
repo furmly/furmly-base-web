@@ -16,13 +16,13 @@ export const Label = styled.label`
   color: ${setupReversal(labelColor, labelBackgroundColor)};
   padding: ${props => props.theme.factor * 5}px;
   font-size: ${smallText}px;
-  // text-transform: uppercase;
   font-weight: bold;
   display: inline-block;
   transition: background-color 1s;
   &.error {
     background-color: ${errorColor};
     color: ${errorForegroundColor};
+    transition: background-color 1s;
   }
 `;
 

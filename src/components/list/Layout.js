@@ -38,6 +38,7 @@ const ListLayout = props => {
       </ListContainer>
       {props.addButton}
       {props.modal}
+      {props.confirmationModal}
     </StyledFormDiv>
   );
 };

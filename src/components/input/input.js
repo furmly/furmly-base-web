@@ -98,9 +98,6 @@ export const inputFactory = (InnerInput, noLabel) => {
               <ToolTip title={description}>
                 &nbsp;
                 <Icon icon={"info-circle"} color={labelColor} />
-                {/* <ToolTipText>
-                  <Copy>{description}</Copy>
-                </ToolTipText> */}
               </ToolTip>
             )}
           </FormLabel>

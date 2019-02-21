@@ -10,7 +10,9 @@ import {
   buttonDefaults,
   minimumInputHeight,
   inputPadding,
-  highLightColor
+  highLightColor,
+  inputBackgroundColor,
+  inputColor
 } from "../common/variables";
 import { hover } from "../common/animations";
 import { media } from "../common/utils";
@@ -64,15 +66,15 @@ const RevealButton = styled.button`
   padding: ${inputPadding};
   width: 100%;
   text-align: left;
-  background-color: transparent;
+  background-color: ${inputBackgroundColor};
+  color: ${inputColor};
   ${hover};
   &:hover {
     background-color: ${highLightColor};
-    // color: ${labelColor};
     cursor: pointer;
   }
-  &:hover svg {
-    // fill: ${labelColor};
+  & svg {
+    fill: ${inputColor};
   }
 `;
 

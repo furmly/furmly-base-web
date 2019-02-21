@@ -3,22 +3,25 @@ import PropTypes from "prop-types";
 import styled, { css } from "styled-components";
 import Portal from "../Portal";
 import ProgressBar from "../ProgressBar";
-import { Label } from "../Label";
 import {
   titleText,
   largerBoxShadow,
   minimumModalHeight,
   minimumModalWidth,
   modalBackgroundColor,
-  dividerColor
+  dividerColor,
+  labelBackgroundColor,
+  labelColor,
+  elementPadding
 } from "../../variables";
-import { INTENTS, media } from "../../utils";
+import { INTENTS, media, setupReversal } from "../../utils";
 
-const Title = styled(Label)`
+const Title = styled.label`
+  background-color: ${setupReversal(labelBackgroundColor, labelColor)};
+  color: ${setupReversal(labelColor, labelBackgroundColor)};
   display: block;
-  position: absolute;
-  font-size: ${titleText};
-  transform: translateY(-100%);
+  font-size: ${titleText}px;
+  margin-left: ${elementPadding}px;
 `;
 const ModalContainer = styled.div`
   overflow-y: auto;

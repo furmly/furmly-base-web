@@ -6,7 +6,7 @@ export default (name, uid = "", key, element) => {
   return React.createElement(
     "div",
     {
-      className: `${name.toLowerCase()} ${(uid && uid.toLowerCase()) || ""}`,
+      className: `${name.toLowerCase()} furmly-control ${(uid && uid.toLowerCase()) || ""}`,
       key
     },
     element

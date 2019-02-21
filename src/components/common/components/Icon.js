@@ -14,9 +14,10 @@ const IconContainer = styled.svg`
     (typeof props.iconColor == "function" && props.iconColor(props)) ||
     props.iconColor ||
     "auto"};
+  ${props => props.onClick && "cursor:pointer;"}
 `;
 
-const Icon = ({ icon, size, color, className }) => {
+const Icon = ({ icon, size, color, className, onClick }) => {
   let iconInfo = icons[icon];
 
   if (!iconInfo) {
@@ -30,6 +31,7 @@ const Icon = ({ icon, size, color, className }) => {
       iconSize={size}
       viewBox={`0 0 ${iconInfo[0]} ${iconInfo[1]}`}
       iconColor={color}
+      onClick={onClick}
     >
       <path d={iconInfo[4]} />
     </IconContainer>
