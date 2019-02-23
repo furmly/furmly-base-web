@@ -9,7 +9,7 @@ import {
   secondaryBackgroundColor
 } from "../common/variables";
 import Icon from "../common/components/Icon";
-export const DURATION = {
+const DURATION = {
   SHORT: 4000,
   LONG: 10000,
   INFINITE: 0
@@ -19,15 +19,16 @@ export default ({ rootTargetId, theme } = { rootTargetId: "furmly-toast" }) => {
   if (!modalRoot) {
     modalRoot = document.createElement("div");
     modalRoot.id = rootTargetId;
-    document.body.append(modalRoot);
+    document.body.appendChild(modalRoot);
   }
   const foreground = props => props.theme.toastColor || inputColor(props);
   const AnimatedDiv = styled(animated.div)`
     min-width: 200px;
     min-height: 50px;
+    margin-top: ${elementPadding}px;
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     padding: ${elementPadding}px 16px;
     background: ${props =>
@@ -41,7 +42,10 @@ export default ({ rootTargetId, theme } = { rootTargetId: "furmly-toast" }) => {
     right: 10px;
   `;
 
-  const hooks = {};
+  const hooks = {
+    DURATION
+  };
+  let key = 0;
   class Toast extends React.Component {
     constructor(props) {
       super(props);
@@ -49,26 +53,33 @@ export default ({ rootTargetId, theme } = { rootTargetId: "furmly-toast" }) => {
         messages: []
       };
       this.close = this.close.bind(this);
-      hooks.show = (message, duration = DURATION.SHORT) => {
+      hooks.show = (message, duration = DURATION.SHORT, onDismissed) => {
         let handle;
+        let _message = { key: key++, message, onDismissed };
         this.setState({
-          messages: [...this.state.messages, message]
+          messages: [...this.state.messages, _message]
         });
         if (duration) {
-          handle = setTimeout(this.close.bind(this, message), duration);
+          handle = setTimeout(this.close.bind(this, _message), duration);
         }
         return () => {
           if (handle) clearTimeout(handle);
-          this.close(message);
+          this.close(_message);
         };
       };
+      Object.freeze(hooks);
     }
     close(message) {
       const messages = this.state.messages.slice();
       messages.splice(messages.findIndex(x => x === message), 1);
-      this.setState({
-        messages
-      });
+      this.setState(
+        {
+          messages
+        },
+        () => {
+          if (message.onDismissed) message.onDismissed();
+        }
+      );
     }
     render() {
       return (
@@ -76,13 +87,14 @@ export default ({ rootTargetId, theme } = { rootTargetId: "furmly-toast" }) => {
           <Transition
             native
             items={this.state.messages}
+            keys={item => item.key}
             from={{ opacity: 0, transform: "translateX(100%)" }}
             enter={{ opacity: 1, transform: "translateX(0)" }}
             leave={{ opacity: 0, transform: "translateX(100%)" }}
           >
             {x => style => (
               <AnimatedDiv className={"toast"} style={style}>
-                {x}
+                {x.message}
                 <Icon
                   icon={"times"}
                   color={foreground}

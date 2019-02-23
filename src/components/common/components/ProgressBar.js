@@ -22,7 +22,7 @@ const FullPage = () => {
   return (
     <Wrapper>
       <span className="spinner">⛬</span>
-      <Copy>Loading...</Copy>
+      {/* <Copy>Loading...</Copy> */}
     </Wrapper>
   );
 };

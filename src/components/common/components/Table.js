@@ -12,7 +12,7 @@ const Table = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  overflow: auto;
+  // overflow: auto;
 `;
 const Row = styled.div`
   display: flex;
@@ -25,9 +25,9 @@ const Row = styled.div`
 `;
 
 const TableRow = styled(Row)`
-  &:nth-child(even) {
-    background-color: ${highLightColor};
-  }
+  // &:nth-child(even) {
+  //   background-color: ${highLightColor};
+  // }
   &:hover {
     background-color: ${highLightColor};
     cursor: pointer;
@@ -44,8 +44,9 @@ const TableHead = styled(Row)`
   * {
     text-transform: uppercase;
   }
-  background-color: ${labelBackgroundColor};
-  color: ${labelColor};
+  // background-color: ${labelBackgroundColor};
+  // color: ${labelColor};
+    // background-color:${highLightColor};
 `;
 const TableCell = styled.div`
   flex: 1;

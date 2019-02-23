@@ -6,7 +6,11 @@ import {
   TableHead,
   TableRow
 } from "../common/components/Table";
-import { smallestText, minimumInputHeight } from "../common/variables";
+import {
+  smallestText,
+  minimumInputHeight,
+  secondaryBackgroundColor
+} from "../common/variables";
 import { getSlice, convertToString } from "../common/utils";
 import getPager from "../common/components/Pager";
 import { RawCheckbox as Checkbox } from "../Input/checkbox";
@@ -18,7 +22,10 @@ const ListTable = styled(Table)`
   padding-top: ${minimumInputHeight}px;
   position: relative;
 `;
-
+const ListFormDiv = styled(FormDiv)`
+  background-color: ${secondaryBackgroundColor};
+  box-shadow: inset 0px 0px 20px 0px rgba(0, 0, 0, 0.12);
+`;
 const ToggleCell = styled(TableCell)`
   flex: 0.2;
 `;
@@ -42,7 +49,7 @@ const Pager = getPager();
 class List extends Component {
   constructor(props) {
     super(props);
-    this.state = { count: 5, page: 1 };
+    this.state = { page: 1 };
     this.setCurrentItems = this.setCurrentItems.bind(this);
     this.renderItem = this.renderItem.bind(this);
     this.renderHeader = this.renderHeader.bind(this);
@@ -59,10 +66,11 @@ class List extends Component {
   }
   componentWillReceiveProps(next) {
     //check if there are less items than the page can display.
+    if (!next.items && next.autoFetch) this.props.more();
     if (
       next.items &&
       next.items.length &&
-      (this.state.page - 1) * this.state.count >= next.items.length &&
+      (this.state.page - 1) * next.count >= next.items.length &&
       !next.busy
     ) {
       //go back to the first page;
@@ -130,7 +138,7 @@ class List extends Component {
     rows.unshift(
       <ToggleCell key={"selector_head"}>
         <Checkbox
-          reverse={true}
+          // reverse={true}
           value={items.length == Object.keys(this.props.selectedItems).length}
           valueChanged={this.toggleSelectAll}
         />
@@ -142,7 +150,7 @@ class List extends Component {
     return !!Object.keys(this.props.selectedItems).length;
   }
   render() {
-    const { start, end } = getSlice(this.state.page, this.state.count);
+    const { start, end } = getSlice(this.state.page, this.props.count);
     const [editCommand, ...commands] = this.props.getCommands() || [];
     const items =
       (this.props.items && this.props.items.slice(start, end)) || [];
@@ -198,7 +206,7 @@ class List extends Component {
     return (
       <Wrapper>
         {renderHeader(this.props)}
-        <FormDiv>{table}</FormDiv>
+        {table && <ListFormDiv>{table}</ListFormDiv>}
         {renderFooter(this.props)}
       </Wrapper>
     );

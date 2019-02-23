@@ -7,7 +7,7 @@ const Container = styled.div`
   flex: 1;
   flex-direction: row;
   width: 100%;
-  align-items: stretch;
+  align-content: flex-start;
   flex-wrap: wrap;
   ${media.xSmall`
   flex-direction:column;

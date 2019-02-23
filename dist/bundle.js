@@ -2622,11 +2622,6 @@ const FullPage = () => {
       "span",
       { className: "spinner" },
       "\u26EC"
-    ),
-    React__default.createElement(
-      Copy,
-      null,
-      "Loading..."
     )
   );
 };
@@ -3887,15 +3882,16 @@ var toast = (({ rootTargetId, theme } = { rootTargetId: "furmly-toast" }) => {
   if (!modalRoot) {
     modalRoot = document.createElement("div");
     modalRoot.id = rootTargetId;
-    document.body.append(modalRoot);
+    document.body.appendChild(modalRoot);
   }
   const foreground = props => props.theme.toastColor || inputColor(props);
   const AnimatedDiv = styled__default(extendedAnimated.div)`
     min-width: 200px;
     min-height: 50px;
+    margin-top: ${elementPadding}px;
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     padding: ${elementPadding}px 16px;
     background: ${props => props.theme.toastBackgroundColor || secondaryBackgroundColor(props)};
@@ -3908,7 +3904,10 @@ var toast = (({ rootTargetId, theme } = { rootTargetId: "furmly-toast" }) => {
     right: 10px;
   `;
 
-  const hooks = {};
+  const hooks = {
+    DURATION
+  };
+  let key = 0;
   class Toast extends React__default.Component {
     constructor(props) {
       super(props);
@@ -3916,25 +3915,29 @@ var toast = (({ rootTargetId, theme } = { rootTargetId: "furmly-toast" }) => {
         messages: []
       };
       this.close = this.close.bind(this);
-      hooks.show = (message, duration = DURATION.SHORT) => {
+      hooks.show = (message, duration = DURATION.SHORT, onDismissed) => {
         let handle;
+        let _message = { key: key++, message, onDismissed };
         this.setState({
-          messages: [...this.state.messages, message]
+          messages: [...this.state.messages, _message]
         });
         if (duration) {
-          handle = setTimeout(this.close.bind(this, message), duration);
+          handle = setTimeout(this.close.bind(this, _message), duration);
         }
         return () => {
           if (handle) clearTimeout(handle);
-          this.close(message);
+          this.close(_message);
         };
       };
+      Object.freeze(hooks);
     }
     close(message) {
       const messages = this.state.messages.slice();
       messages.splice(messages.findIndex(x => x === message), 1);
       this.setState({
         messages
+      }, () => {
+        if (message.onDismissed) message.onDismissed();
       });
     }
     render() {
@@ -3946,6 +3949,7 @@ var toast = (({ rootTargetId, theme } = { rootTargetId: "furmly-toast" }) => {
           {
             native: true,
             items: this.state.messages,
+            keys: item => item.key,
             from: { opacity: 0, transform: "translateX(100%)" },
             enter: { opacity: 1, transform: "translateX(0)" },
             leave: { opacity: 0, transform: "translateX(100%)" }
@@ -3953,7 +3957,7 @@ var toast = (({ rootTargetId, theme } = { rootTargetId: "furmly-toast" }) => {
           x => style => React__default.createElement(
             AnimatedDiv,
             { className: "toast", style: style },
-            x,
+            x.message,
             React__default.createElement(Icon$1, {
               icon: "times",
               color: foreground,
@@ -3977,7 +3981,7 @@ const Container$2 = styled__default.div`
   flex: 1;
   flex-direction: row;
   width: 100%;
-  align-items: stretch;
+  align-content: flex-start;
   flex-wrap: wrap;
   ${media.xSmall`
   flex-direction:column;
@@ -4071,37 +4075,71 @@ const SubTitle = styled__default.p`
   font-size: ${smallText}px;
 `;
 
+var _extends$7 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 const HeaderButton = styled__default(StyledIconButton)`
   margin: ${containerPadding}px;
 `;
 const Title$1 = styled__default(SubTitle)`
+  cursor: pointer;
   padding: ${containerPadding}px;
   font-weight: bold;
   color: ${labelColor};
+  &:hover {
+    background-color: ${highLightColor};
+  }
 `;
 const Container$3 = styled__default.div`
   ${boxShadow};
-  border-bottom: rgba(0, 0, 0, 0.18) solid 1px
+  border-bottom: rgba(0, 0, 0, 0.18) solid 1px;
 `;
-const GridHeader = props => {
-  if (!React__default.isValidElement(props.children)) return null;
-  return React__default.createElement(
-    Container$3,
-    null,
-    React__default.createElement(
-      Title$1,
+
+class GridHeader extends React__default.PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      open: false
+    };
+    this.toggle = this.toggle.bind(this);
+  }
+  toggle() {
+    this.setState({ open: !this.state.open });
+  }
+  render() {
+    if (!React__default.isValidElement(this.props.children)) return null;
+
+    return React__default.createElement(
+      Container$3,
       null,
-      React__default.createElement(Icon$1, { icon: "filter", color: labelColor, size: 16 }),
-      "Filter"
-    ),
-    props.children,
-    React__default.createElement(
-      HeaderButton,
-      { icon: "search", onClick: props.filter },
-      "SEARCH"
-    )
-  );
-};
+      React__default.createElement(
+        Title$1,
+        { onClick: this.toggle },
+        React__default.createElement(Icon$1, { icon: "filter", color: labelColor, size: 16 }),
+        "Filter"
+      ),
+      React__default.createElement(
+        Transition,
+        {
+          items: this.state.open,
+          native: true,
+          from: { height: 0, opacity: 0 },
+          enter: { height: "auto", opacity: 1 },
+          leave: { height: 0, opacity: 0 }
+        },
+        open => open && (props => React__default.createElement(
+          extendedAnimated.div,
+          { style: _extends$7({}, props, { overflow: "hidden" }) },
+          this.props.children,
+          React__default.createElement(
+            HeaderButton,
+            { icon: "search", onClick: this.props.filter },
+            "SEARCH"
+          )
+        )) || null
+      )
+    );
+  }
+}
 
 GridHeader.propTypes = {
   filter: PropTypes.func.isRequired
@@ -4166,7 +4204,7 @@ const Table = styled__default.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  overflow: auto;
+  // overflow: auto;
 `;
 const Row = styled__default.div`
   display: flex;
@@ -4179,9 +4217,9 @@ const Row = styled__default.div`
 `;
 
 const TableRow = styled__default(Row)`
-  &:nth-child(even) {
-    background-color: ${highLightColor};
-  }
+  // &:nth-child(even) {
+  //   background-color: ${highLightColor};
+  // }
   &:hover {
     background-color: ${highLightColor};
     cursor: pointer;
@@ -4198,8 +4236,9 @@ const TableHead = styled__default(Row)`
   * {
     text-transform: uppercase;
   }
-  background-color: ${labelBackgroundColor};
-  color: ${labelColor};
+  // background-color: ${labelBackgroundColor};
+  // color: ${labelColor};
+    // background-color:${highLightColor};
 `;
 const TableCell = styled__default.div`
   flex: 1;
@@ -4251,7 +4290,7 @@ const getPager = (NextButton = NextButtonDefault, PrevButton = PrevButtonDefault
   };
 };
 
-var _extends$7 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _extends$8 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 const CommandsContainer = styled__default.div`
   position: absolute;
@@ -4259,7 +4298,7 @@ const CommandsContainer = styled__default.div`
   top: 0;
   color:${labelColor}
 `;
-const NewButton = props => React__default.createElement(IconButton, _extends$7({ label: "Add" }, props));
+const NewButton = props => React__default.createElement(IconButton, _extends$8({ label: "Add" }, props));
 const Commands = props => {
   return React__default.createElement(
     CommandsContainer,
@@ -4285,14 +4324,17 @@ Commands.propTypes = {
   openCommandMenu: PropTypes.func.isRequired
 };
 
-var _extends$8 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _extends$9 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 const ListTable = styled__default(Table)`
   margin-top: 10px;
   padding-top: ${minimumInputHeight}px;
   position: relative;
 `;
-
+const ListFormDiv = styled__default(FormDiv)`
+  background-color: ${secondaryBackgroundColor};
+  box-shadow: inset 0px 0px 20px 0px rgba(0, 0, 0, 0.12);
+`;
 const ToggleCell = styled__default(TableCell)`
   flex: 0.2;
 `;
@@ -4316,7 +4358,7 @@ const Pager = getPager();
 class List$2 extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { count: 5, page: 1 };
+    this.state = { count: 25, page: 1 };
     this.setCurrentItems = this.setCurrentItems.bind(this);
     this.renderItem = this.renderItem.bind(this);
     this.renderHeader = this.renderHeader.bind(this);
@@ -4333,6 +4375,7 @@ class List$2 extends React.Component {
   }
   componentWillReceiveProps(next) {
     //check if there are less items than the page can display.
+    if (!next.items && next.autoFetch) this.props.more();
     if (next.items && next.items.length && (this.state.page - 1) * this.state.count >= next.items.length && !next.busy) {
       //go back to the first page;
       this.setState({ page: 1 });
@@ -4385,9 +4428,9 @@ class List$2 extends React.Component {
     rows.unshift(React__default.createElement(
       ToggleCell,
       { key: "selector_head" },
-      React__default.createElement(RawCheckbox, {
-        reverse: true,
-        value: items.length == Object.keys(this.props.selectedItems).length,
+      React__default.createElement(RawCheckbox
+      // reverse={true}
+      , { value: items.length == Object.keys(this.props.selectedItems).length,
         valueChanged: this.toggleSelectAll
       })
     ));
@@ -4427,7 +4470,7 @@ class List$2 extends React.Component {
           this.renderItem(item, this.props.templateConfig)
         ))
       ),
-      React__default.createElement(Pager, _extends$8({}, this.state, {
+      React__default.createElement(Pager, _extends$9({}, this.state, {
         items: this.props.items,
         total: this.props.total,
         more: this.props.more,
@@ -4454,8 +4497,8 @@ class List$2 extends React.Component {
       Wrapper$3,
       null,
       renderHeader(this.props),
-      React__default.createElement(
-        FormDiv,
+      table && React__default.createElement(
+        ListFormDiv,
         null,
         table
       ),
@@ -4711,7 +4754,7 @@ InnerComponentWrapper.propTypes = {
   inner: PropTypes.element.isRequired
 };
 
-var _extends$9 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _extends$a = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 const DISPLAY = "DISPLAY";
 const AVATAR = "AVATAR";
 const THUMBNAIL = "THUMBNAIL";
@@ -4756,7 +4799,7 @@ var Image = (props => {
   return React__default.createElement(
     FormDiv,
     null,
-    React__default.createElement(StyledImage, _extends$9({}, props, { src: i }))
+    React__default.createElement(StyledImage, _extends$a({}, props, { src: i }))
   );
 });
 
@@ -4787,7 +4830,7 @@ CustomLabel.propTypes = {
   description: PropTypes.string.isRequired
 };
 
-var _extends$a = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _extends$b = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 // More info on all the options is below in the README...just some common use cases shown here
 const convertToBrowserFilter = function (filter) {
@@ -4982,7 +5025,7 @@ class XlsxPreview extends React.Component {
           convertToString(item[x])
         ))
       ))
-    ), React__default.createElement(XlsxPager, _extends$a({}, this.state, {
+    ), React__default.createElement(XlsxPager, _extends$b({}, this.state, {
       items: this.props.data,
       total: this.props.data.length,
       setCurrentItems: this.setCurrentItems
