@@ -3732,12 +3732,24 @@ const Wrapper$2 = styled__default.div`
   }
 `;
 const Container$1 = styled__default.div`
+  position: relative;
   background-color: ${secondaryBackgroundColor};
   border-radius: 16px;
   color: ${secondaryColor};
   display: flex;
   flex-direction: row;
   padding: 8px;
+  &:after {
+    content: "";
+    pointer-events:none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.18);
+    border-radius: 16px;
+  }
 `;
 const Text$1 = styled__default.span`
   flex: 1;
@@ -4358,7 +4370,7 @@ const Pager = getPager();
 class List$2 extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { count: 25, page: 1 };
+    this.state = { page: 1 };
     this.setCurrentItems = this.setCurrentItems.bind(this);
     this.renderItem = this.renderItem.bind(this);
     this.renderHeader = this.renderHeader.bind(this);
@@ -4376,7 +4388,7 @@ class List$2 extends React.Component {
   componentWillReceiveProps(next) {
     //check if there are less items than the page can display.
     if (!next.items && next.autoFetch) this.props.more();
-    if (next.items && next.items.length && (this.state.page - 1) * this.state.count >= next.items.length && !next.busy) {
+    if (next.items && next.items.length && (this.state.page - 1) * next.count >= next.items.length && !next.busy) {
       //go back to the first page;
       this.setState({ page: 1 });
     }
@@ -4440,7 +4452,7 @@ class List$2 extends React.Component {
     return !!Object.keys(this.props.selectedItems).length;
   }
   render() {
-    const { start, end } = getSlice(this.state.page, this.state.count);
+    const { start, end } = getSlice(this.state.page, this.props.count);
     const [editCommand, ...commands] = this.props.getCommands() || [];
     const items = this.props.items && this.props.items.slice(start, end) || [];
     let table = this.props.items && this.props.items.length ? React__default.createElement(
@@ -4471,6 +4483,7 @@ class List$2 extends React.Component {
         ))
       ),
       React__default.createElement(Pager, _extends$9({}, this.state, {
+        count: this.props.count,
         items: this.props.items,
         total: this.props.total,
         more: this.props.more,

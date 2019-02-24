@@ -179,6 +179,7 @@ class List extends Component {
           </ListTable>
           <Pager
             {...this.state}
+            count={this.props.count}
             items={this.props.items}
             total={this.props.total}
             more={this.props.more}
