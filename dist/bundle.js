@@ -23,6 +23,7 @@ const smallestText = props => props.theme.factor * 12;
 const bodyText = props => props.theme.factor * 16;
 const titleText = props => props.theme.factor * 18;
 const labelBackgroundColor = props => props.theme.labelBackgroundColor;
+const labelPadding = props => props.theme.factor * 5;
 const secondaryBackgroundColor = props => props.theme.secondaryBackgroundColor || "black";
 const secondaryColor = props => props.theme.secondaryColor || "white";
 const accentColor = props => props.theme.accentColor || "#783196";
@@ -41,7 +42,7 @@ const dividerColor = props => props.theme.dividerColor || "black";
 const highLightColor = props => props.theme.highLightColor || "rgba(0,0,0,0.1)";
 const inputColor = props => props.theme.inputColor || "black";
 const inputBackgroundColor = props => props.theme.inputBackgroundColor || "rgba(53, 53, 53, 0.08)";
-const inputPadding = () => `0px 5px`;
+const inputPadding = props => props.inputPadding || `0px 5px`;
 const iconSize = props => props.size || props.theme.factor * 10;
 const buttonDefaults = "display: block;  border: none;";
 const formComponentBackgroundColor = props => props.theme.formComponentBackgroundColor || "rgba(0,0,0,0.01)";
@@ -134,13 +135,11 @@ body,button,input,textarea {
 /* width */
 ::-webkit-scrollbar {
   width: 10px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  background: inherit; 
+  height:10px;
+  background:transparent;
 }
  
+::-webkit-scrollbar-corner { background: rgba(0,0,0,0.5); }
 /* Handle */
 ::-webkit-scrollbar-thumb {
   background: rgba(0,0,0,0.1);
@@ -2634,7 +2633,7 @@ const Title = styled__default.label`
   margin-left: ${elementPadding}px;
 `;
 const ModalContainer = styled__default.div`
-  overflow-y: auto;
+  overflow-y: overlay;
   background-color: ${modalBackgroundColor};
   height: 100%;
   min-width: ${minimumModalWidth};
@@ -2699,15 +2698,15 @@ function _objectWithoutProperties$1(obj, keys) { var target = {}; for (var i in 
 const Label = styled__default.label`
   background-color: ${setupReversal(labelBackgroundColor, labelColor)};
   color: ${setupReversal(labelColor, labelBackgroundColor)};
-  padding: ${props => props.theme.factor * 5}px;
+  padding: ${labelPadding}px;
   font-size: ${smallText}px;
   font-weight: bold;
   display: inline-block;
-  transition: background-color 1s;
+  transition: color 1s;
   &.error {
-    background-color: ${errorColor};
     color: ${errorForegroundColor};
-    transition: background-color 1s;
+    background-color: ${errorColor};
+    transition: color 1s;
   }
 `;
 
@@ -2720,36 +2719,14 @@ const FormLabelContainer = styled__default.div`
     overflow: visible;
   }
 `;
-const FocusIndicator = styled__default.hr`
-  width: 100%;
-  transform: translateX(-101%);
-  position: absolute;
-  bottom: 0px;
-  border: none;
-  margin: 0px;
-  height: ${formLineWidth}px;
-  background-color: ${labelBackgroundColor};
-  transition-property: transform;
-  transition-duration: 0.5s;
-  transition-delay: 200ms;
-  ${FormDiv}:hover & {
-    transform: translateX(0);
-  }
-  ${FormLabelContainer}.no-indicator & {
-    visibility: collapse;
-  }
-  ${Label}.error+& {
-    background-color: ${errorColor};
-  }
-`;
-var StyledLabel = (props => {
+
+var Label$1 = (props => {
   const { className } = props,
         rest = _objectWithoutProperties$1(props, ["className"]);
   return React__default.createElement(
     FormLabelContainer,
     { className: className },
-    React__default.createElement(Label, rest),
-    React__default.createElement(FocusIndicator, null)
+    React__default.createElement(Label, rest)
   );
 });
 
@@ -2833,7 +2810,7 @@ const inputFactory = (InnerInput, noLabel) => {
       FormDiv,
       { className: className },
       !noLabel ? React__default.createElement(
-        StyledLabel,
+        Label$1,
         { reverse: reverse, className: labelClasses.join(" ") },
         label,
         description && React__default.createElement(
@@ -2979,7 +2956,7 @@ var Input$1 = inputFactory(withWorker(Input));
 
 const onChange$1 = onChangeFactory("checked");
 const size = props => props.theme.factor * 20;
-const Label$1 = styled__default.label`
+const Label$2 = styled__default.label`
   cursor: pointer;
   vertical-align: middle;
   font-weight: bold;
@@ -3040,7 +3017,7 @@ const RawCheckbox = props => {
     Wrapper$1,
     { onClick: evt => evt.stopPropagation() },
     React__default.createElement(
-      Label$1,
+      Label$2,
       null,
       React__default.createElement(
         Nob,
@@ -3667,7 +3644,7 @@ const ListLayout = props => {
     StyledFormDiv,
     { className: errorClass },
     React__default.createElement(
-      StyledLabel,
+      Label$1,
       { className: errorClass },
       props.value
     ),
@@ -4863,6 +4840,7 @@ const UploadContainer = styled__default.div`
   border: 1px dashed ${labelBackgroundColor};
   height: ${minimumInputHeight}px;
   position: relative;
+  background: ${inputBackgroundColor};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -4882,26 +4860,26 @@ const UploadPreviewContainer = styled__default.div`
   z-index: 100;
   position: relative;
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  // background-color: ${dropDownMenuColor};
+  max-height: 100%;
+  max-width: 100%;
+  overflow: auto;
+  background-color: ${dropDownMenuColor};
   ${boxShadow};
 `;
-const UploadButton = styled__default(IconButton).attrs({
-  icon: "file-upload"
+
+const ClosePreviewButton = styled__default(IconButton).attrs({
+  icon: "window-close",
+  iconSize: 32
 })`
-  position: relative;
-`;
-const ClosePreviewButton = styled__default(IconButton).attrs({ icon: "window-close" })`
   align-self: flex-end;
-  position: absolute;
-  top: -20px;
-  right: 0;
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  padding: 0px;
 `;
 const StyledImagePreview = styled__default.img`
-  max-height: 80vh;
+  display: block;
+  margin: 0 auto;
 `;
 
 class FileUpload extends React.Component {
@@ -4948,15 +4926,19 @@ class FileUpload extends React.Component {
       FormDiv,
       null,
       React__default.createElement(
-        UploadContainer,
-        { onDrop: this.dropped },
-        React__default.createElement(UploadButton, { disabled: !!this.props.disabled, icon: "file-upload" }),
+        Label$1,
+        { title: this.props.description },
         React__default.createElement(
           "b",
           null,
+          React__default.createElement(Icon$1, { icon: "file-upload", color: labelColor }),
           this.props.title
-        ),
-        isAdvancedUpload && React__default.createElement(
+        )
+      ),
+      React__default.createElement(
+        UploadContainer,
+        { onDrop: this.dropped },
+        isAdvancedUpload && !preview && React__default.createElement(
           "small",
           null,
           "\xA0\xA0\xA0",
@@ -4970,15 +4952,24 @@ class FileUpload extends React.Component {
           key: this.props.component_uid,
           disabled: !!this.props.disabled
         }),
-        React__default.createElement(IconButton, { onClick: this.togglePreview, icon: "eye" }),
+        preview && React__default.createElement(
+          React__default.Fragment,
+          null,
+          React__default.createElement(IconButton, {
+            iconSize: 20,
+            onClick: this.togglePreview,
+            icon: "eye"
+          }),
+          React__default.createElement(IconButton, { icon: "cross", onClick: this.clear })
+        ),
         React__default.createElement(
           Overlay,
           { isOpen: this.state.showPreview },
           React__default.createElement(
             UploadPreviewContainer,
             null,
-            React__default.createElement(ClosePreviewButton, { onClick: this.togglePreview }),
-            preview
+            preview,
+            React__default.createElement(ClosePreviewButton, { onClick: this.togglePreview })
           )
         )
       )
@@ -5110,7 +5101,7 @@ var configure = ((config$$1 = { providerConfig: [] }) => {
   maps.addLABELRecipe([CustomLabel]);
 
   //create fileupload
-  maps.addFILEUPLOADRecipe([FileUpload, FullPage, props => props.children, [XlsxPreview, ImagePreview]]);
+  maps.addFILEUPLOADRecipe([FileUpload, FullPage, props => props.children, Previews]);
 
   //create selectset
   maps.addSELECTSETRecipe([InnerComponentWrapper, Select$1, FullPage, container]);

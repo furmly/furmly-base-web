@@ -5,6 +5,7 @@ export const smallestText = props => props.theme.factor * 12;
 export const bodyText = props => props.theme.factor * 16;
 export const titleText = props => props.theme.factor * 18;
 export const labelBackgroundColor = props => props.theme.labelBackgroundColor;
+export const labelPadding = props => props.theme.factor * 5;
 export const secondaryBackgroundColor = props =>
   props.theme.secondaryBackgroundColor || "black";
 export const secondaryColor = props => props.theme.secondaryColor || "white";
@@ -32,7 +33,8 @@ export const highLightColor = props =>
 export const inputColor = props => props.theme.inputColor || "black";
 export const inputBackgroundColor = props =>
   props.theme.inputBackgroundColor || "rgba(53, 53, 53, 0.08)";
-export const inputPadding = () => `0px 5px`;
+export const inputPadding = props => props.inputPadding || `0px 5px`;
+export const verticalInputPadding = props => props.verticalInputPadding || 5;
 export const iconSize = props => props.size || props.theme.factor * 10;
 export const largeIconSize = props => props.size || props.theme.factor * 20;
 export const buttonDefaults = "display: block;  border: none;";

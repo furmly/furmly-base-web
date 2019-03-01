@@ -98,13 +98,11 @@ body,button,input,textarea {
 /* width */
 ::-webkit-scrollbar {
   width: 10px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  background: inherit; 
+  height:10px;
+  background:transparent;
 }
  
+::-webkit-scrollbar-corner { background: rgba(0,0,0,0.5); }
 /* Handle */
 ::-webkit-scrollbar-thumb {
   background: rgba(0,0,0,0.1);

@@ -24,7 +24,7 @@ const Title = styled.label`
   margin-left: ${elementPadding}px;
 `;
 const ModalContainer = styled.div`
-  overflow-y: auto;
+  overflow-y: overlay;
   background-color: ${modalBackgroundColor};
   height: 100%;
   min-width: ${minimumModalWidth};

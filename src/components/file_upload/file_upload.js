@@ -2,14 +2,18 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import getPager from "../common/components/Pager";
+import Icon from "../common/components/Icon";
 import { getSlice, convertToString } from "../common/utils";
 import {
   labelBackgroundColor,
   minimumInputHeight,
   inputPadding,
   dropDownMenuColor,
-  boxShadow
+  boxShadow,
+  inputBackgroundColor,
+  labelColor
 } from "../common/variables";
+import Label from "../common/components/Label";
 
 import { IconButton } from "../common/components/Button/Button";
 
@@ -48,6 +52,7 @@ const UploadContainer = styled.div`
   border: 1px dashed ${labelBackgroundColor};
   height: ${minimumInputHeight}px;
   position: relative;
+  background: ${inputBackgroundColor};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -67,26 +72,26 @@ const UploadPreviewContainer = styled.div`
   z-index: 100;
   position: relative;
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  // background-color: ${dropDownMenuColor};
+  max-height: 100%;
+  max-width: 100%;
+  overflow: auto;
+  background-color: ${dropDownMenuColor};
   ${boxShadow};
 `;
-const UploadButton = styled(IconButton).attrs({
-  icon: "file-upload"
+
+const ClosePreviewButton = styled(IconButton).attrs({
+  icon: "window-close",
+  iconSize: 32
 })`
-  position: relative;
-`;
-const ClosePreviewButton = styled(IconButton).attrs({ icon: "window-close" })`
   align-self: flex-end;
-  position: absolute;
-  top: -20px;
-  right: 0;
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  padding: 0px;
 `;
 const StyledImagePreview = styled.img`
-  max-height: 80vh;
+  display: block;
+  margin: 0 auto;
 `;
 
 export class FileUpload extends Component {
@@ -131,10 +136,14 @@ export class FileUpload extends Component {
     }
     return (
       <FormDiv>
+        <Label title={this.props.description}>
+          <b>
+            <Icon icon="file-upload" color={labelColor} />
+            {this.props.title}
+          </b>
+        </Label>
         <UploadContainer onDrop={this.dropped}>
-          <UploadButton disabled={!!this.props.disabled} icon="file-upload" />
-          <b>{this.props.title}</b>
-          {isAdvancedUpload && (
+          {isAdvancedUpload && !preview && (
             <small>
               &nbsp;&nbsp;&nbsp;
               {"Drag and drop or select files"}
@@ -149,11 +158,20 @@ export class FileUpload extends Component {
             key={this.props.component_uid}
             disabled={!!this.props.disabled}
           />
-          <IconButton onClick={this.togglePreview} icon={"eye"} />
+          {preview && (
+            <React.Fragment>
+              <IconButton
+                iconSize={20}
+                onClick={this.togglePreview}
+                icon={"eye"}
+              />
+              <IconButton icon="cross" onClick={this.clear} />
+            </React.Fragment>
+          )}
           <Overlay isOpen={this.state.showPreview}>
             <UploadPreviewContainer>
-              <ClosePreviewButton onClick={this.togglePreview} />
               {preview}
+              <ClosePreviewButton onClick={this.togglePreview} />
             </UploadPreviewContainer>
           </Overlay>
         </UploadContainer>

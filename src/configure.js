@@ -32,11 +32,7 @@ import FurmlyInput, {
 } from "./components/Input";
 import Image from "./components/Image";
 import Label from "./components/Label";
-import FileUpload, {
-  XlsxPreview,
-  ImagePreview
-} from "./components/file_upload/file_upload";
-
+import FileUpload, { Previews } from "./components/file_upload";
 export default (config = { providerConfig: [] }) => {
   const maps = controlMap();
   const container = new Deferred("container");
@@ -127,7 +123,7 @@ export default (config = { providerConfig: [] }) => {
     FileUpload,
     ProgressBar,
     props => props.children,
-    [XlsxPreview, ImagePreview]
+    Previews
   ]);
 
   //create selectset
