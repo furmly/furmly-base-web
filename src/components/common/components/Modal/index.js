@@ -26,7 +26,8 @@ const Title = styled.label`
 const ModalContainer = styled.div`
   overflow-y: overlay;
   background-color: ${modalBackgroundColor};
-  height: 100%;
+  // height: 100%;
+  height: auto;
   min-width: ${minimumModalWidth};
   border-bottom: ${dividerColor} solid 1px;
   ${media.xSmall`
@@ -60,7 +61,7 @@ const Modal = props => {
         min-height: ${minimumModalHeight};
       `}
     >
-      <ModalContainer>
+      <ModalContainer className="furmly-scrollable">
         {props.title && <Title>{props.title}</Title>}
         {(props.busy && <ProgressBar />) || props.template || props.children}
       </ModalContainer>

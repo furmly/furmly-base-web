@@ -12,8 +12,6 @@ export const secondaryColor = props => props.theme.secondaryColor || "white";
 export const accentColor = props => props.theme.accentColor || "#783196";
 export const labelColor = props => props.theme.labelColor;
 export const errorColor = props => props.theme.errorColor || "red";
-export const errorForegroundColor = props =>
-  props.theme.errorForegroundColor || "white";
 export const elementPadding = props => props.theme.factor * 5;
 export const borderColor = props => props.theme.borderColor || "gray";
 export const labelSize = props =>
@@ -24,7 +22,7 @@ export const minimumInputHeight = props =>
   (props.large && props.theme.factor * 10 + 50) || props.theme.factor * 30;
 export const containerPadding = props => props.theme.factor * 10;
 export const minimumModalHeight = props =>
-  props.theme.minimumModalHeight || "40vh";
+  props.theme.minimumModalHeight || "auto";
 export const minimumModalWidth = props =>
   props.theme.minimumModalWidth || "40vw";
 export const dividerColor = props => props.theme.dividerColor || "black";

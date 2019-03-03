@@ -6,6 +6,7 @@ import ListItem from "./ListItem";
 import { IconButton } from "../common/components/Button";
 import { camelCaseToWord } from "../common/utils";
 import { formLineWidth, labelBackgroundColor } from "../common/variables";
+import ErrorText from "../common/components/ErrorText";
 const BasicInfoLabel = styled.span`
   display: block;
 `;
@@ -139,7 +140,13 @@ const ListImplementation = props => {
           );
         }, [])
       : null;
-  return <List className={props.className}>{elements}</List>;
+  return (
+    <List className={props.className}>
+      {elements}
+      {props.errors &&
+        props.errors.map(x => <ErrorText key={x}>{x}</ErrorText>)}
+    </List>
+  );
 };
 
 ListImplementation.propTypes = {

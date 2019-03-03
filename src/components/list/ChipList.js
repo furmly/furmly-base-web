@@ -4,6 +4,7 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 
 import Chip from "../common/components/Chip";
+import ErrorText from "../common/components/ErrorText";
 
 const List = styled.div`
   display: flex;
@@ -43,7 +44,13 @@ const ListImplementation = props => {
         );
       })
     : null;
-  return <List className={props.className}>{elements}</List>;
+  return (
+    <List className={props.className}>
+      {elements} 
+      {props.errors &&
+        props.errors.map(x => <ErrorText key={x}>{x}</ErrorText>)}
+    </List>
+  );
 };
 
 ListImplementation.propTypes = {

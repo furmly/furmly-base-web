@@ -14,7 +14,6 @@ import { hover } from "../common/animations";
 import FormDiv from "../common/components/FormDiv";
 import FormLabel from "../common/components/Label";
 import ErrorText from "../common/components/ErrorText";
-// import Copy from "../common/components/Copy";
 import { media } from "../common/utils";
 import Icon from "../common/components/Icon";
 import withWorker from "../common/components/withWorker";
@@ -86,7 +85,7 @@ export const inputFactory = (InnerInput, noLabel) => {
       labelClassName = ""
     } = props;
     const labelClasses = [
-      (errors && errors.length && "error") || "",
+      (errors && errors.length && "furmly-error") || "",
       labelClassName
     ];
     return (
@@ -214,6 +213,9 @@ export class Input extends React.Component {
     this.mode.componentWillUnmount();
   }
   componentWillReceiveProps(next) {
+    if (next.errors && next.errors.length) {
+      this.input.scrollIntoView();
+    }
     this.mode.componentWillReceiveProps(next);
   }
 
@@ -225,6 +227,7 @@ export class Input extends React.Component {
     const { type } = this.props;
     const props = {
       type: type,
+      innerRef: x => (this.input = x),
       value: this.mode.getValue(),
       onChange: onChange.bind(this, this.valueChanged),
       ...this.mode.getProps()

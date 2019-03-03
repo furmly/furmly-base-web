@@ -13,7 +13,7 @@ const ActionContainer = styled.div`
 `;
 const ContentContainer = styled.div`
   display: flex;
-  height: 100%;
+  height: auto;
   flex-direction: column;
   justify-content: center;
   align-items: center;

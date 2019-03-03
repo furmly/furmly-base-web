@@ -29,14 +29,13 @@ const secondaryColor = props => props.theme.secondaryColor || "white";
 const accentColor = props => props.theme.accentColor || "#783196";
 const labelColor = props => props.theme.labelColor;
 const errorColor = props => props.theme.errorColor || "red";
-const errorForegroundColor = props => props.theme.errorForegroundColor || "white";
 const elementPadding = props => props.theme.factor * 5;
 const borderColor = props => props.theme.borderColor || "gray";
 const labelSize = props => 2 * props.theme.factor * 5 + props.theme.factor * 14 * lineHeight;
 const dropDownMenuColor = props => props.theme.dropDownMenuColor || "white";
 const minimumInputHeight = props => props.large && props.theme.factor * 10 + 50 || props.theme.factor * 30;
 const containerPadding = props => props.theme.factor * 10;
-const minimumModalHeight = props => props.theme.minimumModalHeight || "40vh";
+const minimumModalHeight = props => props.theme.minimumModalHeight || "auto";
 const minimumModalWidth = props => props.theme.minimumModalWidth || "40vw";
 const dividerColor = props => props.theme.dividerColor || "black";
 const highLightColor = props => props.theme.highLightColor || "rgba(0,0,0,0.1)";
@@ -2519,7 +2518,7 @@ const ActionContainer = styled__default.div`
 `;
 const ContentContainer = styled__default.div`
   display: flex;
-  height: 100%;
+  height: auto;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -2635,7 +2634,8 @@ const Title = styled__default.label`
 const ModalContainer = styled__default.div`
   overflow-y: overlay;
   background-color: ${modalBackgroundColor};
-  height: 100%;
+  // height: 100%;
+  height: auto;
   min-width: ${minimumModalWidth};
   border-bottom: ${dividerColor} solid 1px;
   ${media.xSmall`
@@ -2670,7 +2670,7 @@ const Modal = props => {
       },
       React__default.createElement(
         ModalContainer,
-        null,
+        { className: "furmly-scrollable" },
         props.title && React__default.createElement(
           Title,
           null,
@@ -2703,9 +2703,8 @@ const Label = styled__default.label`
   font-weight: bold;
   display: inline-block;
   transition: color 1s;
-  &.error {
-    color: ${errorForegroundColor};
-    background-color: ${errorColor};
+  &.furmly-error {
+    color: ${errorColor};
     transition: color 1s;
   }
 `;
@@ -2733,6 +2732,7 @@ var Label$1 = (props => {
 var ErrorText = styled__default.p`
   color: ${errorColor};
   font-size: ${smallestText}px;
+  font-weight: bold;
   margin: 1px 0px;
   display: block;
 `;
@@ -2805,7 +2805,7 @@ const inputFactory = (InnerInput, noLabel) => {
       className,
       labelClassName = ""
     } = props;
-    const labelClasses = [errors && errors.length && "error" || "", labelClassName];
+    const labelClasses = [errors && errors.length && "furmly-error" || "", labelClassName];
     return React__default.createElement(
       FormDiv,
       { className: className },
@@ -2927,6 +2927,9 @@ class Input extends React__default.Component {
     this.mode.componentWillUnmount();
   }
   componentWillReceiveProps(next) {
+    if (next.errors && next.errors.length) {
+      this.input.scrollIntoView();
+    }
     this.mode.componentWillReceiveProps(next);
   }
 
@@ -2938,6 +2941,7 @@ class Input extends React__default.Component {
     const { type } = this.props;
     const props = _extends$4({
       type: type,
+      innerRef: x => this.input = x,
       value: this.mode.getValue(),
       onChange: onChange.bind(this, this.valueChanged)
     }, this.mode.getProps());
@@ -3043,11 +3047,11 @@ const StyledCalendar = styled__default(Calendar).attrs({
   prev2Label: React__default.createElement(Icon$1, { icon: "angle-double-left" })
 })`
   background-color: white;
-  height: 450px;
+  height: auto;
   width: 350px;
   ${media.xSmall`height:40vh;width:50vh`};
   ${media.small`height:40vh;width:50vh`};
-  ${media.xlarge`height:500px;width:400px;`};
+  ${media.xlarge`height:auto;width:400px;`};
   button.react-calendar__tile,
   button.react-calendar__navigation__arrow,
   button.react-calendar__navigation__label {
@@ -3176,11 +3180,58 @@ const Container = styled__default.div`
     right: 5px;
   }
 `;
+const show = styled.keyframes`
+  0% {
+  opacity:0;
+  display:block;
+  transform: translate(0, -5%);
+  }
+  50% {
+  opacity:0.25
+  }
+  90% {
+  opacity:0.8
+  }
+  100% {
+  opacity:1;
+  transform: translate(0, 0);
+  }
+`;
+
+const hide = styled.keyframes`
+0% {
+  opacity:1;
+  display:block;
+  transform: translate(0,0%);
+  }
+  90% {
+  opacity:0.1
+  display:block;
+  }
+  100% {
+  opacity:0;
+  display: none;
+  transform: translate(0,-5%);
+  }
+`;
 
 const MenuContainer = styled__default.div`
   overflow-y: auto;
   overflow-x: hidden;
   max-height: 25vh;
+  position: relative;
+  &.shadow:after {
+    content: "";
+    width: 100%;
+    height: 10px;
+    background-image: linear-gradient(
+      rgba(0, 0, 0, 0.2),
+      rgba(0, 0, 0, 0.05),
+      rgba(255, 0, 0, 0)
+    );
+    position: fixed;
+    top: 0px;
+  }
 `;
 const Menu = styled__default.div`
   ${aboveOthers};
@@ -3189,24 +3240,21 @@ const Menu = styled__default.div`
   border-top-width: 2px;
   background-color: ${dropDownMenuColor};
   width: 100%;
-  visibility: hidden;
+  display: none;
   opacity: 0;
   transform: translate(0, -5%);
   ${largerBoxShadow};
-  &:after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: ${formLineWidth}px;
-    background-color: ${labelBackgroundColor};
-  }
   &.show {
-    visibility: visible;
-    transform: translate(0, 0);
-    transition: opacity 0.5s, transform 0.2s ease-in-out;
+    display: block;
+    animation-name: ${show};
+    animation-duration: 0.2s;
+    animation-fill-mode: forwards;
     opacity: 1;
+  }
+  &.hide {
+    animation-name: ${hide};
+    animation-duration: 0.2s;
+    animation-fill-mode: forwards;
   }
 `;
 
@@ -3220,17 +3268,6 @@ const RevealButton$1 = styled__default.button`
   text-align: left;
   padding: ${inputPadding};
   padding-right: 20px;
-  &.show {
-  }
-  &.show:after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: ${formLineWidth}px;
-    background-color: ${labelBackgroundColor};
-  }
   ${hover};
   &:hover {
     background-color: ${highLightColor};
@@ -3254,9 +3291,10 @@ const Item = styled__default.span`
 class Select extends React__default.PureComponent {
   constructor(props) {
     super(props);
-    this.state = { showMenu: [], displayLabel: null };
+    this.state = { showMenu: "", displayLabel: null };
     this.toggleMenu = this.toggleMenu.bind(this);
     this.revealClicked = this.revealClicked.bind(this);
+    this.onMenuScroll = this.onMenuScroll.bind(this);
     this.setRef = this.setRef.bind(this);
   }
   componentWillMount() {
@@ -3265,6 +3303,11 @@ class Select extends React__default.PureComponent {
   componentWillReceiveProps(next) {
     if (next.value !== this.props.value) {
       this.getDisplayLabel(next);
+    }
+  }
+  componentWillUnmount() {
+    if (this.scrollable) {
+      this.scrollable.removeEventListener("scroll", this.scrollHandler);
     }
   }
   getDisplayLabel(props = this.props) {
@@ -3283,17 +3326,16 @@ class Select extends React__default.PureComponent {
     }
   }
   toggleMenu(cb) {
-    let i = this.state.showMenu.slice();
-    if (!i.length) {
-      i.push("show");
-    } else {
-      i.pop();
-    }
+    const showMenu = !this.state.showMenu || this.state.showMenu == "hide" ? "show" : "hide";
     const args = [{
-      showMenu: i
+      showMenu
     }];
     if (cb) args.push(cb);
     setTimeout(() => {
+      if (showMenu == "show" && this.scrollable) {
+        const { top } = this.container.getBoundingClientRect();
+        this.menu.style.top = `${top + this.container.offsetHeight}px`;
+      }
       this.setState.apply(this, args);
     }, 0);
   }
@@ -3302,9 +3344,22 @@ class Select extends React__default.PureComponent {
   }
 
   outsideClick(e) {
-    if (this.state.showMenu.length) this.setState({
-      showMenu: []
-    });
+    if (this.state.showMenu == "show") {
+      if (this.menu) {
+        this.menu.style.display = "";
+      }
+      this.setState({
+        showMenu: "hide"
+      });
+    }
+  }
+  onMenuScroll(e) {
+    console.log("menu scrolling");
+    if (e.target.scrollTop > 0 && e.target.className !== "shadow") {
+      e.target.classList.add("shadow");
+    } else {
+      e.target.classList.remove("shadow");
+    }
   }
   fetchKey(item) {
     const { keyProperty } = this.props;
@@ -3314,22 +3369,42 @@ class Select extends React__default.PureComponent {
     return item[keyProperty[0]];
   }
   setRef(node) {
-    this.ref = node;
+    this.container = node;
+    const scrollable = node && node.closest(".furmly-scrollable");
+    if (scrollable) {
+      const { top: scrollableTop } = scrollable.getBoundingClientRect();
+      if (this.menu) {
+        this.menu.style.position = "fixed";
+        this.menu.style.width = this.container.offsetWidth + "px";
+      }
+      this.scrollHandler = e => {
+        console.log("scroll handler fired");
+        if (this.menu && this.menu.className.indexOf("show") !== -1) {
+          const { top } = this.container.getBoundingClientRect();
+
+          this.menu.style.top = `${top + this.container.offsetHeight}px`;
+          this.menu.style.display = top <= scrollableTop || top > scrollableTop + scrollable.offsetHeight >= this.container.offsetHeight ? "none" : "block";
+        }
+      };
+      scrollable.addEventListener("scroll", this.scrollHandler);
+      this.scrollable = scrollable;
+    }
+
+    this.props.innerRef(this, node);
   }
   render() {
     const {
       disabled,
       displayProperty,
       valueChanged,
-      label,
       items,
       ItemElement
     } = this.props;
     const MenuItem = ItemElement || Item;
-    const showMenu = this.state.showMenu.join(" ");
+    const showMenu = this.state.showMenu;
     return React__default.createElement(
       Container,
-      { innerRef: node => this.props.innerRef(this, node) },
+      { innerRef: node => this.setRef(node) },
       React__default.createElement(
         RevealButton$1,
         {
@@ -3337,14 +3412,14 @@ class Select extends React__default.PureComponent {
           onClick: this.revealClicked,
           disabled: disabled
         },
-        this.state.displayLabel || label || ""
+        this.state.displayLabel || "select..."
       ),
       React__default.createElement(
         Menu,
-        { className: showMenu },
+        { className: showMenu, innerRef: node => this.menu = node },
         React__default.createElement(
           MenuContainer,
-          null,
+          { onScroll: this.onMenuScroll },
           (items || []).map(x => {
             const key = this.fetchKey(x);
             return React__default.createElement(
@@ -3613,7 +3688,12 @@ const ListImplementation = props => {
   return React__default.createElement(
     List,
     { className: props.className },
-    elements
+    elements,
+    props.errors && props.errors.map(x => React__default.createElement(
+      ErrorText,
+      { key: x },
+      x
+    ))
   );
 };
 
@@ -3819,7 +3899,12 @@ const ListImplementation$1 = props => {
   return React__default.createElement(
     List$1,
     { className: props.className },
-    elements
+    elements,
+    props.errors && props.errors.map(x => React__default.createElement(
+      ErrorText,
+      { key: x },
+      x
+    ))
   );
 };
 
@@ -4203,15 +4288,18 @@ const Row = styled__default.div`
   padding: ${inputPadding};
   min-width: 100%;
   text-align: left;
+  border-bottom:1px solid ${dividerColor};
 `;
 
 const TableRow = styled__default(Row)`
-  // &:nth-child(even) {
-  //   background-color: ${highLightColor};
-  // }
   &:hover {
     background-color: ${highLightColor};
     cursor: pointer;
+  }
+  
+  
+  &:last-child {
+    border:none;
   }
 `;
 const TableHead = styled__default(Row)`
@@ -4225,9 +4313,6 @@ const TableHead = styled__default(Row)`
   * {
     text-transform: uppercase;
   }
-  // background-color: ${labelBackgroundColor};
-  // color: ${labelColor};
-    // background-color:${highLightColor};
 `;
 const TableCell = styled__default.div`
   flex: 1;
@@ -4960,7 +5045,7 @@ class FileUpload extends React.Component {
             onClick: this.togglePreview,
             icon: "eye"
           }),
-          React__default.createElement(IconButton, { icon: "cross", onClick: this.clear })
+          React__default.createElement(IconButton, { icon: "times", onClick: this.props.clear })
         ),
         React__default.createElement(
           Overlay,

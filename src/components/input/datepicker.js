@@ -26,11 +26,11 @@ const StyledCalendar = styled(Calendar).attrs({
   prev2Label: <Icon icon="angle-double-left" />
 })`
   background-color: white;
-  height: 450px;
+  height: auto;
   width: 350px;
   ${media.xSmall`height:40vh;width:50vh`};
   ${media.small`height:40vh;width:50vh`};
-  ${media.xlarge`height:500px;width:400px;`};
+  ${media.xlarge`height:auto;width:400px;`};
   button.react-calendar__tile,
   button.react-calendar__navigation__arrow,
   button.react-calendar__navigation__label {

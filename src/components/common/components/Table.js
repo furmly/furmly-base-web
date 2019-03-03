@@ -5,7 +5,8 @@ import {
   labelBackgroundColor,
   labelColor,
   inputPadding,
-  highLightColor
+  highLightColor,
+  dividerColor
 } from "../variables";
 
 const Table = styled.div`
@@ -22,15 +23,18 @@ const Row = styled.div`
   padding: ${inputPadding};
   min-width: 100%;
   text-align: left;
+  border-bottom:1px solid ${dividerColor};
 `;
 
 const TableRow = styled(Row)`
-  // &:nth-child(even) {
-  //   background-color: ${highLightColor};
-  // }
   &:hover {
     background-color: ${highLightColor};
     cursor: pointer;
+  }
+  
+  
+  &:last-child {
+    border:none;
   }
 `;
 const TableHead = styled(Row)`
@@ -44,9 +48,6 @@ const TableHead = styled(Row)`
   * {
     text-transform: uppercase;
   }
-  // background-color: ${labelBackgroundColor};
-  // color: ${labelColor};
-    // background-color:${highLightColor};
 `;
 const TableCell = styled.div`
   flex: 1;

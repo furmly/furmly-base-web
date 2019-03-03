@@ -165,7 +165,7 @@ export class FileUpload extends Component {
                 onClick={this.togglePreview}
                 icon={"eye"}
               />
-              <IconButton icon="cross" onClick={this.clear} />
+              <IconButton icon="times" onClick={this.props.clear} />
             </React.Fragment>
           )}
           <Overlay isOpen={this.state.showPreview}>

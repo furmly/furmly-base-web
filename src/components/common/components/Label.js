@@ -2,10 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import {
   labelBackgroundColor,
-  smallText,
+  smallText, 
   labelPadding,
   errorColor,
-  errorForegroundColor,
   labelColor
 } from "../variables";
 
@@ -19,9 +18,8 @@ export const Label = styled.label`
   font-weight: bold;
   display: inline-block;
   transition: color 1s;
-  &.error {
-    color: ${errorForegroundColor};
-    background-color: ${errorColor};
+  &.furmly-error {
+    color: ${errorColor};
     transition: color 1s;
   }
 `;
