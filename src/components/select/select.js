@@ -125,6 +125,7 @@ const Item = styled.span`
   width: 100%;
   cursor: pointer;
   display: block;
+  color: ${inputColor};
   padding: ${inputPadding};
   padding-top: 5px;
   padding-bottom: 5px;
@@ -227,7 +228,6 @@ class Select extends React.PureComponent {
         this.menu.style.width = this.container.offsetWidth + "px";
       }
       this.scrollHandler = e => {
-        console.log("scroll handler fired");
         if (this.menu && this.menu.className.indexOf("show") !== -1) {
           const { top } = this.container.getBoundingClientRect();
 
@@ -264,7 +264,7 @@ class Select extends React.PureComponent {
           onClick={this.revealClicked}
           disabled={disabled}
         >
-          {this.state.displayLabel || "select..."}
+          {this.state.displayLabel || "Select..."}
         </RevealButton>
         <Menu className={showMenu} innerRef={node => (this.menu = node)}>
           <MenuContainer onScroll={this.onMenuScroll}>

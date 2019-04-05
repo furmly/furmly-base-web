@@ -7,7 +7,7 @@ export const titleText = props => props.theme.factor * 18;
 export const labelBackgroundColor = props => props.theme.labelBackgroundColor;
 export const labelPadding = props => props.theme.factor * 5;
 export const secondaryBackgroundColor = props =>
-  props.theme.secondaryBackgroundColor || "black";
+  props.theme.secondaryBackgroundColor || "transparent";
 export const secondaryColor = props => props.theme.secondaryColor || "white";
 export const accentColor = props => props.theme.accentColor || "#783196";
 export const labelColor = props => props.theme.labelColor;
