@@ -40,6 +40,7 @@ const minimumModalWidth = props => props.theme.minimumModalWidth || "40vw";
 const dividerColor = props => props.theme.dividerColor || "black";
 const highLightColor = props => props.theme.highLightColor || "rgba(0,0,0,0.1)";
 const inputColor = props => props.theme.inputColor || "black";
+const progressBarColor = props => props.theme.progressBarColor || "black";
 const inputBackgroundColor = props => props.theme.inputBackgroundColor || "rgba(53, 53, 53, 0.08)";
 const inputPadding = props => props.inputPadding || `0px 5px`;
 const iconSize = props => props.size || props.theme.factor * 10;
@@ -2945,12 +2946,6 @@ Portal.propTypes = {
 
 var Portal$1 = styled.withTheme(Portal);
 
-var Copy = styled__default.span`
-  color: ${props => props.theme.copyColor || "gray"};
-  font-size: ${smallestText}px;
-  display: block;
-`;
-
 const Wrapper = styled__default.div`
   display: flex;
   flex-direction: row;
@@ -2958,9 +2953,9 @@ const Wrapper = styled__default.div`
   align-items: center;
   width: 100%;
   height: 100%;
-  background-color: #fdfeff54;
   .spinner {
     animation: ${spin} 0.9s linear infinite;
+    color: ${progressBarColor};
     margin-right: 10px;
   }
 `;
@@ -3528,6 +3523,7 @@ const Container = styled__default.div`
   width: 100%;
   &:after {
     content: "▼";
+    color: ${inputColor};
     position: absolute;
     top: calc(${props => minimumInputHeight(props) / 2}px - 0.6em);
     right: 5px;
@@ -3708,7 +3704,6 @@ class Select extends React__default.PureComponent {
     }
   }
   onMenuScroll(e) {
-    console.log("menu scrolling");
     if (e.target.scrollTop > 0 && e.target.className !== "shadow") {
       e.target.classList.add("shadow");
     } else {
@@ -3795,7 +3790,7 @@ Select.propTypes = {
   disabled: PropTypes.bool,
   displayProperty: PropTypes.string,
   valueChanged: PropTypes.func,
-  value: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
+  value: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.number]),
   keyProperty: PropTypes.array.isRequired,
   label: PropTypes.string,
   items: PropTypes.array.isRequired,
@@ -4057,6 +4052,12 @@ ListImplementation.propTypes = {
   disabled: PropTypes.bool,
   rowRemoved: PropTypes.func.isRequired
 };
+
+var Copy = styled__default.span`
+  color: ${props => props.theme.copyColor || "gray"};
+  font-size: ${smallestText}px;
+  display: block;
+`;
 
 const StyledFormDiv = styled__default.div`
   margin: ${containerPadding}px;
@@ -5093,7 +5094,9 @@ Layout$1.propTypes = {
 };
 
 const Text$2 = styled__default.p``;
-const AnimatedContainer = styled__default(extendedAnimated.div)``;
+const AnimatedContainer = styled__default(extendedAnimated.div)`
+  height: 100%;
+`;
 const TextView = props => {
   return React__default.createElement(
     Text$2,
@@ -5552,6 +5555,7 @@ var configure = ((config$$1 = { providerConfig: [] }) => {
   return maps.cook();
 });
 
+exports.defaultRootReducer = controlMap.defaultRootReducer;
 exports.ThemeProvider = styled.ThemeProvider;
 exports.Button = Button;
 exports.IconButton = IconButton;

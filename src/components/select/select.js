@@ -10,8 +10,7 @@ import {
   aboveOthers,
   inputBackgroundColor,
   largerBoxShadow,
-  inputColor,
-  dropShadowColor
+  inputColor
 } from "../common/variables";
 
 import { hover } from "../common/animations";
@@ -21,6 +20,7 @@ const Container = styled.div`
   width: 100%;
   &:after {
     content: "▼";
+    color: ${inputColor};
     position: absolute;
     top: calc(${props => minimumInputHeight(props) / 2}px - 0.6em);
     right: 5px;
@@ -204,7 +204,6 @@ class Select extends React.PureComponent {
     }
   }
   onMenuScroll(e) {
-    console.log("menu scrolling");
     if (e.target.scrollTop > 0 && e.target.className !== "shadow") {
       e.target.classList.add("shadow");
     } else {
@@ -291,7 +290,11 @@ Select.propTypes = {
   disabled: PropTypes.bool,
   displayProperty: PropTypes.string,
   valueChanged: PropTypes.func,
-  value: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
+  value: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.string,
+    PropTypes.number
+  ]),
   keyProperty: PropTypes.array.isRequired,
   label: PropTypes.string,
   items: PropTypes.array.isRequired,

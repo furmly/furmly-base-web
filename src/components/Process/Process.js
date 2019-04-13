@@ -4,7 +4,9 @@ import PropTypes from "prop-types";
 import { Transition, animated } from "react-spring/renderprops";
 
 const Text = styled.p``;
-const AnimatedContainer = styled(animated.div)``;
+const AnimatedContainer = styled(animated.div)`
+  height: 100%;
+`;
 export const TextView = props => {
   return <Text>{props.text}</Text>;
 };

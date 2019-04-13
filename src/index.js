@@ -1,4 +1,5 @@
 export { ThemeProvider } from "styled-components";
+export { defaultRootReducer } from "furmly-client";
 export {
   default as Button,
   IconButton,

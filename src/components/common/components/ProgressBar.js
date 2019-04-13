@@ -1,8 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import { spin, flow } from "../animations";
-import Copy from "./Copy";
-
+import { spin } from "../animations";
+import { progressBarColor } from "../variables";
 
 const Wrapper = styled.div`
   display: flex;
@@ -11,9 +10,9 @@ const Wrapper = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
-  background-color: #fdfeff54;
   .spinner {
     animation: ${spin} 0.9s linear infinite;
+    color: ${progressBarColor};
     margin-right: 10px;
   }
 `;
@@ -22,7 +21,6 @@ const FullPage = () => {
   return (
     <Wrapper>
       <span className="spinner">⛬</span>
-      {/* <Copy>Loading...</Copy> */}
     </Wrapper>
   );
 };
