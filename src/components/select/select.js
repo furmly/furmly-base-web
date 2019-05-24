@@ -159,13 +159,11 @@ class Select extends React.PureComponent {
   }
   getDisplayLabel(props = this.props) {
     if (props.value && props.items) {
-      const { keyProperty, displayProperty } = props;
+      const { displayProperty } = props;
       for (let i = 0; i < props.items.length; i++) {
-        for (let z = 0; z <= keyProperty.length - 1; z++) {
-          if (props.items[i][keyProperty[z]] == props.value) {
-            this.setState({ displayLabel: props.items[i][displayProperty] });
-            return;
-          }
+        if (this.props.getKeyValue(props.items[i]) === props.value) {
+          this.setState({ displayLabel: props.items[i][displayProperty] });
+          return;
         }
       }
     } else {
@@ -210,13 +208,7 @@ class Select extends React.PureComponent {
       e.target.classList.remove("shadow");
     }
   }
-  fetchKey(item) {
-    const { keyProperty } = this.props;
-    for (let i = 0; i <= keyProperty.length - 1; i++) {
-      if (item[keyProperty[i]]) return item[keyProperty[i]];
-    }
-    return item[keyProperty[0]];
-  }
+
   setRef(node) {
     this.container = node;
     const scrollable = node && node.closest(".furmly-scrollable");
@@ -268,7 +260,7 @@ class Select extends React.PureComponent {
         <Menu className={showMenu} innerRef={node => (this.menu = node)}>
           <MenuContainer onScroll={this.onMenuScroll}>
             {(items || []).map(x => {
-              const key = this.fetchKey(x);
+              const key = this.props.getKeyValue(x);
               return (
                 <MenuItem
                   onClick={() => this.toggleMenu(valueChanged(key))}

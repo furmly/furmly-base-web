@@ -5,14 +5,17 @@ const rollup = require("rollup").rollup,
   path = require("path"),
   package = require("../package.json"),
   input = path.resolve(__dirname, "../src/index.js"),
-  output = path.resolve(__dirname, "../dist/bundle.js");
-const babelrc = path.join(__dirname, "./.babelrc");
+  output = path.resolve(__dirname, "../dist/bundle.js"),
+  babelrc = path.join(__dirname, "./.babelrc");
+
 
 rollup({
   input,
   external: Object.keys(package.dependencies),
   plugins: [
-    resolve({ modulesOnly: true }),
+    resolve({
+      jail: path.resolve(__dirname, "../src")
+    }),
     babel({
       exclude: ["node_modules/**", ".storybook/**", "stories/**", "static/**"],
       extends: babelrc
