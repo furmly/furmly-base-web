@@ -21,7 +21,7 @@ const Title = styled.label`
   color: ${setupReversal(labelColor, labelBackgroundColor)};
   display: block;
   font-size: ${titleText}px;
-  margin-left: ${elementPadding}px;
+  padding: ${elementPadding}px;
 `;
 const ModalContainer = styled.div`
   overflow-y: overlay;

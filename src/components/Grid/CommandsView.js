@@ -1,13 +1,18 @@
 import React from "react";
 import styled from "styled-components";
 import Modal from "../common/components/Modal";
-import { minimumInputHeight, highLightColor } from "../common/variables";
+import {
+  minimumInputHeight,
+  highLightColor,
+  inputColor
+} from "../common/variables";
 
 const Button = styled.button`
   background: none;
   border: none;
   width: 100%;
   height: ${minimumInputHeight}px;
+  color: ${inputColor};
   cursor: pointer;
   &:hover {
     background-color: ${highLightColor};

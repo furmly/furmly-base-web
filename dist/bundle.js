@@ -670,7 +670,7 @@ const Title=styled__default.label`
   color: ${setupReversal(labelColor,labelBackgroundColor)};
   display: block;
   font-size: ${titleText}px;
-  margin-left: ${elementPadding}px;
+  padding: ${elementPadding}px;
 `,ModalContainer=styled__default.div`
   overflow-y: overlay;
   background-color: ${modalBackgroundColor};
@@ -1235,20 +1235,21 @@ const HeaderButton=styled__default(StyledIconButton)`
   border-bottom: rgba(0, 0, 0, 0.18) solid 1px;
 `;class GridHeader extends React__default.PureComponent{constructor(a){super(a),this.state={open:!1},this.toggle=this.toggle.bind(this);}toggle(){this.setState({open:!this.state.open});}render(){return React__default.isValidElement(this.props.children)?React__default.createElement(Container$3,null,React__default.createElement(Title$1,{onClick:this.toggle},React__default.createElement(Icon$1,{icon:"filter",color:labelColor,size:16}),"Filter"),React__default.createElement(renderprops.Transition,{items:this.state.open,native:!0,from:{height:0,opacity:0},enter:{height:"auto",opacity:1},leave:{height:0,opacity:0}},(a)=>a&&((a)=>React__default.createElement(renderprops.animated.div,{style:_extends({},a,{overflow:"hidden"})},this.props.children,React__default.createElement(HeaderButton,{icon:"search",onClick:this.props.filter},"SEARCH")))||null)):null}}GridHeader.propTypes={filter:PropTypes.func.isRequired};
 
-const GridLayout=(a)=>{const{list:b,itemView:c,commandsView:d,commandViewResult:e,filter:f}=a;return React__default.createElement(React__default.Fragment,null,[f,b,c,d,e])};GridLayout.propTypes={filter:PropTypes.element,itemView:PropTypes.element,list:PropTypes.element,commandView:PropTypes.element,commandViewResult:PropTypes.element};
+const GridLayout=(a)=>{const{list:b,itemView:c,commandsView:d,commandResultView:e,filter:f}=a;return React__default.createElement(React__default.Fragment,null,[f,b,c,d,e])};GridLayout.propTypes={filter:PropTypes.element,itemView:PropTypes.element,list:PropTypes.element,commandView:PropTypes.element,commandViewResult:PropTypes.element};
 
 const Button$1=styled__default.button`
   background: none;
   border: none;
   width: 100%;
   height: ${minimumInputHeight}px;
+  color: ${inputColor};
   cursor: pointer;
   &:hover {
     background-color: ${highLightColor};
   }
 `,CommandsView=(a)=>React__default.createElement(Modal,{id:"commands-dialog",visibility:!!a.visibility,title:"What would you like to do ?",done:a.close,actions:[{content:"cancel",onClick:()=>a.close(),accent:!0}]},a.commands&&a.commands.map((b)=>React__default.createElement(Button$1,{key:b.commandText,onClick:()=>a.execCommand(b)},b.commandText))||null);
 
-const ResultView=()=>React__default.createElement("p",null,"Command Results");
+const ResultView=(a)=>React__default.createElement(Modal,{id:"commands-result-view",visibility:!!a.visibility,done:a.done,actions:[{content:"ok",onClick:()=>a.done(),accent:!0}]},a.template);
 
 const Table=styled__default.div`
   display: flex;
