@@ -1299,7 +1299,7 @@ const CommandsContainer=styled__default.div`
   left: 0;
   top: 0;
   color:${labelColor}
-`,NewButton=(a)=>React__default.createElement(IconButton,_extends({label:"Add"},a)),Commands=(a)=>React__default.createElement(CommandsContainer,null,a.canAddOrEdit&&React__default.createElement(React__default.Fragment,null,React__default.createElement(NewButton,{onClick:()=>a.showItemView("NEW"),icon:"plus"}),"\xA0|\xA0"),0<a.commands.length&&a.canShowCommands()&&React__default.createElement(IconButton,{icon:"caret-square-down",onClick:()=>a.openCommandMenu(),label:"Do something"}));Commands.propTypes={commands:PropTypes.array,showItemView:PropTypes.func.isRequired,canAddOrEdit:PropTypes.bool,openCommandMenu:PropTypes.func.isRequired};
+`,NewButton=(a)=>React__default.createElement(IconButton,_extends({label:"Add"},a)),Commands=(a)=>React__default.createElement(CommandsContainer,null,a.canAddOrEdit&&React__default.createElement(React__default.Fragment,null,React__default.createElement(NewButton,{onClick:()=>a.showItemView("NEW"),icon:"plus"}),"\xA0|\xA0"),0<a.commands.length&&a.canShowCommands()&&React__default.createElement(IconButton,{icon:"caret-square-down",onClick:()=>a.openCommandMenu(),label:"Actions"}));Commands.propTypes={commands:PropTypes.array,showItemView:PropTypes.func.isRequired,canAddOrEdit:PropTypes.bool,openCommandMenu:PropTypes.func.isRequired};
 
 const ListTable=styled__default(Table)`
   margin-top: 10px;

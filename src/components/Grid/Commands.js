@@ -24,7 +24,7 @@ const Commands = props => {
         <IconButton
           icon="caret-square-down"
           onClick={() => props.openCommandMenu()}
-          label={"Do something"}
+          label={"Actions"}
         />
       )}
     </CommandsContainer>
