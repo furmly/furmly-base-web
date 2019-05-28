@@ -164,6 +164,7 @@ class List extends Component {
               openCommandMenu={this.props.openCommandMenu}
               showItemView={this.props.showItemView}
               commands={commands}
+              execCommand={this.props.execCommand}
             />
             <TableHead>
               {this.renderHeader(this.props.items, this.props.templateConfig)}
