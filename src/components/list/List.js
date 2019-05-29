@@ -58,7 +58,7 @@ export const rowTemplates = {
       key={index}
       onClick={itemClicked}
       disabled={disabled}
-      rightActions={[<IconButton icon="trash" onClick={itemRemoved} />]}
+      rightActions={[<IconButton key={"trash"} icon="trash" onClick={itemRemoved} />]}
     >
       <BasicInfo
         rowData={rowData}

@@ -11,6 +11,7 @@ const inherit = function(source, target) {
   return Constructor;
 };
 const live_components = {};
+const live_instances = {};
 const message_types = {};
 function Base(msg, parent) {
   this.parent = parent;
@@ -25,7 +26,8 @@ Base.prototype.message = function(msg) {
   this[msg.type].call(this, msg.body);
 };
 Base.prototype.destroy = function() {
-  this.parent[this.id] = null;
+  live_instances[this.id] -= 1;
+  if (!live_instances[this.id] <= 0) this.parent[this.id] = null;
 };
 
 function _Input(msg) {
@@ -33,7 +35,11 @@ function _Input(msg) {
 }
 const Input = inherit(Base, _Input);
 
-Input.prototype.init = function() {};
+Input.prototype.init = function() {
+  if (typeof live_components[this.id] === "undefined")
+    live_components[this.id] = 0;
+  live_instances[this.id] += 1;
+};
 Input.prototype.busy = function() {
   this.reset();
   this.handle = setTimeout(this.expired.bind(this), this.idleTimeout);
@@ -58,6 +64,7 @@ onmessage = function({ data: msg }) {
     console.log(
       "Unknown message handler. Message does not have an either an id or a component"
     );
+    console.warn(msg);
     return;
   }
   live_components[msg.id] = new message_types[msg.component](
