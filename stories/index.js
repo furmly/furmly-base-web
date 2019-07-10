@@ -4,7 +4,7 @@ import { ThemeProvider } from "styled-components";
 import { injectFontsAndCSSBase } from "../src/components/common/utils";
 import registerServiceWorker from "./utils/registerServiceWorker";
 registerServiceWorker();
-injectFontsAndCSSBase();
+injectFontsAndCSSBase(null);
 const defaultTheme = {
   labelBackgroundColor: "rgb(203, 163, 163)",
   formComponentBackgroundColor: "transparent",
@@ -39,4 +39,3 @@ require("./html_view");
 require("./label");
 require("./image");
 require("./chips");
-
