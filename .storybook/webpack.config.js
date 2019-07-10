@@ -4,7 +4,7 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const npmBase = path.join(__dirname, "../node_modules");
 const furmlyClient = fs.realpathSync(path.join(npmBase, "furmly-client"));
 
-module.exports = (baseConfig, env, defaultConfig) => {
+module.exports = ({ config: defaultConfig }) => {
   defaultConfig.plugins.push(
     new CopyWebpackPlugin([
       { from: "static" },
@@ -23,11 +23,11 @@ module.exports = (baseConfig, env, defaultConfig) => {
       !/node_modules(\/|\\)furmly-client/i.test(modulePath)
     );
   };
-  const babelRule = defaultConfig.module.rules[0].query;
-  babelRule.presets[0] = fs.realpathSync(
-    path.join(npmBase, babelRule.presets[0])
+  const babelRule = defaultConfig.module.rules[0].use[0];
+  babelRule.options.presets[0] = fs.realpathSync(
+    path.join(npmBase, babelRule.options.presets[0])
   );
-  babelRule.plugins = babelRule.plugins.map(x => {
+  babelRule.options.plugins = babelRule.options.plugins.map(x => {
     if (typeof x === "object") {
       if (!path.isAbsolute(x[0]))
         x[0] = fs.realpathSync(path.join(npmBase, x[0]));

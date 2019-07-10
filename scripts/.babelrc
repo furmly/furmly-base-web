@@ -1,7 +1,10 @@
 {
-  "presets": ["babel-preset-react", "babel-preset-minify"],
-  "plugins": [
-    "babel-plugin-transform-object-rest-spread",
-    "babel-plugin-external-helpers"
+  "presets": [
+    "@babel/preset-react",
+    "babel-preset-minify"
   ],
+  "plugins": [
+    "@babel/plugin-proposal-object-rest-spread",
+    "@babel/plugin-external-helpers"
+  ]
 }

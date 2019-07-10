@@ -12,6 +12,9 @@ const selectProps = {
   disabled: false,
   label: "Select something...",
   keyProperty: "_id",
+  getKeyValue: item => {
+    return item.id;
+  },
   items: [
     {
       _id: 1,

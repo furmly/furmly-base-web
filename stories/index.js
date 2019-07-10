@@ -26,11 +26,11 @@ const ProviderForTheme = storyFn => (
 
 addDecorator(ProviderForTheme);
 addDecorator(Wrapper);
+require("./grid");
 require("./input");
 require("./select");
 require("./file_upload");
 require("./list");
-require("./grid");
 require("./section");
 require("./progressbar");
 require("./actionview");
@@ -39,3 +39,4 @@ require("./html_view");
 require("./label");
 require("./image");
 require("./chips");
+

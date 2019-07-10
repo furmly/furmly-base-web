@@ -1,5 +1,6 @@
 import React from "react";
-import { storiesOf, action } from "@storybook/react";
+import { storiesOf } from "@storybook/react";
+import { action } from "@storybook/addon-actions";
 import GridList, { GridHeader, GridCommandsView } from "../src/components/grid";
 import Input from "../src/components/Input";
 import { userProps } from "./input";
@@ -21,5 +22,5 @@ storiesOf("Grid", module)
   .add("Full", () => {
     const controls = configure({ providerConfig: [] });
     const { PROVIDER } = controls;
-    return <PROVIDER id={process._id} />;
+    return <PROVIDER id={process._id} showMessage={m => window.alert(m.message)} />;
   });
