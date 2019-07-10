@@ -1,8 +1,8 @@
 import React from "react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
-import GridList, { GridHeader, GridCommandsView } from "../src/components/grid";
-import Input from "../src/components/Input";
+import GridList, { GridHeader, GridCommandsView } from "../src/components/Grid";
+import Input from "../src/components/input";
 import { userProps } from "./input";
 import configure from "../src/configure";
 import { getList, getCommands, getProcess } from "./fixtures";

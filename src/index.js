@@ -11,9 +11,9 @@ export {
 export { default as Icon } from "./components/common/components/Icon";
 export { WorkerProvider } from "./components/common/components/withWorker";
 export { default as Modal } from "./components/common/components/Modal";
-export { default as Input } from "./components/Input/input";
-export { default as Checkbox } from "./components/Input/checkbox";
-export { default as DatePicker } from "./components/Input/datepicker";
+export { default as Input } from "./components/input/input";
+export { default as Checkbox } from "./components/input/checkbox";
+export { default as DatePicker } from "./components/input/datepicker";
 export { default as Select } from "./components/select";
 export {
   default as List,

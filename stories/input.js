@@ -1,7 +1,7 @@
 import React from "react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
-import Input, { DatePicker, Checkbox } from "../src/components/Input";
+import Input, { DatePicker, Checkbox } from "../src/components/input";
 
 const valueChanged = action("valueChanged");
 const time = new Date();

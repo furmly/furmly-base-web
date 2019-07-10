@@ -13,7 +13,7 @@ import {
 } from "../common/variables";
 import { getSlice, convertToString } from "../common/utils";
 import getPager from "../common/components/Pager";
-import { RawCheckbox as Checkbox } from "../Input/checkbox";
+import { RawCheckbox as Checkbox } from "../input/checkbox";
 import Commands from "./Commands";
 import FormDiv from "../common/components/FormDiv";
 
