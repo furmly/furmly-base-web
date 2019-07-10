@@ -1,3 +1,9 @@
+<p align="center">
+  <img src="https://github.com/furmly/furmly-studio/blob/master/logo-grey.png" width="135" align="center">
+  <br>
+  <br>
+</p>
+
 # Furmly Web Base
 
 ## Simple implementation of furmly components using react & styled-components.
