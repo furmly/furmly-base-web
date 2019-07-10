@@ -12,7 +12,6 @@ const CommandsContainer = styled.div`
 `;
 const NewButton = props => <IconButton label={"Add"} {...props} />;
 const Commands = props => {
-  console.log(props)
   return (
     <CommandsContainer>
       {props.canAddOrEdit && (
