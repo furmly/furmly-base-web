@@ -140,6 +140,7 @@ const Input = styled.input`
   background-color: transparent;
   padding: ${inputPadding};
   border: none;
+  color: ${inputColor};
   min-height: ${minimumInputHeight}px;
   width: calc(100% - 20px);
 `;
