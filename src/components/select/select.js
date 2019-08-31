@@ -24,6 +24,7 @@ const Container = styled.div`
     position: absolute;
     top: calc(${props => minimumInputHeight(props) / 2}px - 0.6em);
     right: 5px;
+    pointer-events: none;
   }
 `;
 const show = keyframes`
@@ -107,14 +108,13 @@ const Menu = styled.div`
 const RevealButton = styled.button`
   display: block;
   border: none;
-  color: ${inputColor};
+  color: ${props => (!props.queryOpen && inputColor(props)) || "transparent"};
   background-color: ${inputBackgroundColor};
   min-height: ${minimumInputHeight}px;
   width: 100%;
   text-align: left;
   padding: ${inputPadding};
-  padding-right: 20px;
-  ${hover};
+  transition: background-color 0.6s, color 1s
   &:hover {
     background-color: ${highLightColor};
     cursor: pointer;
@@ -135,14 +135,33 @@ const Item = styled.span`
   }
 `;
 
+const Input = styled.input`
+  position: absolute;
+  background-color: transparent;
+  padding: ${inputPadding};
+  border: none;
+  min-height: ${minimumInputHeight}px;
+  width: calc(100% - 20px);
+`;
+
 class Select extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.state = { showMenu: "", displayLabel: null };
+    this.state = {
+      showMenu: "",
+      displayLabel: null,
+      query: "",
+      inputHasFocus: false,
+      queryResult: []
+    };
     this.toggleMenu = this.toggleMenu.bind(this);
     this.revealClicked = this.revealClicked.bind(this);
     this.onMenuScroll = this.onMenuScroll.bind(this);
     this.setRef = this.setRef.bind(this);
+    this.setQuery = this.setQuery.bind(this);
+    this.menuRef = this.menuRef.bind(this);
+    this.inputFocused = this.inputFocused.bind(this);
+    this.cleanInput = this.cleanInput.bind(this);
   }
   componentWillMount() {
     this.getDisplayLabel();
@@ -209,6 +228,13 @@ class Select extends React.PureComponent {
     }
   }
 
+  setQuery(e) {
+    this.setState({
+      query: e.target.value,
+      queryResult: this.props.filter(e.target.value)
+    });
+  }
+
   setRef(node) {
     this.container = node;
     const scrollable = node && node.closest(".furmly-scrollable");
@@ -238,6 +264,24 @@ class Select extends React.PureComponent {
 
     this.props.innerRef(this, node);
   }
+  menuRef(ref) {
+    this.menu = ref;
+  }
+  cleanInput() {
+    this.setState({
+      query: "",
+      queryResult: [],
+      inputHasFocus: false
+    });
+  }
+  inputFocused() {
+    this.setState(
+      {
+        inputHasFocus: true
+      },
+      this.toggleMenu
+    );
+  }
   render() {
     const {
       disabled,
@@ -247,23 +291,34 @@ class Select extends React.PureComponent {
       ItemElement
     } = this.props;
     const MenuItem = ItemElement || Item;
-    const showMenu = this.state.showMenu;
+    const { showMenu, queryResult, query, inputHasFocus } = this.state;
     return (
       <Container innerRef={node => this.setRef(node)}>
+        <Input
+          value={query}
+          onChange={this.setQuery}
+          onFocus={this.inputFocused}
+          onBlur={this.cleanInput}
+          disabled={disabled}
+        />
         <RevealButton
           className={showMenu}
           onClick={this.revealClicked}
           disabled={disabled}
+          queryOpen={inputHasFocus}
         >
           {this.state.displayLabel || "Select..."}
         </RevealButton>
-        <Menu className={showMenu} innerRef={node => (this.menu = node)}>
+        <Menu className={showMenu} innerRef={this.menuRef}>
           <MenuContainer onScroll={this.onMenuScroll}>
-            {(items || []).map(x => {
+            {((query && queryResult) || items || []).map(x => {
               const key = this.props.getKeyValue(x);
               return (
                 <MenuItem
-                  onClick={() => this.toggleMenu(valueChanged(key))}
+                  onClick={() => {
+                    // this.cleanInput();
+                    this.toggleMenu(valueChanged(key));
+                  }}
                   key={key}
                   data={x}
                 >

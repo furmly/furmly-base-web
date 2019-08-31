@@ -3,11 +3,11 @@ const rollup = require("rollup").rollup,
   resolve = require("rollup-plugin-node-resolve"),
   copy = require("rollup-plugin-copy"),
   path = require("path"),
+  minify = require("rollup-plugin-babel-minify"),
   package = require("../package.json"),
   input = path.resolve(__dirname, "../src/index.js"),
   output = path.resolve(__dirname, "../dist/bundle.js"),
   babelrc = path.join(__dirname, "./.babelrc");
-
 
 rollup({
   input,
@@ -16,6 +16,7 @@ rollup({
     resolve({
       jail: path.resolve(__dirname, "../src")
     }),
+    minify({}),
     babel({
       exclude: ["node_modules/**", ".storybook/**", "stories/**", "static/**"],
       extends: babelrc

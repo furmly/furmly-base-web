@@ -22,10 +22,10 @@
        "validators": [],
        "description": "",
        "asyncValidators": [],
-       "name": "image15627529746310.740280454119359",
+       "name": "image15672104852390.8013403466970683",
        "label": "Image View",
        "elementType": "IMAGE",
-       "component_uid": "b41a05b1-e2c8-46dc-87b6-772a1700c5515627529746320.13724576177855852"
+       "component_uid": "b41a05b1-e2c8-46dc-87b6-772a1700c5515672104852390.6841797027799714"
       },
       {
        "args": {
@@ -38,10 +38,10 @@
        "validators": [],
        "description": "",
        "asyncValidators": [],
-       "name": "image15627529746320.49787218694838176",
+       "name": "image15672104852390.5847017368636218",
        "label": "Image View",
        "elementType": "IMAGE",
-       "component_uid": "b41a05b1-e2c8-46dc-87b6-772a1700c5515627529746320.16217329426900884"
+       "component_uid": "b41a05b1-e2c8-46dc-87b6-772a1700c5515672104852390.46516925872897397"
       },
       {
        "args": {
@@ -54,10 +54,10 @@
        "validators": [],
        "description": "",
        "asyncValidators": [],
-       "name": "image15627529746320.5990220060043965",
+       "name": "image15672104852390.13365808512410027",
        "label": "Image View",
        "elementType": "IMAGE",
-       "component_uid": "b41a05b1-e2c8-46dc-87b6-772a1700c5515627529746320.5573556245148179"
+       "component_uid": "b41a05b1-e2c8-46dc-87b6-772a1700c5515672104852390.713307145715727"
       }
      ]
     }

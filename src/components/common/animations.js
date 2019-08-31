@@ -62,5 +62,5 @@ export const loader = keyframes`
 
 export const spin = keyframes` to { transform: rotate(1turn); }`;
 export const hover = `
-  transition: background-color 0.6s, color 1s
+  transition: background-color 0.6s, color 0.1s
   `;
